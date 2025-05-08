@@ -1,5 +1,24 @@
 {
-  "projects": {},
+  "projects": {
+    "management": {
+      "type": "application",
+      "root": "apps/management",
+      "entryFile": "main",
+      "sourceRoot": "apps/management/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/management/tsconfig.app.json"
+      }
+    },
+    "api": {
+      "type": "application",
+      "root": "apps/api",
+      "entryFile": "main",
+      "sourceRoot": "apps/api/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/api/tsconfig.app.json"
+      }
+    }
+  },
   "compilerOptions": {
     "webpack": true,
     "sourceMap": true
