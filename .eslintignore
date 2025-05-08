@@ -1,0 +1,18 @@
+# Node modules und Build-Verzeichnisse
+node_modules/
+dist/
+build/
+
+apps/frontend/node_modules
+
+# Ignoriere alle Testdateien
+*.test.js
+*.spec.js
+
+# Ignoriere spezifische Ordner
+legacy/
+
+# Ignoriere kompilierten oder gebündelten Code
+*.min.js
+
+apps/**/test

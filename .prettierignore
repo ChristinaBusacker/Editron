@@ -1,0 +1,51 @@
+# Build- und Distributionsverzeichnisse
+build/
+dist/
+out/
+temp/
+
+# Node-Module
+node_modules/
+
+# Logs
+*.log
+*.cache
+
+# Minifizierte Dateien
+*.min.js
+*.min.css
+
+# Bild- und Asset-Dateien
+*.webp
+*.svg
+*.png
+*.jpg
+*.jpeg
+*.gif
+
+*.gltf
+
+# Angular spezifische Dateien
+.angular/
+.husky/
+coverage/
+e2e/
+*.module.ts
+*.spec.ts
+
+# JSON und Lockfiles
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Editor und Betriebssystem-Spezifische Dateien
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.iml
+
+# Temporäre Dateien
+*.tmp
+*.swp
+*.bak

@@ -1,0 +1,10 @@
+{
+  "projects": {},
+  "compilerOptions": {
+    "webpack": true,
+    "sourceMap": true
+  },
+  "monorepo": true,
+  "root": "apps/management",
+  "sourceRoot": "apps/management/src"
+}

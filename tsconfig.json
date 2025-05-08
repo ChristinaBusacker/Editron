@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2021",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": ".",
+    "rootDir": ".",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": false,
+    "resolveJsonModule": true,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": false,
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@database/": ["libs/database/src"],
+      "@database/*": ["libs/database/src/*"],
+      "@shared": ["libs/shared/src"],
+      "@shared/*": ["libs/shared/src/*"],
+      "@frontend/*": ["apps/frontend/src/app/*"],
+      "@simulation/*": ["apps/simulation/src/*"],
+      "three": ["node_modules/three"],
+      "three/examples/jsm/*": ["node_modules/three/examples/jsm/*"]
+    }
+  },
+  "exclude": ["node_modules", "./dist/**/*"]
+}
