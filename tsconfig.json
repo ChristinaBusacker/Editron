@@ -26,7 +26,6 @@
       "@shared": ["libs/shared/src"],
       "@shared/*": ["libs/shared/src/*"],
       "@frontend/*": ["apps/frontend/src/app/*"],
-      "@simulation/*": ["apps/simulation/src/*"],
       "three": ["node_modules/three"],
       "three/examples/jsm/*": ["node_modules/three/examples/jsm/*"]
     }
