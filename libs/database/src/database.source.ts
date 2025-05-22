@@ -4,6 +4,7 @@ import { PasswordResetEntity } from './password-reset/password-reset.entity';
 import { SessionEntity } from './session/session.entity';
 import { UserEntity } from './user/user.entity';
 import * as dotenv from 'dotenv';
+import { MigrationEntity } from './migration/migration.entity';
 
 dotenv.config();
 
@@ -12,6 +13,7 @@ export const entities = [
   PasswordResetEntity,
   SessionEntity,
   LocalizationEntity,
+  MigrationEntity,
 ];
 
 export const AppDataSource = new DataSource({
@@ -21,7 +23,7 @@ export const AppDataSource = new DataSource({
   username: process.env['DB_USER'],
   password: process.env['DB_PASSWORD'],
   database: `${process.env['DB_NAME']}`,
-  synchronize: !process.env['IS_PROD'],
+  synchronize: true,
   entities,
 });
 

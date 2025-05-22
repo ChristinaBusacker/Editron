@@ -5,6 +5,7 @@ import { LocalizationEntity } from './localization/localization.entity';
 import { PasswordResetEntity } from './password-reset/password-reset.entity';
 import { SessionEntity } from './session/session.entity';
 import { UserEntity } from './user/user.entity';
+import { MigrationEntity } from './migration/migration.entity';
 
 @Injectable()
 export class DatabaseService {
@@ -17,5 +18,7 @@ export class DatabaseService {
     public readonly sessionRepository: Repository<SessionEntity>,
     @Inject(RepositoryKey.localization)
     public readonly localizationRepository: Repository<LocalizationEntity>,
+    @Inject(RepositoryKey.migration)
+    public readonly migrationRepository: Repository<MigrationEntity>,
   ) {}
 }

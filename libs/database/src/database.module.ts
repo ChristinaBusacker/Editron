@@ -5,6 +5,7 @@ import { LocalizationTableModule } from './localization/localization.module';
 import { PasswordResetTableModule } from './password-reset/password-reset.module';
 import { SessionTableModule } from './session/session.module';
 import { UserTableModule } from './user/user.module';
+import { MigrationTableModule } from './migration/migration.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { UserTableModule } from './user/user.module';
     PasswordResetTableModule,
     UserTableModule,
     LocalizationTableModule,
+    MigrationTableModule
   ],
   providers: [...databaseProviders, DatabaseService],
   exports: [...databaseProviders, DatabaseService],

@@ -4,4 +4,5 @@ export enum RepositoryKey {
   passwordReset = 'PASSWORDRESET_REPOSITORY',
   user = 'USER_REPOSITORY',
   message = 'MESSAGE_REPOSITORY',
+  migration = 'MIGRATION_REPOSITORY',
 }
