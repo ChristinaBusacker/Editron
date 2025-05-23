@@ -5,4 +5,5 @@ export enum RepositoryKey {
   user = 'USER_REPOSITORY',
   message = 'MESSAGE_REPOSITORY',
   migration = 'MIGRATION_REPOSITORY',
+  project = 'PROJECT_REPOSITORY',
 }

@@ -5,6 +5,7 @@ import { SessionEntity } from './session/session.entity';
 import { UserEntity } from './user/user.entity';
 import * as dotenv from 'dotenv';
 import { MigrationEntity } from './migration/migration.entity';
+import { ProjectEntity } from './project/project.entity';
 
 dotenv.config();
 
@@ -14,6 +15,7 @@ export const entities = [
   SessionEntity,
   LocalizationEntity,
   MigrationEntity,
+  ProjectEntity,
 ];
 
 export const AppDataSource = new DataSource({
