@@ -47,20 +47,6 @@ export class UserEntity {
   @Column({ nullable: true })
   providerId: string;
 
-  @BeforeInsert()
-  async hashPassword() {
-    if (!this.provider && this.password) {
-      this.password = await bcrypt.hash(this.password, 10);
-    }
-  }
-
-  @BeforeUpdate()
-  async checkPassword() {
-    if (!this.provider && this.password) {
-      this.password = await bcrypt.hash(this.password, 10);
-    }
-  }
-
   @BeforeUpdate()
   updateLastActivity() {
     this.lastActivity = new Date();

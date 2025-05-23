@@ -13,4 +13,4 @@ import { MigrationPatch } from '../../helpers/decorators/patch.decorators';
     ],
   },
 })
-export class LoginPatch {}
+export class DefaultPatch {}

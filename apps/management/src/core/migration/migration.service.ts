@@ -4,10 +4,12 @@ import * as cliProgress from 'cli-progress';
 import { MigrationPatch } from '../../declarations/interfaces/migration-patch.interfaces';
 import { InitialPatch } from './patches/initial.patch';
 import { LoginPatch } from './patches/login.patch';
+import { DefaultPatch } from './patches/default.patch';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class MigrationService implements OnModuleInit {
-  private migrationPatches = [InitialPatch, LoginPatch];
+  private migrationPatches = [InitialPatch, LoginPatch, DefaultPatch];
 
   constructor(private databaseService: DatabaseService) {}
 
@@ -57,6 +59,7 @@ export class MigrationService implements OnModuleInit {
 
       for (let index = 0; index < patch.values.users.length; index++) {
         const user = patch.values.users[index];
+        user.password = await bcrypt.hash(user.password, 10);
         await this.databaseService.userRepository.save(user);
         progressBar.update(index + 1);
       }
