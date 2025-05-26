@@ -7,10 +7,19 @@ import {
   Get,
   Res,
   UnauthorizedException,
+  HttpCode,
+  HttpException,
+  Param,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SessionEntity } from '@database/session/session.entity';
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { Request, Response } from 'express';
 import { LoginDto } from './dto/login.dto';
@@ -92,5 +101,20 @@ export class AuthController {
   async microsoftCallback(@Req() req: Request, @Res() res: Response) {
     const session = await this.authService.createSession(req.user as any);
     return res.json({ sessionId: session.id });
+  }
+
+  @Get('validate/:sessionId')
+  @HttpCode(200)
+  @ApiOperation({ summary: 'Validate a session ID' })
+  @ApiParam({ name: 'sessionId', required: true, description: 'Session UUID' })
+  @ApiResponse({ status: 200, description: 'Session is valid' })
+  @ApiResponse({ status: 418, description: 'Session is invalid or expired' })
+  async validateSessionById(
+    @Param('sessionId') sessionId: string,
+  ): Promise<void> {
+    const session = await this.authService.getValidSession(sessionId);
+    if (!session) {
+      throw new HttpException('Session invalid', 418);
+    }
   }
 }
