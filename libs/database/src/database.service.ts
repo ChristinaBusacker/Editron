@@ -8,6 +8,10 @@ import { UserEntity } from './user/user.entity';
 import { MigrationEntity } from './migration/migration.entity';
 import { ProjectEntity } from './project/project.entity';
 import { ProjectMemberEntity } from './project-member/project-member.entity';
+import { ContentEntryEntity } from './content-entry/content-entry.entity';
+import { ContentSchemaEntity } from './content-schema/content-schema.entity';
+import { ContentVersionEntity } from './content-version/content-version.entity';
+import { ContentValueEntity } from './content-value/content-value.entity';
 
 @Injectable()
 export class DatabaseService {
@@ -26,5 +30,13 @@ export class DatabaseService {
     public readonly projectRepository: Repository<ProjectEntity>,
     @Inject(RepositoryKey.projectMember)
     public readonly projectMemberRepository: Repository<ProjectMemberEntity>,
+    @Inject(RepositoryKey.contentEntry)
+    public readonly contentEntryRepository: Repository<ContentEntryEntity>,
+    @Inject(RepositoryKey.contentSchema)
+    public readonly contentSchemaRepository: Repository<ContentSchemaEntity>,
+    @Inject(RepositoryKey.contentVersion)
+    public readonly contentVersionRepository: Repository<ContentVersionEntity>,
+    @Inject(RepositoryKey.contentValue)
+    public readonly contentValueRepository: Repository<ContentValueEntity>,
   ) {}
 }

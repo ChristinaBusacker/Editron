@@ -8,6 +8,11 @@ import { UserTableModule } from './user/user.module';
 import { MigrationTableModule } from './migration/migration.module';
 import { ProjectTableModule } from './project/project.module';
 import { ProjectMemberTableModule } from './project-member/project-member.module';
+import { ContentEntryTableModule } from './content-entry/content-entry.module';
+import { ContentSchemaEntity } from './content-schema/content-schema.entity';
+import { ContentVersionTableModule } from './content-version/content-version.module';
+import { ContentValueTableModule } from './content-value/content-value.module';
+import { ContentSchemaTableModule } from './content-schema/content-schema.module';
 
 @Module({
   imports: [
@@ -17,7 +22,11 @@ import { ProjectMemberTableModule } from './project-member/project-member.module
     LocalizationTableModule,
     MigrationTableModule,
     ProjectTableModule,
-    ProjectMemberTableModule
+    ProjectMemberTableModule,
+    ContentEntryTableModule,
+    ContentSchemaTableModule,
+    ContentVersionTableModule,
+    ContentValueTableModule
   ],
   providers: [...databaseProviders, DatabaseService],
   exports: [...databaseProviders, DatabaseService],

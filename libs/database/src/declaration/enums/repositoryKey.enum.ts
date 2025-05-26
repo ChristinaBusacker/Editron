@@ -7,4 +7,8 @@ export enum RepositoryKey {
   migration = 'MIGRATION_REPOSITORY',
   project = 'PROJECT_REPOSITORY',
   projectMember = 'PROJECTMEMBER_REPOSITORY',
+  contentEntry = 'CONTENTENTRY_REPOSITORY',
+  contentSchema = 'CONTENTSCHEMA_REPOSITORY',
+  contentVersion = 'CONTENTVERSION_REPOSITORY',
+  contentValue = 'CONTENTVALUE_REPOSITORY',
 }

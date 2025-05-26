@@ -7,6 +7,10 @@ import * as dotenv from 'dotenv';
 import { MigrationEntity } from './migration/migration.entity';
 import { ProjectEntity } from './project/project.entity';
 import { ProjectMemberEntity } from './project-member/project-member.entity';
+import { ContentEntryEntity } from './content-entry/content-entry.entity';
+import { ContentSchemaEntity } from './content-schema/content-schema.entity';
+import { ContentVersionEntity } from './content-version/content-version.entity';
+import { ContentValueEntity } from './content-value/content-value.entity';
 
 dotenv.config();
 
@@ -18,6 +22,10 @@ export const entities = [
   MigrationEntity,
   ProjectEntity,
   ProjectMemberEntity,
+  ContentEntryEntity,
+  ContentSchemaEntity,
+  ContentVersionEntity,
+  ContentValueEntity,
 ];
 
 export const AppDataSource = new DataSource({
