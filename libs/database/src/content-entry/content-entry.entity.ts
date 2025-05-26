@@ -7,6 +7,7 @@ import {
   Column,
   Index,
 } from 'typeorm';
+import { UserEntity } from '@database/user/user.entity';
 
 @Entity('content_entries')
 @Index(['project', 'schema', 'key'], { unique: true })
@@ -22,4 +23,10 @@ export class ContentEntryEntity {
 
   @Column()
   key: string;
+
+  @ManyToOne(() => UserEntity, { nullable: true })
+  createdBy: UserEntity;
+
+  @ManyToOne(() => UserEntity, { nullable: true })
+  updatedBy: UserEntity;
 }

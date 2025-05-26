@@ -6,8 +6,8 @@ import * as fs from 'fs';
 
 async function bootstrap() {
   const httpsOptions = {
-    key: fs.readFileSync('./ssl/key.pem'),
-    cert: fs.readFileSync('./ssl/cert.pem'),
+    key: fs.readFileSync('./ssl/localhost-key.pem'),
+    cert: fs.readFileSync('./ssl/localhost.pem'),
   };
 
   const app = await NestFactory.create(AppModule, {
@@ -18,14 +18,13 @@ async function bootstrap() {
   app.setGlobalPrefix(globalPrefix);
 
   const config = new DocumentBuilder()
-  .setTitle('Editron Management Documentation')
-  .setDescription('Die API Beschreibung')
-  .setVersion('1.0')
-  .build();
+    .setTitle('Editron Management Documentation')
+    .setDescription('Die API Beschreibung')
+    .setVersion('1.0')
+    .build();
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('swagger', app, document);
-
 
   const port = process.env.PORT ?? 3001;
 
