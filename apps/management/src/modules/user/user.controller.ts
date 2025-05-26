@@ -16,11 +16,18 @@ import {
   ApiOperation,
   ApiBearerAuth,
   ApiResponse,
+  ApiHeader,
 } from '@nestjs/swagger';
+import * as bcrypt from 'bcryptjs';
 
 @ApiTags('Users')
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
+@ApiHeader({
+  name: 'x-auth',
+  description: 'Authentication token for the request',
+  required: true,
+})
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -29,7 +36,8 @@ export class UserController {
   @ApiOperation({ summary: 'Create a new user' })
   @ApiResponse({ status: 201, description: 'User created' })
   async create(@Body() dto: CreateUserDto) {
-    return this.userService.create(dto.name, dto.email, dto.password);
+    const pw = await bcrypt.hash(dto.password, 10);
+    return this.userService.create(dto.name, dto.email, pw);
   }
 
   @Patch(':id')

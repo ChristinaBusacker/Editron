@@ -15,12 +15,18 @@ import {
   ApiOperation,
   ApiResponse,
   ApiBearerAuth,
+  ApiHeader,
 } from '@nestjs/swagger';
-import { AuthGuard } from '../auth/auth.guard'; // dein selbst geschriebener Guard
+import { AuthGuard } from '../auth/auth.guard';
 
 @ApiTags('Projects')
 @ApiBearerAuth()
-@UseGuards(AuthGuard) // schützt alle Routen im Controller
+@UseGuards(AuthGuard)
+@ApiHeader({
+  name: 'x-auth',
+  description: 'Authentication token for the request',
+  required: true,
+})
 @Controller('projects')
 export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}

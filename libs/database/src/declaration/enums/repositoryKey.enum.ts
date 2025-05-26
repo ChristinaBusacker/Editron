@@ -6,4 +6,5 @@ export enum RepositoryKey {
   message = 'MESSAGE_REPOSITORY',
   migration = 'MIGRATION_REPOSITORY',
   project = 'PROJECT_REPOSITORY',
+  projectMember = 'PROJECTMEMBER_REPOSITORY',
 }

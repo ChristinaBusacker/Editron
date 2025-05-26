@@ -7,6 +7,7 @@ import { SessionTableModule } from './session/session.module';
 import { UserTableModule } from './user/user.module';
 import { MigrationTableModule } from './migration/migration.module';
 import { ProjectTableModule } from './project/project.module';
+import { ProjectMemberTableModule } from './project-member/project-member.module';
 
 @Module({
   imports: [
@@ -15,7 +16,8 @@ import { ProjectTableModule } from './project/project.module';
     UserTableModule,
     LocalizationTableModule,
     MigrationTableModule,
-    ProjectTableModule
+    ProjectTableModule,
+    ProjectMemberTableModule
   ],
   providers: [...databaseProviders, DatabaseService],
   exports: [...databaseProviders, DatabaseService],
