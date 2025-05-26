@@ -1,0 +1,58 @@
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { CookieService } from '../cookie/cookie.service.js';
+
+@Injectable({ providedIn: 'root' })
+export class RequestService {
+  constructor(
+    private http: HttpClient,
+    private cookieService: CookieService,
+  ) {}
+
+  /**
+   * Builds the default headers including the x-auth header if the Session cookie is set
+   */
+  private buildHeaders(): HttpHeaders {
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    const session = this.cookieService.get('Session');
+    if (session) {
+      headers = headers.set('x-auth', session);
+    }
+    return headers;
+  }
+
+  /**
+   * Sends a GET request
+   * @param url Endpoint URL
+   */
+  get<T>(url: string): Observable<T> {
+    return this.http.get<T>(url, { headers: this.buildHeaders() });
+  }
+
+  /**
+   * Sends a POST request
+   * @param url Endpoint URL
+   * @param body Payload
+   */
+  post<T>(url: string, body: any): Observable<T> {
+    return this.http.post<T>(url, body, { headers: this.buildHeaders() });
+  }
+
+  /**
+   * Sends a DELETE request
+   * @param url Endpoint URL
+   */
+  delete<T>(url: string): Observable<T> {
+    return this.http.delete<T>(url, { headers: this.buildHeaders() });
+  }
+
+  /**
+   * Sends a PATCH request
+   * @param url Endpoint URL
+   * @param body Payload
+   */
+  patch<T>(url: string, body: any): Observable<T> {
+    return this.http.patch<T>(url, body, { headers: this.buildHeaders() });
+  }
+}
