@@ -4,12 +4,14 @@ import { RequestService } from '@frontend/core/services/request/request.service'
 import { LoginPayload, LoginResponse } from './models/auth.model';
 import { CookieService } from '@frontend/core/services/cookie/cookie.service';
 import { User } from './models/user.model';
+import { SnackbarService } from '@frontend/core/services/snackbar/snackbar.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthApiService {
   constructor(
     private request: RequestService,
     private cookie: CookieService,
+    private snackbar: SnackbarService,
   ) {}
 
   /**
@@ -21,8 +23,19 @@ export class AuthApiService {
       .post<LoginResponse>('/api/auth/login', credentials)
       .pipe(
         map(response => {
-          this.cookie.set('Session', response.sessionId, 30);
+          if (response.sessionId) {
+            this.cookie.set('Session', response.sessionId, 30);
+            this.snackbar.error('logged in successfully');
+          }
+
           return response;
+        }),
+        catchError((err, caught) => {
+          if (err.error.statusCode === 401) {
+            this.snackbar.error('Invalid credentials');
+          }
+
+          return of();
         }),
       );
   }
@@ -35,6 +48,7 @@ export class AuthApiService {
       map(response => {
         if (response) {
           this.cookie.delete('Session');
+          this.snackbar.success('Logged out successfully');
         }
         return response;
       }),

@@ -55,29 +55,9 @@ export class LoginPageComponent {
     this.store
       .dispatch(new Login(credentials.email, credentials.password))
       .subscribe(() => {
+        this.isSubmitting.set(false);
         this.router.navigate(['/projects']);
       });
-
-    /*
-    this.auth.login(credentials).subscribe({
-      next: () => {
-        this.snackBar.open('Login erfolgreich!', 'Schließen', {
-          duration: 3000,
-        });
-        this.router.navigate(['/projects']);
-      },
-      error: () => {
-        this.snackBar.open(
-          'Login fehlgeschlagen. Bitte überprüfe deine Eingaben.',
-          'Schließen',
-          {
-            duration: 5000,
-          },
-        );
-        this.isSubmitting.set(false);
-      },
-    });
-    */
   }
 
   redirectToSSO(provider: 'google' | 'github' | 'microsoft'): void {

@@ -7,6 +7,7 @@ import {
   Post,
   UseGuards,
   Request,
+  Get,
 } from '@nestjs/common';
 import { ProjectService } from './project.service';
 import { CreateProjectDto, UpdateProjectNameDto } from './dto/project.dto';
@@ -18,6 +19,7 @@ import {
   ApiHeader,
 } from '@nestjs/swagger';
 import { AuthGuard } from '../auth/auth.guard';
+import { CurrentUser } from '@shared/decorators/current-user.decorator';
 
 @ApiTags('Projects')
 @ApiBearerAuth()
@@ -30,6 +32,20 @@ import { AuthGuard } from '../auth/auth.guard';
 @Controller('projects')
 export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}
+
+  @Get()
+  @ApiOperation({ summary: 'Get all Projects' })
+  @ApiResponse({ status: 201, description: 'List of Projects availible' })
+  async getAll(@CurrentUser() user) {
+    return this.projectService.getAll(user);
+  }
+
+  @Get(':id')
+  @ApiOperation({ summary: 'Get a project by id' })
+  @ApiResponse({ status: 201, description: 'The reqquested Project' })
+  async getProject(@Param('id') id: string, @CurrentUser() user) {
+    return this.projectService.getProjectForUserOrThrow(id, user);
+  }
 
   @Post()
   @ApiOperation({ summary: 'Create a new project' })

@@ -11,10 +11,11 @@ import { RequestService } from './core/services/request/request.service';
 import { withNgxsReduxDevtoolsPlugin } from '@ngxs/devtools-plugin';
 import { provideStates, provideStore } from '@ngxs/store';
 import { AuthState } from './core/store/auth/auth.state';
+import { SnackbarService } from './core/services/snackbar/snackbar.service';
 
 const states = [AuthState];
 
-const coreServices = [CookieService, RequestService];
+const coreServices = [CookieService, RequestService, SnackbarService];
 
 export const appConfig: ApplicationConfig = {
   providers: [
