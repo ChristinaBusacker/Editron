@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { Logger } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as fs from 'fs';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const httpsOptions = {
@@ -17,6 +18,14 @@ async function bootstrap() {
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
 
+  const configService = app.get(ConfigService);
+
+  app.enableCors({
+    origin: [configService.get<string>('FRONTEND_URL')],
+    methods: 'GET,POST,PUT,DELETE',
+    allowedHeaders: 'Content-Type, x-auth',
+  });
+
   const config = new DocumentBuilder()
     .setTitle('Editron Management Documentation')
     .setDescription('Die API Beschreibung')
@@ -26,7 +35,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('swagger', app, document);
 
-  const port = process.env.PORT ?? 3001;
+  const port = configService.get<number>('MANAGEMENT_PORT') ?? 3001;
 
   await app.listen(port);
 

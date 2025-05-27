@@ -1,35 +1,34 @@
-import { Injectable } from '@angular/core';
-import { CanActivate, Router, UrlTree } from '@angular/router';
-import { Observable, of } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { inject } from '@angular/core';
+import { ActivatedRouteSnapshot, CanActivateFn, Router } from '@angular/router';
+import { Store } from '@ngxs/store';
+import { AuthState } from '../store/auth/auth.state';
 import { CookieService } from '../services/cookie/cookie.service';
+import { SetSession } from '../store/auth/auth.actions';
+import { of, map, catchError } from 'rxjs';
 import { RequestService } from '../services/request/request.service';
 
-@Injectable({ providedIn: 'root' })
-export class AuthGuard implements CanActivate {
-  constructor(
-    private cookieService: CookieService,
-    private request: RequestService,
-    private router: Router,
-  ) {}
+export const authGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
+  const store = inject(Store);
+  const router = inject(Router);
+  const request = inject(RequestService);
+  const cookie = inject(CookieService);
 
-  /**
-   * Checks whether a session is valid by verifying it with the backend.
-   * If invalid, removes the session cookie and redirects to /login.
-   */
-  canActivate(): Observable<boolean | UrlTree> {
-    const sessionId = this.cookieService.get('Session');
+  // Access the query params using the ActivatedRouteSnapshot provided by the router state
+  let sessionId = route.queryParamMap.get('sessionId');
 
-    if (!sessionId) {
-      return of(this.router.createUrlTree(['/login']));
-    }
-
-    return this.request.get<void>(`/api/auth/validate/${sessionId}`).pipe(
-      map(() => true),
-      catchError(() => {
-        this.cookieService.delete('Session'); // Remove invalid session
-        return of(this.router.createUrlTree(['/login']));
-      }),
-    );
+  if (sessionId) {
+    store.dispatch(new SetSession(sessionId));
+    cookie.set('Session', sessionId);
+  } else {
+    sessionId = cookie.get('Session');
   }
-}
+
+  if (!sessionId) {
+    return of(router.createUrlTree(['/login']));
+  }
+
+  return request.get<void>(`/api/auth/validate/${sessionId}`).pipe(
+    map(() => true),
+    catchError(() => of(router.createUrlTree(['/login']))),
+  );
+};

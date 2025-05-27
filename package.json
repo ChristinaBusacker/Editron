@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev:frontend": "ng serve frontend",
+    "dev:frontend": "ng serve frontend --ssl true --ssl-cert ./ssl/localhost.pem --ssl-key ./ssl/localhost-key.pem",
     "dev:management": "nest start management --watch",
     "dev:api": "nest start api --watch",
     "prettier": "npx prettier --write .",
@@ -35,6 +35,8 @@
     "@nestjs/swagger": "^7.4.2",
     "@nestjs/typeorm": "^11.0.0",
     "@nestjs/websockets": "^10.4.1",
+    "@ngxs/devtools-plugin": "19.0.0",
+    "@ngxs/store": "^19.0.0",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "class-transformer": "^0.5.1",

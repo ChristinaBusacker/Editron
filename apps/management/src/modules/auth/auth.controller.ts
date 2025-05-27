@@ -15,14 +15,19 @@ import { AuthService } from './auth.service';
 import { SessionEntity } from '@database/session/session.entity';
 import {
   ApiBody,
+  ApiHeader,
   ApiOperation,
   ApiParam,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { AuthGuard } from '@nestjs/passport';
+import { AuthGuard as PassportAuthGuard } from '@nestjs/passport';
 import { Request, Response } from 'express';
 import { LoginDto } from './dto/login.dto';
+import { CurrentSession } from '@shared/decorators/current-session.decorator';
+import { AuthGuard } from './auth.guard';
+import { CurrentUser } from '@shared/decorators/current-user.decorator';
+import { UserEntity } from '@database/user/user.entity';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -51,12 +56,12 @@ export class AuthController {
 
   // GitHub OAuth
   @Get('github')
-  @UseGuards(AuthGuard('github'))
+  @UseGuards(PassportAuthGuard('github'))
   @ApiOperation({ summary: 'Redirect to GitHub for authentication' })
   async githubLogin(): Promise<void> {}
 
   @Get('github/callback')
-  @UseGuards(AuthGuard('github'))
+  @UseGuards(PassportAuthGuard('github'))
   @ApiOperation({ summary: 'GitHub OAuth callback' })
   @ApiResponse({
     status: 200,
@@ -69,12 +74,12 @@ export class AuthController {
 
   // Google OAuth
   @Get('google')
-  @UseGuards(AuthGuard('google'))
+  @UseGuards(PassportAuthGuard('google'))
   @ApiOperation({ summary: 'Redirect to Google for authentication' })
   async googleLogin(): Promise<void> {}
 
   @Get('google/callback')
-  @UseGuards(AuthGuard('google'))
+  @UseGuards(PassportAuthGuard('google'))
   @ApiOperation({ summary: 'Google OAuth callback' })
   @ApiResponse({
     status: 200,
@@ -87,12 +92,12 @@ export class AuthController {
 
   // Microsoft OAuth
   @Get('microsoft')
-  @UseGuards(AuthGuard('microsoft'))
+  @UseGuards(PassportAuthGuard('microsoft'))
   @ApiOperation({ summary: 'Redirect to Microsoft for authentication' })
   async microsoftLogin(): Promise<void> {}
 
   @Get('microsoft/callback')
-  @UseGuards(AuthGuard('microsoft'))
+  @UseGuards(PassportAuthGuard('microsoft'))
   @ApiOperation({ summary: 'Microsoft OAuth callback' })
   @ApiResponse({
     status: 200,
@@ -116,5 +121,35 @@ export class AuthController {
     if (!session) {
       throw new HttpException('Session invalid', 418);
     }
+  }
+
+  @Get('user')
+  @UseGuards(AuthGuard)
+  @ApiHeader({
+    name: 'x-auth',
+    description: 'Authentication token for the request',
+    required: true,
+  })
+  @HttpCode(200)
+  @ApiOperation({ summary: 'Loads current logged inUser' })
+  @ApiResponse({ status: 200, description: 'Current user successfully loaded' })
+  @ApiResponse({ status: 418, description: 'Session is invalid or expired' })
+  async loadCurrentUser(@CurrentUser() user: UserEntity) {
+    return user;
+  }
+
+  @Get('logout')
+  @UseGuards(AuthGuard)
+  @ApiHeader({
+    name: 'x-auth',
+    description: 'Authentication token for the request',
+    required: true,
+  })
+  @HttpCode(200)
+  @ApiOperation({ summary: 'Ends current Session' })
+  @ApiResponse({ status: 200, description: 'Session successfully deleted' })
+  @ApiResponse({ status: 418, description: 'Session is invalid or expired' })
+  async logout(@CurrentSession() session: SessionEntity) {
+    return await this.authService.deleteSession(session.id);
   }
 }

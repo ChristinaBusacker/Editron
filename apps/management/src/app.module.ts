@@ -8,9 +8,11 @@ import { UserModule } from './modules/user/user.module';
 import { ProjectModule } from './modules/project/project.module';
 import { ProjectMemberModule } from './modules/project-member/project-member.module';
 import { ContentModule } from './modules/content/content.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule,
     AuthModule, 
     MigrationModule, 
     UserModule, 

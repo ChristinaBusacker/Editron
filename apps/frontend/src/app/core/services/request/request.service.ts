@@ -5,6 +5,8 @@ import { CookieService } from '../cookie/cookie.service.js';
 
 @Injectable({ providedIn: 'root' })
 export class RequestService {
+  private baseUrl = 'https://localhost:3000';
+
   constructor(
     private http: HttpClient,
     private cookieService: CookieService,
@@ -27,7 +29,9 @@ export class RequestService {
    * @param url Endpoint URL
    */
   get<T>(url: string): Observable<T> {
-    return this.http.get<T>(url, { headers: this.buildHeaders() });
+    return this.http.get<T>(this.baseUrl + url, {
+      headers: this.buildHeaders(),
+    });
   }
 
   /**
@@ -36,7 +40,9 @@ export class RequestService {
    * @param body Payload
    */
   post<T>(url: string, body: any): Observable<T> {
-    return this.http.post<T>(url, body, { headers: this.buildHeaders() });
+    return this.http.post<T>(this.baseUrl + url, body, {
+      headers: this.buildHeaders(),
+    });
   }
 
   /**
@@ -44,7 +50,9 @@ export class RequestService {
    * @param url Endpoint URL
    */
   delete<T>(url: string): Observable<T> {
-    return this.http.delete<T>(url, { headers: this.buildHeaders() });
+    return this.http.delete<T>(this.baseUrl + url, {
+      headers: this.buildHeaders(),
+    });
   }
 
   /**
@@ -53,6 +61,8 @@ export class RequestService {
    * @param body Payload
    */
   patch<T>(url: string, body: any): Observable<T> {
-    return this.http.patch<T>(url, body, { headers: this.buildHeaders() });
+    return this.http.patch<T>(this.baseUrl + url, body, {
+      headers: this.buildHeaders(),
+    });
   }
 }
