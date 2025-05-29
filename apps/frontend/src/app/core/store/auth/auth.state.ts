@@ -32,6 +32,11 @@ export class AuthState {
   }
 
   @Selector()
+  static isAdmin(state: AuthStateModel): boolean {
+    return state?.user?.isAdmin || false;
+  }
+
+  @Selector()
   static sessionId(state: AuthStateModel): string {
     return state.sessionId;
   }

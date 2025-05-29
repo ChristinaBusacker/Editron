@@ -14,6 +14,21 @@ export class ProjectApiService {
   constructor(private request: RequestService) {}
 
   /**
+   * Get a project
+   * @param id Project ID
+   */
+  get(id: string): Observable<Project> {
+    return this.request.get<Project>(`${this.baseUrl}/${id}`);
+  }
+
+  /**
+   * List all projects
+   */
+  list(): Observable<Array<Project>> {
+    return this.request.get<Array<Project>>(this.baseUrl);
+  }
+
+  /**
    * Creates a new project
    * @param payload Project creation payload
    */

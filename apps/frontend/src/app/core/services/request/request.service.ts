@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CookieService } from '../cookie/cookie.service.js';
 
@@ -28,9 +28,17 @@ export class RequestService {
    * Sends a GET request
    * @param url Endpoint URL
    */
-  get<T>(url: string): Observable<T> {
+  get<T>(url: string, params?: any): Observable<T> {
+    let httpParams = new HttpParams();
+    if (params) {
+      Object.keys(params).forEach(key => {
+        httpParams = httpParams.append(key, params[key]);
+      });
+    }
+
     return this.http.get<T>(this.baseUrl + url, {
       headers: this.buildHeaders(),
+      params: httpParams,
     });
   }
 

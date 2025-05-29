@@ -47,6 +47,9 @@ export class UserEntity {
   @Column({ nullable: true })
   providerId: string;
 
+  @Column({ default: 'de' })
+  language: string;
+
   @BeforeUpdate()
   updateLastActivity() {
     this.lastActivity = new Date();

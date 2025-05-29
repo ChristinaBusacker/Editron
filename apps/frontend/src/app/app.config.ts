@@ -12,8 +12,10 @@ import { withNgxsReduxDevtoolsPlugin } from '@ngxs/devtools-plugin';
 import { provideStates, provideStore } from '@ngxs/store';
 import { AuthState } from './core/store/auth/auth.state';
 import { SnackbarService } from './core/services/snackbar/snackbar.service';
+import { ProjectState } from './core/store/project/project.state';
+import { LocalizationState } from './core/store/localization/localization.state';
 
-const states = [AuthState];
+const states = [AuthState, ProjectState, LocalizationState];
 
 const coreServices = [CookieService, RequestService, SnackbarService];
 
