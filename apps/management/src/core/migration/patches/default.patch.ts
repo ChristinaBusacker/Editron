@@ -9,6 +9,7 @@ import { MigrationPatch } from '../../helpers/decorators/patch.decorators';
         name: 'admin',
         password: 'nimda',
         email: 'hello@itinchen.de',
+        isAdmin: true,
       },
     ],
   },

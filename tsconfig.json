@@ -27,6 +27,15 @@
       "@shared/*": ["libs/shared/src/*"],
       "@frontend/*": ["apps/frontend/src/app/*"],
       "@management/*": ["apps/management/src/*"],
+      "@cmsmodules/*": [
+        "apps/cmsmodules/src/*"
+      ],
+      "@cmsrenderer": [
+        "libs/cms-renderer/src"
+      ],
+      "@cmsrenderer/*": [
+        "libs/cms-renderer/src/*"
+      ],
       "three": ["node_modules/three"],
       "three/examples/jsm/*": ["node_modules/three/examples/jsm/*"]
     }

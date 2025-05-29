@@ -99,6 +99,39 @@
           }
         }
       }
+    },
+    "cms-renderer": {
+      "projectType": "library",
+      "root": "libs/cms-renderer",
+      "sourceRoot": "libs/cms-renderer/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "apps/cms-renderer/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "apps/cms-renderer/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "apps/cms-renderer/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "tsConfig": "apps/cms-renderer/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
+          }
+        }
+      }
     }
   },
   "cli": {
