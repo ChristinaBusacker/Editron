@@ -6,23 +6,24 @@ import {
   UpdateEntry,
   ValidateEntry,
 } from './models/content.model';
+import { RequestService } from '@frontend/core/services/request/request.service';
 
 @Injectable({ providedIn: 'root' })
 export class ContentApiService {
-  private readonly baseUrl = '/management/content';
+  private readonly baseUrl = '/api/content';
 
-  constructor(private http: HttpClient) {}
+  constructor(private request: RequestService) {}
 
   // -------------------------------
   // ContentSchemas
   // -------------------------------
 
   getAllSchemas(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/schemas`);
+    return this.request.get(`${this.baseUrl}/schemas`);
   }
 
   getSchemaBySlug(schemaSlug: string): Observable<any> {
-    return this.http.get(`${this.baseUrl}/schemas/${schemaSlug}`);
+    return this.request.get(`${this.baseUrl}/schemas/${schemaSlug}`);
   }
 
   // -------------------------------
@@ -30,7 +31,7 @@ export class ContentApiService {
   // -------------------------------
 
   getEntries(projectId: string, schemaSlug: string): Observable<any[]> {
-    return this.http.get<any[]>(
+    return this.request.get<any[]>(
       `${this.baseUrl}/projects/${projectId}/schemas/${schemaSlug}/entries`,
     );
   }
@@ -40,22 +41,22 @@ export class ContentApiService {
     schemaSlug: string,
     dto: CreateEntry,
   ): Observable<any> {
-    return this.http.post(
+    return this.request.post(
       `${this.baseUrl}/projects/${projectId}/schemas/${schemaSlug}/entries`,
       dto,
     );
   }
 
   getEntryDetails(entryId: number): Observable<any> {
-    return this.http.get(`${this.baseUrl}/entries/${entryId}`);
+    return this.request.get(`${this.baseUrl}/entries/${entryId}`);
   }
 
   updateEntry(entryId: number, dto: UpdateEntry): Observable<any> {
-    return this.http.put(`${this.baseUrl}/entries/${entryId}`, dto);
+    return this.request.put(`${this.baseUrl}/entries/${entryId}`, dto);
   }
 
   deleteEntry(entryId: number): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/entries/${entryId}`);
+    return this.request.delete(`${this.baseUrl}/entries/${entryId}`);
   }
 
   // -------------------------------
@@ -63,15 +64,23 @@ export class ContentApiService {
   // -------------------------------
 
   getVersions(entryId: number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseUrl}/entries/${entryId}/versions`);
+    return this.request.get<any[]>(
+      `${this.baseUrl}/entries/${entryId}/versions`,
+    );
   }
 
   publishVersion(versionId: number): Observable<any> {
-    return this.http.post(`${this.baseUrl}/versions/${versionId}/publish`, {});
+    return this.request.post(
+      `${this.baseUrl}/versions/${versionId}/publish`,
+      {},
+    );
   }
 
   restoreVersion(versionId: number): Observable<any> {
-    return this.http.post(`${this.baseUrl}/versions/${versionId}/restore`, {});
+    return this.request.post(
+      `${this.baseUrl}/versions/${versionId}/restore`,
+      {},
+    );
   }
 
   // -------------------------------
@@ -79,6 +88,6 @@ export class ContentApiService {
   // -------------------------------
 
   validateEntry(dto: ValidateEntry): Observable<any> {
-    return this.http.post(`${this.baseUrl}/validate`, dto);
+    return this.request.post(`${this.baseUrl}/validate`, dto);
   }
 }

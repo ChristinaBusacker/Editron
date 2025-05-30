@@ -1,0 +1,28 @@
+<ng-content></ng-content>
+<footer>
+  <div>
+    <button mat-button (click)="action.emit('cancel')">Cancel</button>
+  </div>
+  <div>
+    @if (buttonOptions) {
+      @if (buttonOptions.confirm) {
+        <button
+          [color]="buttonOptions.confirm.color"
+          mat-flat-button
+          (click)="action.emit('confirm')"
+        >
+          {{ buttonOptions.confirm.label }}
+        </button>
+      }
+      @if (buttonOptions.decline) {
+        <button
+          [color]="buttonOptions.decline.color"
+          mat-flat-button
+          (click)="action.emit('decline')"
+        >
+          {{ buttonOptions.decline.label }}
+        </button>
+      }
+    }
+  </div>
+</footer>

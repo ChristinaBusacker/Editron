@@ -32,7 +32,12 @@ export class AppService {
         });
         console.log(`Module "${module.slug}" registered.`);
       } else {
-        console.log(`Module "${module.slug}" already exists, skipping.`);
+        this.databaseService.contentSchemaRepository.update(exists, {
+          name: module.name,
+          slug: module.slug,
+          definition: module.schema,
+        });
+        console.log(`Module "${module.slug}" already exists, updated.`);
       }
     }
   }

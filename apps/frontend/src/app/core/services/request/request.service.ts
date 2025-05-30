@@ -73,4 +73,15 @@ export class RequestService {
       headers: this.buildHeaders(),
     });
   }
+
+  /**
+   * Sends a PUT request
+   * @param url Endpoint URL
+   * @param body Payload
+   */
+  put<T>(url: string, body: any): Observable<T> {
+    return this.http.put<T>(this.baseUrl + url, body, {
+      headers: this.buildHeaders(),
+    });
+  }
 }

@@ -14,10 +14,17 @@ import { AuthState } from './core/store/auth/auth.state';
 import { SnackbarService } from './core/services/snackbar/snackbar.service';
 import { ProjectState } from './core/store/project/project.state';
 import { LocalizationState } from './core/store/localization/localization.state';
+import { CmsModuleState } from './core/store/cmsModules/project.state';
+import { DialogService } from './shared/dialogs/dialog.service';
 
-const states = [AuthState, ProjectState, LocalizationState];
+const states = [AuthState, ProjectState, LocalizationState, CmsModuleState];
 
-const coreServices = [CookieService, RequestService, SnackbarService];
+const coreServices = [
+  CookieService,
+  RequestService,
+  SnackbarService,
+  DialogService,
+];
 
 export const appConfig: ApplicationConfig = {
   providers: [

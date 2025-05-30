@@ -1,2 +1,10 @@
 <p>project-overview works!</p>
 <button (click)="logout()">logout</button>
+<div class="projectlist">
+    @for(project of (projects | async); track project.id) {
+        <div>{{project.name}}</div>
+    }
+</div>
+<app-admin-wrapper>
+<button>new Project</button>
+</app-admin-wrapper>

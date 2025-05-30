@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Project } from '@frontend/shared/services/api/models/project.model';
 import { ProjectApiService } from '@frontend/shared/services/api/project-api.service';
-import { Action, State, StateContext } from '@ngxs/store';
+import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { of, switchMap } from 'rxjs';
 import {
   CreateProject,
@@ -22,6 +22,11 @@ export interface ProjectStateModel {
 @Injectable()
 export class ProjectState {
   constructor(private api: ProjectApiService) {}
+
+  @Selector()
+  static list(state: ProjectStateModel): Array<Project> {
+    return state?.projects || [];
+  }
 
   @Action(CreateProject)
   createProject(ctx: StateContext<ProjectStateModel>, action: CreateProject) {
