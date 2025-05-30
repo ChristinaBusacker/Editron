@@ -3,7 +3,7 @@ import { ContentApiService } from '@frontend/shared/services/api/content-api.ser
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { CmsModule } from 'libs/cmsmodules/src/modules/cms-module';
 import { map } from 'rxjs';
-import { FetchCMSModules } from './project.actions';
+import { FetchCMSModules } from './cmsModules.actions';
 
 export interface CmsModuleStateModel {
   modules: Array<CmsModule>;
@@ -28,8 +28,6 @@ export class CmsModuleState {
   fetchModules(ctx: StateContext<CmsModuleStateModel>) {
     return this.api.getAllSchemas().pipe(
       map(modules => {
-        console.log(modules);
-
         ctx.patchState({
           modules,
         });

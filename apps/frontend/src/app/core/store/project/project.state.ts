@@ -72,29 +72,4 @@ export class ProjectState {
       }),
     );
   }
-
-  /*
-  @Action(SetSession)
-  setSession(ctx: StateContext<AuthStateModel>, action: SetSession) {
-    const state = ctx.getState();
-    const { sessionId } = action;
-    ctx.patchState({
-      ...state,
-      sessionId,
-    });
-    this.loadCurrentUser(ctx);
-  }
-
-  ngxsOnInit(ctx: StateContext<AuthStateModel>): void {
-    const sessionId = this.cookieService.get('Session');
-    if (sessionId) {
-      this.authApi.loadCurrentUser().subscribe(user => {
-        ctx.patchState({
-          sessionId,
-          user,
-        });
-      });
-    }
-  }
-    */
 }

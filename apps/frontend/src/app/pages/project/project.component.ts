@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Component, inject, OnInit } from '@angular/core';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { SidenavComponent } from '../../shared/components/sidenav/sidenav.component';
+import { Project } from '@frontend/shared/services/api/models/project.model';
 
 @Component({
   selector: 'app-project',
@@ -8,4 +9,6 @@ import { SidenavComponent } from '../../shared/components/sidenav/sidenav.compon
   templateUrl: './project.component.html',
   styleUrl: './project.component.scss',
 })
-export class ProjectComponent {}
+export class ProjectComponent {
+  project!: Project;
+}

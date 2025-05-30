@@ -14,10 +14,18 @@ import { AuthState } from './core/store/auth/auth.state';
 import { SnackbarService } from './core/services/snackbar/snackbar.service';
 import { ProjectState } from './core/store/project/project.state';
 import { LocalizationState } from './core/store/localization/localization.state';
-import { CmsModuleState } from './core/store/cmsModules/project.state';
-import { DialogService } from './shared/dialogs/dialog.service';
 
-const states = [AuthState, ProjectState, LocalizationState, CmsModuleState];
+import { DialogService } from './shared/dialogs/dialog.service';
+import { CmsModuleState } from './core/store/cmsModules/cmsModules.state';
+import { NavigationState } from './core/store/navigation/navigation.state';
+
+const states = [
+  AuthState,
+  ProjectState,
+  LocalizationState,
+  CmsModuleState,
+  NavigationState,
+];
 
 const coreServices = [
   CookieService,

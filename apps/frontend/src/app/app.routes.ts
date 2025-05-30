@@ -2,11 +2,14 @@ import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { ProjectOverviewComponent } from './pages/project-overview/project-overview.component';
-import { projectsResolver } from './core/resolvers/projects.resolver';
+
 import { cmsModulesResolver } from './core/resolvers/cmsmodules.resolver';
-import { projectDetailResolver } from './core/resolvers/project-details.resolver';
-import { ProjectComponent } from './pages/project/project.component';
+
+import { projectListResolver } from './core/resolvers/project-list.resolver';
+import { projectResolver } from './core/resolvers/projectresolver';
 import { ProjectDetailsComponent } from './pages/project/children/project-details/project-details.component';
+import { ProjectEntityComponent } from './pages/project/children/project-entity-component/project-entity.component';
+import { ProjectComponent } from './pages/project/project.component';
 
 // app-routing.module.ts
 export const routes: Routes = [
@@ -15,13 +18,13 @@ export const routes: Routes = [
     path: 'projects',
     component: ProjectOverviewComponent,
     canActivate: [authGuard],
-    resolve: [projectsResolver, cmsModulesResolver],
+    resolve: [projectListResolver, cmsModulesResolver],
   },
   {
     path: ':projectId',
     component: ProjectComponent,
     canActivate: [authGuard],
-    resolve: { data: projectDetailResolver },
+    resolve: { data: projectResolver, modules: cmsModulesResolver },
     children: [
       {
         path: 'details',
@@ -29,7 +32,7 @@ export const routes: Routes = [
       },
       {
         path: ':entitySlug',
-        component: ProjectComponent,
+        component: ProjectEntityComponent,
       },
       {
         path: '',

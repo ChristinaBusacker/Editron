@@ -1,24 +1,18 @@
+import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { ProjectDetailResovlerResponse } from '@frontend/core/resolvers/project-details.resolver';
-import { SidenavComponent } from '@frontend/shared/components/sidenav/sidenav.component';
+import { NavigationState } from '@frontend/core/store/navigation/navigation.state';
 import { Project } from '@frontend/shared/services/api/models/project.model';
+import { Store } from '@ngxs/store';
 
 @Component({
   selector: 'app-project-details',
-  imports: [RouterModule],
+  imports: [RouterModule, CommonModule],
   templateUrl: './project-details.component.html',
   styleUrl: './project-details.component.scss',
 })
-export class ProjectDetailsComponent implements OnInit {
-  project!: Project;
+export class ProjectDetailsComponent {
+  project = this.store.select(NavigationState.currentProject);
 
-  private route = inject(ActivatedRoute);
-
-  ngOnInit() {
-    this.route.parent.data.subscribe(data => {
-      const resolved = data['data'] as ProjectDetailResovlerResponse;
-      this.project = resolved.project;
-    });
-  }
+  constructor(private store: Store) {}
 }
