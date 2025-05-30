@@ -4,8 +4,9 @@ import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { ProjectOverviewComponent } from './pages/project-overview/project-overview.component';
 import { projectsResolver } from './core/resolvers/projects.resolver';
 import { cmsModulesResolver } from './core/resolvers/cmsmodules.resolver';
-import { ProjectDetailsComponent } from './pages/project-details/project-details.component';
 import { projectDetailResolver } from './core/resolvers/project-details.resolver';
+import { ProjectComponent } from './pages/project/project.component';
+import { ProjectDetailsComponent } from './pages/project/children/project-details/project-details.component';
 
 // app-routing.module.ts
 export const routes: Routes = [
@@ -17,10 +18,25 @@ export const routes: Routes = [
     resolve: [projectsResolver, cmsModulesResolver],
   },
   {
-    path: ':projectId/details',
-    component: ProjectDetailsComponent,
+    path: ':projectId',
+    component: ProjectComponent,
     canActivate: [authGuard],
     resolve: { data: projectDetailResolver },
+    children: [
+      {
+        path: 'details',
+        component: ProjectDetailsComponent,
+      },
+      {
+        path: ':entitySlug',
+        component: ProjectComponent,
+      },
+      {
+        path: '',
+        redirectTo: 'details',
+        pathMatch: 'full',
+      },
+    ],
   },
   {
     path: '',

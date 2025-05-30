@@ -1,0 +1,7 @@
+<h3>Modules</h3>
+<hr/>
+@for(module of modules | async; track module.slug) {
+    <div class="module" [routerLink]="['/']" routerLinkActive="router-link-active" >
+        {{module.name}}
+    </div>
+}
