@@ -11,5 +11,6 @@ import { DialogButtonOptions } from '@frontend/core/declarations/interfaces/dial
 })
 export class DialogComponent {
   @Input() buttonOptions: DialogButtonOptions;
+  @Input() title: string;
   @Output() action = new EventEmitter<string>();
 }

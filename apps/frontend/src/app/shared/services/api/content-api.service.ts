@@ -7,6 +7,7 @@ import {
   ValidateEntry,
 } from './models/content.model';
 import { RequestService } from '@frontend/core/services/request/request.service';
+import { CmsModule } from 'libs/cmsmodules/src/modules/cms-module';
 
 @Injectable({ providedIn: 'root' })
 export class ContentApiService {
@@ -18,7 +19,7 @@ export class ContentApiService {
   // ContentSchemas
   // -------------------------------
 
-  getAllSchemas(): Observable<any> {
+  getAllSchemas(): Observable<Array<CmsModule>> {
     return this.request.get(`${this.baseUrl}/schemas`);
   }
 

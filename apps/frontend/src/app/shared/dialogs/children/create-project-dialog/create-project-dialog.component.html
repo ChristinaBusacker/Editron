@@ -5,7 +5,14 @@
       color: 'primary',
     },
   }"
+  title="Create new Project"
   (action)="close($event)"
 >
-  
+<mat-form-field appearance="fill">
+    <mat-label>Project Name</mat-label>
+    <input matInput
+    [value]="name()"
+    (input)="name.set($event.target.value)"
+    placeholder="Projectname">
+  </mat-form-field>
 </app-dialog>

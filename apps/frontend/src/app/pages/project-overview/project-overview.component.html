@@ -2,9 +2,12 @@
 <button (click)="logout()">logout</button>
 <div class="projectlist">
     @for(project of (projects | async); track project.id) {
-        <div>{{project.name}}</div>
+        <a class="project-tile" [routerLink]="['/', project.id, 'details']" >
+            <div>{{project.name}}</div>
+            <div>{{project.updatedAt}}</div>
+        </a>
     }
 </div>
 <app-admin-wrapper>
-<button>new Project</button>
+    <button (click)="openCreateDialog()">new Project</button>
 </app-admin-wrapper>

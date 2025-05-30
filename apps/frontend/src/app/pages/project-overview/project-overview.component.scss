@@ -1,0 +1,11 @@
+:host {
+  & .project-tile {
+    width: 200px;
+    height: 50px;
+    background-color: lightgrey;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 5px;
+  }
+}

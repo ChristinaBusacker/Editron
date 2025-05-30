@@ -1,28 +1,27 @@
-<ng-content></ng-content>
-<footer>
-  <div>
-    <button mat-button (click)="action.emit('cancel')">Cancel</button>
+<section class="dialog-wrapper">
+  <h2 id="dialog-title">{{ title }}</h2>
+
+  <div class="dialog-body">
+    <ng-content></ng-content>
   </div>
-  <div>
-    @if (buttonOptions) {
-      @if (buttonOptions.confirm) {
-        <button
-          [color]="buttonOptions.confirm.color"
-          mat-flat-button
-          (click)="action.emit('confirm')"
-        >
-          {{ buttonOptions.confirm.label }}
-        </button>
-      }
-      @if (buttonOptions.decline) {
-        <button
-          [color]="buttonOptions.decline.color"
-          mat-flat-button
-          (click)="action.emit('decline')"
-        >
-          {{ buttonOptions.decline.label }}
-        </button>
-      }
-    }
+
+  <div class="dialog-actions">
+    <button
+      *ngIf="buttonOptions?.cancel"
+      mat-button
+      (click)="action.emit('cancel')"
+      [color]="buttonOptions.cancel.color || null"
+    >
+      {{ buttonOptions.cancel.label || 'Cancel' }}
+    </button>
+
+    <button
+      *ngIf="buttonOptions?.confirm"
+      mat-button
+      (click)="action.emit('confirm')"
+      [color]="buttonOptions.confirm.color || 'primary'"
+    >
+      {{ buttonOptions.confirm.label || 'OK' }}
+    </button>
   </div>
-</footer>
+</section>

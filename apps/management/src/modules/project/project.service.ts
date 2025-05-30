@@ -26,7 +26,7 @@ export class ProjectService {
 
   async getProjectForUserOrThrow(
     projectId: string,
-    userId: string,
+    user: UserEntity,
   ): Promise<ProjectEntity> {
     const project = await this.databaseService.projectRepository
       .createQueryBuilder('project')
@@ -36,9 +36,9 @@ export class ProjectService {
       .where('project.id = :projectId', { projectId })
       .andWhere(
         new Brackets((qb) => {
-          qb.where('owner.id = :userId', { userId }).orWhere(
+          qb.where('owner.id = :userId', { userId: user.id }).orWhere(
             'memberUser.id = :userId',
-            { userId },
+            { userId: user.id },
           );
         }),
       )
