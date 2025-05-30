@@ -18,6 +18,7 @@ import { LocalizationState } from './core/store/localization/localization.state'
 import { DialogService } from './shared/dialogs/dialog.service';
 import { CmsModuleState } from './core/store/cmsModules/cmsModules.state';
 import { NavigationState } from './core/store/navigation/navigation.state';
+import { ContentState } from './core/store/content/content.state';
 
 const states = [
   AuthState,
@@ -25,6 +26,7 @@ const states = [
   LocalizationState,
   CmsModuleState,
   NavigationState,
+  ContentState,
 ];
 
 const coreServices = [

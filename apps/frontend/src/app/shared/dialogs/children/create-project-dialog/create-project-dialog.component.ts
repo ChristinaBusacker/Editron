@@ -1,11 +1,11 @@
 import { Component, HostListener, inject, signal } from '@angular/core';
-import { DialogComponent } from '../../dialog.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Store } from '@ngxs/store';
 import { CreateProject } from '@frontend/core/store/project/project.actions';
+import { Store } from '@ngxs/store';
+import { DialogComponent } from '../../dialog.component';
 
 @Component({
   selector: 'app-create-project-dialog',

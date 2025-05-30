@@ -1,9 +1,9 @@
 <h3>Modules</h3>
 <hr/>
 
-    @for(module of modules | async; track module.slug) {
-        <a class="module" [routerLink]="['/', (project | async).id, module.slug]" routerLinkActive="router-link-active" >
-            {{module.name}}
-        </a>
-    }
+@for(module of modules | async; track module.slug) {
+    <a class="module" [routerLink]="['/', (project | async).id, module.slug]" routerLinkActive="router-link-active" >
+        {{module.name}}
+    </a>
+}
 

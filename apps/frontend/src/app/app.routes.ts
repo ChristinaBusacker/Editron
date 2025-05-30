@@ -10,6 +10,7 @@ import { projectResolver } from './core/resolvers/projectresolver';
 import { ProjectDetailsComponent } from './pages/project/children/project-details/project-details.component';
 import { ProjectEntityComponent } from './pages/project/children/project-entity-component/project-entity.component';
 import { ProjectComponent } from './pages/project/project.component';
+import { moduleEntityResolver } from './core/resolvers/module-entity.resolver';
 
 // app-routing.module.ts
 export const routes: Routes = [
@@ -31,8 +32,9 @@ export const routes: Routes = [
         component: ProjectDetailsComponent,
       },
       {
-        path: ':entitySlug',
+        path: ':moduleSlug',
         component: ProjectEntityComponent,
+        resolve: { entries: moduleEntityResolver },
       },
       {
         path: '',
