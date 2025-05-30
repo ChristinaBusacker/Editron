@@ -1,9 +1,12 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { databaseReady } from '@database/database.source';
 import { Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as fs from 'fs';
-import { ConfigService } from '@nestjs/config';
+import { AppModule } from './app.module';
+import { MigrationService } from './core/migration/migration.service';
+import { AppService } from './app.service';
 
 async function bootstrap() {
   const httpsOptions = {
@@ -36,6 +39,12 @@ async function bootstrap() {
   SwaggerModule.setup('swagger', app, document);
 
   const port = configService.get<number>('MANAGEMENT_PORT') ?? 3001;
+
+  databaseReady.then(() => {
+    // Trigger migrations
+    app.get(MigrationService).migrate();
+    app.get(AppService).initCMSModules();
+  });
 
   await app.listen(port);
 

@@ -1,12 +1,11 @@
-import { ContentSchemaDefinition } from '@shared/declarations/interfaces/content/content-schema-definition';
 import { CmsModule } from '../cms-module';
 import { SeoCMSModule } from '../seo/seo.cms';
+import { BlogCategoryCMSModule } from './blog-category.cms';
 
-export class BlogCMSModule implements CmsModule {
-  readonly slug = 'blog';
-  readonly name = 'Blog Article';
-
-  readonly schema: ContentSchemaDefinition = {
+export const BlogCMSModule: CmsModule = {
+  slug: 'blog',
+  name: 'Blog Article',
+  schema: {
     fields: [
       {
         name: 'title',
@@ -60,9 +59,9 @@ export class BlogCMSModule implements CmsModule {
         validation: {},
       },
     ],
-  };
-
-  extensions?: Record<string, ContentSchemaDefinition> = {
+  },
+  extensions: {
     seo: SeoCMSModule,
-  };
-}
+    blogCategories: BlogCategoryCMSModule,
+  },
+};

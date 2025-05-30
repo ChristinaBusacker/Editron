@@ -1,28 +1,32 @@
-import { ContentSchemaDefinition } from '@shared/declarations/interfaces/content/content-schema-definition';
+import { CmsModule } from '../cms-module';
 
-export const BlogCategorySchema: ContentSchemaDefinition = {
-  fields: [
-    {
-      name: 'name',
-      type: 'singleline',
-      localizable: true,
-      validation: { required: true },
-    },
-    {
-      name: 'slug',
-      type: 'slug',
-      localizable: false,
-      validation: { required: true },
-    },
-    {
-      name: 'color',
-      type: 'color',
-      localizable: false,
-    },
-    {
-      name: 'description',
-      type: 'multiline',
-      localizable: true,
-    },
-  ],
+export const BlogCategoryCMSModule: CmsModule = {
+  slug: 'blog_category',
+  name: 'Blog Category',
+  schema: {
+    fields: [
+      {
+        name: 'name',
+        type: 'singleline',
+        localizable: true,
+        validation: { required: true },
+      },
+      {
+        name: 'slug',
+        type: 'slug',
+        localizable: false,
+        validation: { required: true },
+      },
+      {
+        name: 'color',
+        type: 'color',
+        localizable: false,
+      },
+      {
+        name: 'description',
+        type: 'multiline',
+        localizable: true,
+      },
+    ],
+  },
 };

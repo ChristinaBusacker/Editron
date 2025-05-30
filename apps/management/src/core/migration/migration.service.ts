@@ -8,7 +8,7 @@ import { DefaultPatch } from './patches/default.patch';
 import * as bcrypt from 'bcryptjs';
 
 @Injectable()
-export class MigrationService implements OnModuleInit {
+export class MigrationService {
   private migrationPatches = [InitialPatch, LoginPatch, DefaultPatch];
 
   constructor(private databaseService: DatabaseService) {}
@@ -92,11 +92,5 @@ export class MigrationService implements OnModuleInit {
     } finally {
       progressBar.stop();
     }
-  }
-
-  public onModuleInit() {
-    setTimeout(() => {
-      this.migrate();
-    }, 2000);
   }
 }

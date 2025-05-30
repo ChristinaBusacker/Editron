@@ -4,5 +4,5 @@ export interface CmsModule {
   slug: string;
   name: string;
   schema: ContentSchemaDefinition;
-  extensions?: Record<string, ContentSchemaDefinition>;
+  extensions?: Record<string, CmsModule>;
 }

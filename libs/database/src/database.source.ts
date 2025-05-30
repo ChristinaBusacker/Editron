@@ -39,7 +39,7 @@ export const AppDataSource = new DataSource({
   entities,
 });
 
-AppDataSource.initialize()
+export const databaseReady = AppDataSource.initialize()
   .then(() => {
     console.log('Data Source has been initialized!');
   })
