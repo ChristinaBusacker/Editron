@@ -3,16 +3,19 @@ import { ContentApiService } from '@frontend/shared/services/api/content-api.ser
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { CmsModule } from 'libs/cmsmodules/src/modules/cms-module';
 import { map } from 'rxjs';
-import { FetchCMSModules } from './cmsModules.actions';
+import { FetchCMSModules, FetchModuleSchema } from './cmsModules.actions';
+import { ContentSchemaDefinition } from '@shared/declarations/interfaces/content/content-schema-definition';
 
 export interface CmsModuleStateModel {
   modules: Array<CmsModule>;
+  schemas: { [key: string]: ContentSchemaDefinition };
 }
 
 @State<CmsModuleStateModel>({
   name: 'cmsModules',
   defaults: {
     modules: [],
+    schemas: {},
   },
 })
 @Injectable()
@@ -24,6 +27,13 @@ export class CmsModuleState {
     return state?.modules || [];
   }
 
+  @Selector()
+  static schemas(state: CmsModuleStateModel): {
+    [key: string]: ContentSchemaDefinition;
+  } {
+    return state?.schemas || {};
+  }
+
   @Action(FetchCMSModules)
   fetchModules(ctx: StateContext<CmsModuleStateModel>) {
     return this.api.getAllSchemas().pipe(
@@ -33,6 +43,23 @@ export class CmsModuleState {
         });
 
         return modules;
+      }),
+    );
+  }
+
+  @Action(FetchModuleSchema)
+  fetchSchema(
+    ctx: StateContext<CmsModuleStateModel>,
+    action: FetchModuleSchema,
+  ) {
+    return this.api.getSchemaBySlug(action.module).pipe(
+      map(schemaDefinition => {
+        const state = ctx.getState();
+        const schemas = { ...state.schemas };
+        schemas[action.module] = schemaDefinition.definition;
+        ctx.patchState({
+          schemas,
+        });
       }),
     );
   }

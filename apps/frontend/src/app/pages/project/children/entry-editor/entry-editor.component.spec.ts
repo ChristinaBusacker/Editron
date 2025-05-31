@@ -1,19 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ProjectEntityComponent } from './project-entity.component';
 
+import { EntryEditorComponent } from './entry-editor.component';
 
-
-describe('ProjectEntityComponentComponent', () => {
-  let component: ProjectEntityComponent;
-  let fixture: ComponentFixture<ProjectEntityComponent>;
+describe('EntryEditorComponent', () => {
+  let component: EntryEditorComponent;
+  let fixture: ComponentFixture<EntryEditorComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ProjectEntityComponent]
+      imports: [EntryEditorComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ProjectEntityComponent);
+    fixture = TestBed.createComponent(EntryEditorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -26,7 +26,7 @@ export class NavigationState {
   }
 
   @Selector()
-  static cmsModules(state: NavigationStateModel): CmsModule | null {
+  static cmsModule(state: NavigationStateModel): CmsModule | null {
     return state?.module || null;
   }
 

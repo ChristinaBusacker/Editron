@@ -11,6 +11,7 @@ import { ProjectDetailsComponent } from './pages/project/children/project-detail
 import { ProjectEntityComponent } from './pages/project/children/project-entity-component/project-entity.component';
 import { ProjectComponent } from './pages/project/project.component';
 import { moduleEntityResolver } from './core/resolvers/module-entity.resolver';
+import { EntryEditorComponent } from './pages/project/children/entry-editor/entry-editor.component';
 
 // app-routing.module.ts
 export const routes: Routes = [
@@ -34,6 +35,16 @@ export const routes: Routes = [
       {
         path: ':moduleSlug',
         component: ProjectEntityComponent,
+        resolve: { entries: moduleEntityResolver },
+      },
+      {
+        path: ':moduleSlug/create',
+        component: EntryEditorComponent,
+        resolve: { entries: moduleEntityResolver },
+      },
+      {
+        path: ':moduleSlug/:entityId',
+        component: EntryEditorComponent,
         resolve: { entries: moduleEntityResolver },
       },
       {

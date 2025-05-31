@@ -5,7 +5,6 @@ import { ProjectApiService } from '@frontend/shared/services/api/project-api.ser
 import { Store } from '@ngxs/store';
 import { map } from 'rxjs';
 import { SetCurrentProject } from '../store/navigation/navigation.actions';
-import { ProjectState } from '../store/project/project.state';
 import { NavigationState } from '../store/navigation/navigation.state';
 
 export const projectResolver: ResolveFn<Project> = (route, state) => {
@@ -15,13 +14,11 @@ export const projectResolver: ResolveFn<Project> = (route, state) => {
   let projectId = route.paramMap.get('projectId');
 
   if (!projectId) {
-    const project = store.selectSnapshot(NavigationState.currentProject);
-    projectId = project.id;
+    const current = store.selectSnapshot(NavigationState.currentProject);
+    projectId = current?.id;
   }
 
-  const project = projectApi.get(projectId);
-
-  return project.pipe(
+  return projectApi.get(projectId).pipe(
     map(project => {
       store.dispatch(new SetCurrentProject(project));
       return project;
