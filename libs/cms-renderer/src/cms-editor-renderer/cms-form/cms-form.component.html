@@ -1,0 +1,110 @@
+<form [formGroup]="form" class="cms-form">
+    @for (field of fields(); track field.name) {
+    <div class="field-wrapper">
+        <div class="field-label">{{ field.name }}</div>
+
+        @if (field.type === 'singleline') {
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>{{ field.name }}</mat-label>
+            <input matInput [formControl]="getControl(field.name)" />
+            <mat-error *ngFor="let error of getErrors(field.name)">
+                {{ error }}
+            </mat-error>
+        </mat-form-field>
+        }
+
+        @if (field.type === 'multiline') {
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>{{ field.name }}</mat-label>
+            <textarea matInput rows="4" [formControl]="getControl(field.name)"></textarea>
+            <mat-error *ngFor="let error of getErrors(field.name)">
+                {{ error }}
+            </mat-error>
+        </mat-form-field>
+        }
+
+        @if (field.type === 'boolean') {
+        <mat-checkbox [formControl]="getControl(field.name)">
+            {{ field.name }}
+        </mat-checkbox>
+        }
+
+        @if (field.type === 'select') {
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>{{ field.name }}</mat-label>
+            <mat-select [formControl]="getControl(field.name)">
+                @for (option of field.options ?? []; track option) {
+                <mat-option [value]="option">{{ option }}</mat-option>
+                }
+            </mat-select>
+            <mat-error *ngFor="let error of getErrors(field.name)">
+                {{ error }}
+            </mat-error>
+        </mat-form-field>
+        }
+
+        @if (field.type === 'date') {
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>{{ field.name }}</mat-label>
+            <input matInput [matDatepicker]="picker" [formControl]="getControl(field.name)" />
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngFor="let error of getErrors(field.name)">
+                {{ error }}
+            </mat-error>
+        </mat-form-field>
+        }
+
+        @if (field.type === 'slug') {
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>{{ field.name }}</mat-label>
+            <input matInput [formControl]="getControl(field.name)" (input)="onSlugInput(field.name)" />
+            <mat-error *ngFor="let error of getErrors(field.name)">
+                {{ error }}
+            </mat-error>
+        </mat-form-field>
+        }
+
+        @if (field.type === 'number') {
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>{{ field.name }}</mat-label>
+            <input matInput type="number" [formControl]="getControl(field.name)" step="1" />
+            <mat-error *ngFor="let error of getErrors(field.name)">
+                {{ error }}
+            </mat-error>
+        </mat-form-field>
+        }
+
+        @if (field.type === 'float') {
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>{{ field.name }}</mat-label>
+            <input matInput type="number" [formControl]="getControl(field.name)" step="any" />
+            <mat-error *ngFor="let error of getErrors(field.name)">
+                {{ error }}
+            </mat-error>
+        </mat-form-field>
+        }
+
+        @if (field.type === 'select') {
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>{{ field.name }}</mat-label>
+            <mat-select [formControl]="getControl(field.name)">
+                @for (option of field.options ?? []; track option) {
+                <mat-option [value]="option">{{ option }}</mat-option>
+                }
+            </mat-select>
+            <mat-error *ngFor="let error of getErrors(field.name)">
+                {{ error }}
+            </mat-error>
+        </mat-form-field>
+        }
+
+        @if (field.type === 'richtext') {
+        <lib-cms-richtext-editor [control]="getControl(field.name)" />
+        <mat-error *ngFor="let error of getErrors(field.name)">
+            {{ error }}
+        </mat-error>
+        }
+    </div>
+    }
+</form>

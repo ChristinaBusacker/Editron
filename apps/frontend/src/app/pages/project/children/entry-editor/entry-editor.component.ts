@@ -1,16 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { CmsFormComponent } from '@cmsrenderer/cms-editor-renderer/cms-form/cms-form.component';
 import { CmsModuleState } from '@frontend/core/store/cmsModules/cmsModules.state';
-import { ContentState } from '@frontend/core/store/content/content.state';
 import { NavigationState } from '@frontend/core/store/navigation/navigation.state';
 import { Store } from '@ngxs/store';
 import { ContentSchemaDefinition } from '@shared/declarations/interfaces/content/content-schema-definition';
-import { CmsModule } from 'libs/cmsmodules/src/modules/cms-module';
 import { combineLatest, map } from 'rxjs';
 
 @Component({
   selector: 'app-entry-editor',
-  imports: [CommonModule],
+  imports: [CommonModule, CmsFormComponent],
   templateUrl: './entry-editor.component.html',
   styleUrl: './entry-editor.component.scss',
 })
