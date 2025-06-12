@@ -33,6 +33,11 @@
         <lib-cms-color-editor [control]="getControl(field.name)"></lib-cms-color-editor>
         }
 
+        @if (field.type === 'tags') {
+        <lib-cms-tag-editor [control]="getControl(field.name)" [label]="field.name"></lib-cms-tag-editor>
+        }
+
+
         @if (field.type === 'html') {
         <lib-cms-html-editor [control]="getControl(field.name)" />
         }
