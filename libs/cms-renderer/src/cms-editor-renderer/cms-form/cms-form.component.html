@@ -33,6 +33,10 @@
         <input type="color" />
         }
 
+        @if (field.type === 'html') {
+        <lib-cms-html-editor />
+        }
+
         @if (field.type === 'date') {
         <mat-form-field appearance="outline" class="w-full">
             <mat-label>{{ field.name }}</mat-label>

@@ -21,6 +21,7 @@ import {
 import { CmsRichtextEditorComponent } from '../cms-richtext-editor/cms-richtext-editor.component';
 import { CmsGeolocationEditorComponent } from '../cms-geolocation-editor/cms-geolocation-editor.component';
 import { CmsDatetimeEditorComponent } from '../cms-datetime-editor/cms-datetime-editor.component';
+import { CmsHtmlEditorComponent } from '../cms-html-editor/cms-html-editor.component';
 
 @Component({
   selector: 'lib-cms-form',
@@ -37,6 +38,7 @@ import { CmsDatetimeEditorComponent } from '../cms-datetime-editor/cms-datetime-
     CmsRichtextEditorComponent,
     CmsGeolocationEditorComponent,
     CmsDatetimeEditorComponent,
+    CmsHtmlEditorComponent,
   ],
   templateUrl: './cms-form.component.html',
 })
