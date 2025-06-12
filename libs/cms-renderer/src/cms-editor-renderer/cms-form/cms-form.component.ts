@@ -23,8 +23,8 @@ import { CmsGeolocationEditorComponent } from '../cms-geolocation-editor/cms-geo
 import { CmsDatetimeEditorComponent } from '../cms-datetime-editor/cms-datetime-editor.component';
 import { CmsHtmlEditorComponent } from '../cms-html-editor/cms-html-editor.component';
 import { CmsColorEditorComponent } from '../cms-color-editor/cms-color-editor.component';
-import { CmsJsonEditorComponent } from '@cmsrenderer/cms-json-editor/cms-json-editor.component';
 import { CmsTagEditorComponent } from '../cms-tag-editor/cms-tag-editor.component';
+import { CmsJsonEditorComponent } from '../cms-json-editor/cms-json-editor.component';
 
 @Component({
   selector: 'lib-cms-form',
