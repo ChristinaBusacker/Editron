@@ -37,6 +37,10 @@
         <lib-cms-html-editor [control]="getControl(field.name)" />
         }
 
+        @if (field.type === 'json') {
+        <lib-cms-json-editor [control]="getControl(field.name)" />
+        }
+
         @if (field.type === 'date') {
         <mat-form-field appearance="outline" class="w-full">
             <mat-label>{{ field.name }}</mat-label>

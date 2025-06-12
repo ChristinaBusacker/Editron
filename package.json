@@ -29,6 +29,7 @@
     "@angular/ssr": "^19.2.10",
     "@codemirror/lang-html": "^6.4.9",
     "@codemirror/lang-javascript": "^6.2.4",
+    "@codemirror/lang-json": "^6.0.1",
     "@eslint/js": "^9.26.0",
     "@nestjs/common": "^10.4.17",
     "@nestjs/config": "^3.2.3",

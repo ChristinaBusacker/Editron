@@ -19,6 +19,15 @@ export class CmsColorEditorComponent {
   @Input() label = 'Color';
   public color = '#000000';
 
+  public presetColors = [
+    '#fff',
+    '#000',
+    '#2889e9',
+    '#e920e9',
+    '#fff500',
+    'rgb(236,64,64)',
+  ];
+
   onChange(color: string) {
     this.control.setValue(color);
   }
