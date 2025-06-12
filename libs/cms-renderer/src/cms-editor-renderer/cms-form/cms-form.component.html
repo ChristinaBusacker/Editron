@@ -29,6 +29,11 @@
         </mat-checkbox>
         }
 
+        @if (field.type === 'color') {
+        <input type="color" />
+        }
+
+
         @if (field.type === 'select') {
         <mat-form-field appearance="outline" class="w-full">
             <mat-label>{{ field.name }}</mat-label>
@@ -101,6 +106,13 @@
 
         @if (field.type === 'richtext') {
         <lib-cms-richtext-editor [control]="getControl(field.name)" />
+        <mat-error *ngFor="let error of getErrors(field.name)">
+            {{ error }}
+        </mat-error>
+        }
+
+        @if (field.type === 'geolocation') {
+        <lib-cms-geolocation-editor />
         <mat-error *ngFor="let error of getErrors(field.name)">
             {{ error }}
         </mat-error>

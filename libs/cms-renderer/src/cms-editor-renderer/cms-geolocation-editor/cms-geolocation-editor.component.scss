@@ -1,0 +1,26 @@
+.map {
+  height: 300px;
+  width: 100%;
+  margin: 1rem 0;
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  input {
+    padding: 0.5rem;
+    font-size: 1rem;
+  }
+
+  .latlon {
+    display: flex;
+    gap: 1rem;
+
+    label {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}

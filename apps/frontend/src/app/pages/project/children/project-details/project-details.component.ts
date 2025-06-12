@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { NavigationState } from '@frontend/core/store/navigation/navigation.state';
 import { Project } from '@frontend/shared/services/api/models/project.model';
 import { Store } from '@ngxs/store';

@@ -19,6 +19,7 @@ import {
   FieldDefinition,
 } from '@shared/declarations/interfaces/content/content-schema-definition';
 import { CmsRichtextEditorComponent } from '../cms-richtext-editor/cms-richtext-editor.component';
+import { CmsGeolocationEditorComponent } from '../cms-geolocation-editor/cms-geolocation-editor.component';
 
 @Component({
   selector: 'lib-cms-form',
@@ -33,6 +34,7 @@ import { CmsRichtextEditorComponent } from '../cms-richtext-editor/cms-richtext-
     MatDatepickerModule,
     MatNativeDateModule,
     CmsRichtextEditorComponent,
+    CmsGeolocationEditorComponent,
   ],
   templateUrl: './cms-form.component.html',
 })
