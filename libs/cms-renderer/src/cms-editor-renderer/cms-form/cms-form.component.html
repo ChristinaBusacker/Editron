@@ -30,11 +30,11 @@
         }
 
         @if (field.type === 'color') {
-        <lib-cms-color-editor></lib-cms-color-editor>
+        <lib-cms-color-editor [control]="getControl(field.name)"></lib-cms-color-editor>
         }
 
         @if (field.type === 'html') {
-        <lib-cms-html-editor />
+        <lib-cms-html-editor [control]="getControl(field.name)" />
         }
 
         @if (field.type === 'date') {
@@ -107,7 +107,7 @@
         }
 
         @if (field.type === 'geolocation') {
-        <lib-cms-geolocation-editor />
+        <lib-cms-geolocation-editor [control]="getControl(field.name)" />
         <mat-error *ngFor="let error of getErrors(field.name)">
             {{ error }}
         </mat-error>

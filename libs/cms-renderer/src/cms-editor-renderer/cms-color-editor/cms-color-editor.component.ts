@@ -15,7 +15,11 @@ import { ColorPickerComponent, ColorPickerDirective } from 'ngx-color-picker';
   styleUrl: './cms-color-editor.component.scss',
 })
 export class CmsColorEditorComponent {
-  @Input() control!: FormControl;
+  @Input() control!: FormControl<string>;
   @Input() label = 'Color';
   public color = '#000000';
+
+  onChange(color: string) {
+    this.control.setValue(color);
+  }
 }

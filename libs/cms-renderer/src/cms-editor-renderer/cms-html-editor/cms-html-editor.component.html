@@ -1,1 +1,2 @@
-<code-editor [(ngModel)]="value" [extensions]="[extensions]" [setup]="'basic'" theme="dark"></code-editor>
+<code-editor [(ngModel)]="value" [extensions]="[extensions]" [setup]="'basic'" theme="dark"
+    (change)="onChange($event)"></code-editor>

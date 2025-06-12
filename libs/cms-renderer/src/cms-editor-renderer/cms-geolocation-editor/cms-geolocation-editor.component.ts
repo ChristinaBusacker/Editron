@@ -43,9 +43,11 @@ import { NominatimSearchResult } from '@shared/declarations/interfaces/nominatim
   styleUrl: './cms-geolocation-editor.component.scss',
 })
 export class CmsGeolocationEditorComponent {
-  @Input() lat = 52.52;
-  @Input() lon = 13.405;
+  @Input() control: FormControl<{ lat: number; lon: number }>;
   @Output() locationChange = new EventEmitter<{ lat: number; lon: number }>();
+
+  lat = 52.52;
+  lon = 13.405;
 
   latSignal = signal(this.lat);
   lonSignal = signal(this.lon);
@@ -64,6 +66,7 @@ export class CmsGeolocationEditorComponent {
       this.updateMarker(lat, lon);
       this.locationChange.emit({ lat, lon });
       this.reverseGeocode(lat, lon);
+      this.control.setValue({ lat, lon }, { emitEvent: true });
     });
 
     this.filteredSuggestions$ = this.addressControl.valueChanges.pipe(
