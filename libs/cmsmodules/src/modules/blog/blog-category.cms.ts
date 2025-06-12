@@ -3,6 +3,7 @@ import { CmsModule } from '../cms-module';
 export const BlogCategoryCMSModule: CmsModule = {
   slug: 'blog_category',
   name: 'Blog Category',
+  renderer: 'form',
   schema: {
     fields: [
       {

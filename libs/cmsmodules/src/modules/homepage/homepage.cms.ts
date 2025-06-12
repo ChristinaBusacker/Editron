@@ -4,6 +4,7 @@ import { SeoCMSModule } from '../seo/seo.cms';
 export const HomepageCMSModule: CmsModule = {
   slug: 'homepage',
   name: 'Homepage',
+  renderer: 'homepage',
   schema: {
     fields: [
       {

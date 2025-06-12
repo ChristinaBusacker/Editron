@@ -4,6 +4,7 @@ import { SeoCMSModule } from '../seo/seo.cms';
 export const WipMSModule: CmsModule = {
   slug: 'wip',
   name: 'Wip Module',
+  renderer: 'form',
   schema: {
     fields: [
       {

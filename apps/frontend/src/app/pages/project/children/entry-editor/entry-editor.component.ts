@@ -19,6 +19,8 @@ export class EntryEditorComponent implements OnInit {
 
   schema: ContentSchemaDefinition;
 
+  renderer: string;
+
   constructor(private store: Store) {}
 
   ngOnInit(): void {
@@ -27,6 +29,7 @@ export class EntryEditorComponent implements OnInit {
         map(([schemas, module]) => {
           if (schemas && module) {
             this.schema = schemas[module.slug];
+            this.renderer = module.renderer;
           }
         }),
       )

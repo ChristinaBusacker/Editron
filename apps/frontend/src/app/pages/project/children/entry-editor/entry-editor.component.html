@@ -1,2 +1,5 @@
-<p>entry-editor works!</p>
+@if(renderer === 'form') {
 <lib-cms-form [schemaDefinition]="schema"></lib-cms-form>
+} @else {
+selected renderer {{renderer}}
+}

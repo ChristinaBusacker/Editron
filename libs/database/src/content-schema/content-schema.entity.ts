@@ -12,6 +12,9 @@ export class ContentSchemaEntity {
   @Column({ unique: true })
   slug: string;
 
+  @Column()
+  renderer: string;
+
   @Column('jsonb')
   definition: ContentSchemaDefinition;
 }

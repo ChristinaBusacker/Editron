@@ -3,6 +3,7 @@ import { CmsModule } from '../cms-module';
 export const SeoCMSModule: CmsModule = {
   slug: 'seo',
   name: 'Search Engine Optimisation',
+  renderer: 'form',
   schema: {
     fields: [
       {

@@ -8,7 +8,7 @@ export class ContentSchemaService {
   async getAllSchemas() {
     return this.db.contentSchemaRepository.find({
       order: { name: 'ASC' },
-      select: ['id', 'name', 'slug'],
+      select: ['id', 'name', 'slug', 'renderer'],
     });
   }
 

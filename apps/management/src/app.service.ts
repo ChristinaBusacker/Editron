@@ -29,6 +29,7 @@ export class AppService {
         await this.databaseService.contentSchemaRepository.save({
           name: module.name,
           slug: module.slug,
+          renderer: module.renderer,
           definition: module.schema,
         });
         console.log(`Module "${module.slug}" registered.`);
@@ -36,6 +37,7 @@ export class AppService {
         this.databaseService.contentSchemaRepository.update(exists, {
           name: module.name,
           slug: module.slug,
+          renderer: module.renderer,
           definition: module.schema,
         });
         console.log(`Module "${module.slug}" already exists, updated.`);
