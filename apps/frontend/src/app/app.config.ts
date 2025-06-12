@@ -19,6 +19,10 @@ import { DialogService } from './shared/dialogs/dialog.service';
 import { CmsModuleState } from './core/store/cmsModules/cmsModules.state';
 import { NavigationState } from './core/store/navigation/navigation.state';
 import { ContentState } from './core/store/content/content.state';
+import {
+  MAT_DATE_LOCALE,
+  provideNativeDateAdapter,
+} from '@angular/material/core';
 
 const states = [
   AuthState,
@@ -42,6 +46,11 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(withInterceptorsFromDi()),
     ...coreServices,
+    provideNativeDateAdapter(),
+    {
+      provide: MAT_DATE_LOCALE,
+      useValue: navigator.language || navigator.languages[0] || 'en-US',
+    },
     provideStore([...states], withNgxsReduxDevtoolsPlugin()),
   ],
 };

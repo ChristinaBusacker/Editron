@@ -65,6 +65,7 @@ export const WipMSModule: CmsModule = {
         name: 'select',
         type: 'select',
         localizable: false,
+        options: ['a', 'b'],
       },
       {
         name: 'tags',

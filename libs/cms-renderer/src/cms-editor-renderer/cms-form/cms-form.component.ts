@@ -20,6 +20,7 @@ import {
 } from '@shared/declarations/interfaces/content/content-schema-definition';
 import { CmsRichtextEditorComponent } from '../cms-richtext-editor/cms-richtext-editor.component';
 import { CmsGeolocationEditorComponent } from '../cms-geolocation-editor/cms-geolocation-editor.component';
+import { CmsDatetimeEditorComponent } from '../cms-datetime-editor/cms-datetime-editor.component';
 
 @Component({
   selector: 'lib-cms-form',
@@ -35,6 +36,7 @@ import { CmsGeolocationEditorComponent } from '../cms-geolocation-editor/cms-geo
     MatNativeDateModule,
     CmsRichtextEditorComponent,
     CmsGeolocationEditorComponent,
+    CmsDatetimeEditorComponent,
   ],
   templateUrl: './cms-form.component.html',
 })
@@ -111,7 +113,20 @@ export class CmsFormComponent implements OnInit {
 
     for (const field of this.fields()) {
       const validators = this.buildValidators(field);
-      this.form.addControl(field.name, new FormControl(null, validators));
+
+      // Setting global defaults
+      let defaultValue = null;
+      if (field.type === 'boolean') {
+        defaultValue = false;
+      }
+
+      // overwrite with explicit defaults
+      defaultValue = field.default || defaultValue;
+
+      this.form.addControl(
+        field.name,
+        new FormControl(defaultValue, validators),
+      );
     }
   }
 
@@ -133,5 +148,9 @@ export class CmsFormComponent implements OnInit {
       .replace(/-+/g, '-');
 
     control.setValue(slug, { emitEvent: false });
+  }
+
+  logValues() {
+    console.log(this.form.value);
   }
 }

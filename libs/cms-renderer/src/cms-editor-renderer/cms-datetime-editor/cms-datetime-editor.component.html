@@ -1,0 +1,13 @@
+<mat-form-field appearance="fill">
+    <mat-label>Datum</mat-label>
+    <input matInput [matDatepicker]="datepicker" [ngModel]="date" (ngModelChange)="onDateChange($event)" />
+    <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+    <mat-datepicker #datepicker></mat-datepicker>
+</mat-form-field>
+
+<mat-form-field appearance="fill">
+    <mat-label>Uhrzeit</mat-label>
+    <input matInput [matTimepicker]="timepicker" [ngModel]="time" (ngModelChange)="onTimeChange($event)" />
+    <mat-timepicker-toggle matSuffix [for]="timepicker"></mat-timepicker-toggle>
+    <mat-timepicker #timepicker></mat-timepicker>
+</mat-form-field>

@@ -31,6 +31,7 @@ export interface FieldDefinition {
   type: FieldType;
   localizable: boolean;
   validation?: FieldValidation;
+  default?: any;
   options?: string[];
   relation?: {
     schema: string;

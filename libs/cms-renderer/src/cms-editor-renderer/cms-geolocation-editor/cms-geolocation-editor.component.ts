@@ -23,7 +23,7 @@ import {
 } from 'rxjs/operators';
 
 import { Observable } from 'rxjs';
-import { NgIf, NgFor } from '@angular/common';
+import { NgFor } from '@angular/common';
 import { NominatimSearchResult } from '@shared/declarations/interfaces/nominatim/nominatim-search-results.interface';
 
 @Component({
@@ -35,7 +35,7 @@ import { NominatimSearchResult } from '@shared/declarations/interfaces/nominatim
     MatAutocompleteModule,
     MatFormFieldModule,
     MatInputModule,
-    NgIf,
+
     NgFor,
   ],
   providers: [CmsGeolocationEditorService],
