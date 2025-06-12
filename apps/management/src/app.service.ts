@@ -1,3 +1,4 @@
+import { ContentSchemaEntity } from '@database/content-schema/content-schema.entity';
 import { DatabaseService } from '@database/database.service';
 import { Injectable } from '@nestjs/common';
 import { BlogCMSModule } from 'libs/cmsmodules/src/modules/blog/blog.cms';
@@ -18,6 +19,8 @@ export class AppService {
       this.initModule(mod, uniqueModules);
     }
 
+    const entries: { [key: string]: ContentSchemaEntity } = {};
+
     for (const module of uniqueModules) {
       const exists = await this.databaseService.contentSchemaRepository.findOne(
         {
@@ -26,21 +29,46 @@ export class AppService {
       );
 
       if (!exists) {
-        await this.databaseService.contentSchemaRepository.save({
-          name: module.name,
-          slug: module.slug,
-          renderer: module.renderer,
-          definition: module.schema,
-        });
+        entries[module.slug] =
+          await this.databaseService.contentSchemaRepository.save({
+            name: module.name,
+            slug: module.slug,
+            renderer: module.renderer,
+            definition: module.schema,
+          });
         console.log(`Module "${module.slug}" registered.`);
       } else {
-        this.databaseService.contentSchemaRepository.update(exists, {
-          name: module.name,
-          slug: module.slug,
-          renderer: module.renderer,
-          definition: module.schema,
-        });
+        entries[module.slug] = exists;
+        this.databaseService.contentSchemaRepository.update(
+          { id: exists.id },
+          {
+            name: module.name,
+            slug: module.slug,
+            renderer: module.renderer,
+            definition: module.schema,
+          },
+        );
         console.log(`Module "${module.slug}" already exists, updated.`);
+      }
+    }
+
+    for (const module of uniqueModules) {
+      if (module.extensions) {
+        const entry = entries[module.slug];
+        const extensions = module.extensions
+          .map((ext) => entries[ext.slug])
+          .filter((e): e is ContentSchemaEntity => !!e);
+
+        if (extensions.length > 0) {
+          entry.extensions = extensions;
+          await this.databaseService.contentSchemaRepository.save(entry);
+
+          console.log(
+            `Updated ${entry.name} with extensions: ${extensions
+              .map((e) => e.slug)
+              .join(', ')}`,
+          );
+        }
       }
     }
   }

@@ -4,5 +4,5 @@ export interface CmsModule {
   name: string;
   schema: ContentSchemaDefinition;
   renderer: 'form' | 'homepage';
-  extensions?: Record<string, CmsModule>;
+  extensions?: Array<CmsModule>;
 }

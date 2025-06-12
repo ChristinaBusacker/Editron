@@ -27,7 +27,5 @@ export const HomepageCMSModule: CmsModule = {
       },
     ],
   },
-  extensions: {
-    seo: SeoCMSModule,
-  },
+  extensions: [SeoCMSModule],
 };

@@ -8,13 +8,15 @@ export class ContentSchemaService {
   async getAllSchemas() {
     return this.db.contentSchemaRepository.find({
       order: { name: 'ASC' },
-      select: ['id', 'name', 'slug', 'renderer'],
+      relations: ['extensions'],
+      select: ['id', 'name', 'slug', 'renderer'], // optional
     });
   }
 
   async getSchemaBySlug(slug: string) {
     const schema = await this.db.contentSchemaRepository.findOne({
       where: { slug },
+      relations: ['extensions'],
     });
 
     if (!schema) {

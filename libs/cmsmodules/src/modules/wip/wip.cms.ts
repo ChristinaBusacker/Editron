@@ -85,5 +85,5 @@ export const WipMSModule: CmsModule = {
       },
     ],
   },
-  extensions: {},
+  extensions: [SeoCMSModule],
 };

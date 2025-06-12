@@ -61,8 +61,5 @@ export const BlogCMSModule: CmsModule = {
       },
     ],
   },
-  extensions: {
-    seo: SeoCMSModule,
-    blogCategories: BlogCategoryCMSModule,
-  },
+  extensions: [SeoCMSModule, BlogCategoryCMSModule],
 };
