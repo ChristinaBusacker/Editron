@@ -1,4 +1,5 @@
 import { ContentEntryEntity } from '@database/content-entry/content-entry.entity';
+import { UserEntity } from '@database/user/user.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -9,8 +10,8 @@ import {
 
 @Entity('content_versions')
 export class ContentVersionEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @ManyToOne(() => ContentEntryEntity, { onDelete: 'CASCADE' })
   entry: ContentEntryEntity;
@@ -26,4 +27,7 @@ export class ContentVersionEntity {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @ManyToOne(() => UserEntity, { nullable: true })
+  createdBy: UserEntity;
 }

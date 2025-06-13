@@ -6,14 +6,16 @@ import {
   ManyToOne,
   Column,
   Index,
+  OneToMany,
 } from 'typeorm';
 import { UserEntity } from '@database/user/user.entity';
+import { ContentVersionEntity } from '@database/content-version/content-version.entity';
 
 @Entity('content_entries')
-@Index(['project', 'schema', 'key'], { unique: true })
+@Index(['project', 'schema'], { unique: true })
 export class ContentEntryEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @ManyToOne(() => ContentSchemaEntity, { nullable: false })
   schema: ContentSchemaEntity;
@@ -21,12 +23,12 @@ export class ContentEntryEntity {
   @ManyToOne(() => ProjectEntity, { onDelete: 'CASCADE', nullable: false })
   project: ProjectEntity;
 
-  @Column()
-  key: string;
-
   @ManyToOne(() => UserEntity, { nullable: true })
   createdBy: UserEntity;
 
   @ManyToOne(() => UserEntity, { nullable: true })
   updatedBy: UserEntity;
+
+  @OneToMany(() => ContentVersionEntity, version => version.entry)
+  versions: ContentVersionEntity[];
 }

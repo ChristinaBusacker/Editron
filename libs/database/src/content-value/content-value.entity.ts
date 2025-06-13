@@ -1,5 +1,11 @@
 import { ContentVersionEntity } from '@database/content-version/content-version.entity';
-import { Entity, PrimaryGeneratedColumn, ManyToOne, Column } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  Column,
+  OneToMany,
+} from 'typeorm';
 
 @Entity('content_values')
 export class ContentValueEntity {
@@ -8,12 +14,6 @@ export class ContentValueEntity {
 
   @ManyToOne(() => ContentVersionEntity, { onDelete: 'CASCADE' })
   version: ContentVersionEntity;
-
-  @Column()
-  fieldName: string;
-
-  @Column({ nullable: true })
-  locale?: string;
 
   @Column('jsonb')
   value: any;

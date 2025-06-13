@@ -82,19 +82,19 @@ export class ContentEntryController {
 
   @Get('entries/:entryId')
   @ApiOperation({ summary: 'Get entry details with latest version and values' })
-  @ApiParam({ name: 'entryId', type: Number })
+  @ApiParam({ name: 'entryId', type: String })
   @ApiResponse({
     status: 200,
     description: 'Entry with latest version returned',
   })
   @ApiResponse({ status: 404, description: 'Entry not found' })
-  getEntryDetails(@Param('entryId') entryId: number) {
+  getEntryDetails(@Param('entryId') entryId: string) {
     return this.contentEntryService.getEntryWithLatestVersion(entryId);
   }
 
   @Put('entries/:entryId')
   @ApiOperation({ summary: 'Update an entry (creates a new version)' })
-  @ApiParam({ name: 'entryId', type: Number })
+  @ApiParam({ name: 'entryId', type: String })
   @ApiResponse({
     status: 200,
     description: 'Entry updated (new version created)',
@@ -102,7 +102,7 @@ export class ContentEntryController {
   @ApiResponse({ status: 400, description: 'Validation failed' })
   @ApiResponse({ status: 404, description: 'Entry not found' })
   updateEntry(
-    @Param('entryId') entryId: number,
+    @Param('entryId') entryId: string,
     @Body() dto: UpdateEntryDto,
     @CurrentUser() user: UserEntity,
   ) {
@@ -113,10 +113,10 @@ export class ContentEntryController {
   @ApiOperation({
     summary: 'Delete an entry and all associated versions/values',
   })
-  @ApiParam({ name: 'entryId', type: Number })
+  @ApiParam({ name: 'entryId', type: String })
   @ApiResponse({ status: 200, description: 'Entry deleted' })
   @ApiResponse({ status: 404, description: 'Entry not found' })
-  deleteEntry(@Param('entryId') entryId: number) {
+  deleteEntry(@Param('entryId') entryId: string) {
     return this.contentEntryService.deleteEntry(entryId);
   }
 
@@ -126,32 +126,32 @@ export class ContentEntryController {
 
   @Get('entries/:entryId/versions')
   @ApiOperation({ summary: 'List all versions of a content entry' })
-  @ApiParam({ name: 'entryId', type: Number })
+  @ApiParam({ name: 'entryId', type: String })
   @ApiResponse({ status: 200, description: 'List of versions returned' })
   @ApiResponse({ status: 404, description: 'Entry not found' })
-  getVersions(@Param('entryId') entryId: number) {
+  getVersions(@Param('entryId') entryId: string) {
     return this.contentEntryService.getVersions(entryId);
   }
 
   @Post('versions/:versionId/publish')
   @ApiOperation({ summary: 'Publish a specific version' })
-  @ApiParam({ name: 'versionId', type: Number })
+  @ApiParam({ name: 'versionId', type: String })
   @ApiResponse({ status: 200, description: 'Version published' })
   @ApiResponse({ status: 404, description: 'Version not found' })
-  publishVersion(@Param('versionId') versionId: number) {
+  publishVersion(@Param('versionId') versionId: string) {
     return this.contentEntryService.publishVersion(versionId);
   }
 
   @Post('versions/:versionId/restore')
   @ApiOperation({ summary: 'Restore a specific version (creates new draft)' })
-  @ApiParam({ name: 'versionId', type: Number })
+  @ApiParam({ name: 'versionId', type: String })
   @ApiResponse({
     status: 200,
     description: 'Version restored (new draft created)',
   })
   @ApiResponse({ status: 404, description: 'Version not found' })
   restoreVersion(
-    @Param('versionId') versionId: number,
+    @Param('versionId') versionId: string,
     @Body() dto: RestoreVersionDto,
   ) {
     return this.contentEntryService.restoreVersion(versionId);

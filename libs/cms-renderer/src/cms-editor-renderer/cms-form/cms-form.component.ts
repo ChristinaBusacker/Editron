@@ -50,8 +50,7 @@ import { CmsJsonEditorComponent } from '../cms-json-editor/cms-json-editor.compo
 })
 export class CmsFormComponent implements OnInit {
   @Input({ required: true }) schemaDefinition!: ContentSchemaDefinition;
-
-  form: FormGroup = this.fb.group({});
+  @Input() form: FormGroup = this.fb.group({});
   fields = signal<FieldDefinition[]>([]);
 
   constructor(private fb: FormBuilder) {}
@@ -156,9 +155,5 @@ export class CmsFormComponent implements OnInit {
       .replace(/-+/g, '-');
 
     control.setValue(slug, { emitEvent: false });
-  }
-
-  logValues() {
-    console.log(this.form.value);
   }
 }

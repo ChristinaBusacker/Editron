@@ -11,6 +11,7 @@ import { validateContentValues } from '@management/core/helpers/utils/content-va
 import { UpdateEntryDto } from '../dto/update-entry.dto';
 import { ValidateEntryDto } from '../dto/validate-entry.dto';
 import { UserEntity } from '@database/user/user.entity';
+import { ContentValueEntity } from '@database/content-value/content-value.entity';
 
 @Injectable()
 export class ContentEntryService {
@@ -56,29 +57,39 @@ export class ContentEntryService {
     if (!project)
       throw new NotFoundException(`Project "${projectId}" not found`);
 
-    const existing = await this.db.contentEntryRepository.findOne({
-      where: {
-        key: dto.key,
-        schema: { id: schema.id },
-        project: { id: projectId },
-      },
-    });
-    if (existing) {
-      throw new ConflictException(`Entry with key "${dto.key}" already exists`);
+    const validationErrors = validateContentValues(schema.definition, dto.data);
+    if (validationErrors.length > 0) {
+      throw new BadRequestException({
+        message: 'Validation failed',
+        errors: validationErrors,
+      });
     }
 
     const entry = this.db.contentEntryRepository.create({
-      key: dto.key,
       schema,
       project,
       createdBy: user,
     });
+    await this.db.contentEntryRepository.save(entry);
 
-    return this.db.contentEntryRepository.save(entry);
+    const version = this.db.contentVersionRepository.create({
+      entry,
+      version: 1,
+      isPublished: false,
+      createdBy: user,
+    });
+    await this.db.contentVersionRepository.save(version);
+
+    await this.db.contentValueRepository.save({
+      version,
+      value: dto.data,
+    });
+
+    return entry;
   }
 
   // Update entry by creating a new version and validating values
-  async updateEntry(entryId: number, dto: UpdateEntryDto, user: UserEntity) {
+  async updateEntry(entryId: string, dto: UpdateEntryDto, user: UserEntity) {
     const entry = await this.db.contentEntryRepository.findOne({
       where: { id: entryId },
       relations: ['schema'],
@@ -87,25 +98,8 @@ export class ContentEntryService {
 
     const schema = entry.schema.definition;
 
-    const valueMap: Record<string, Record<string | null, any>> = {};
-    for (const v of dto.values) {
-      if (!valueMap[v.fieldName]) valueMap[v.fieldName] = {};
-      valueMap[v.fieldName][v.locale ?? null] = v.value;
-    }
-
-    const flatValues = Object.entries(valueMap).flatMap(([field, locales]) =>
-      Object.entries(locales).map(([locale, val]) => ({
-        fieldName: field,
-        locale: locale === 'null' ? null : locale,
-        value: val,
-      })),
-    );
-
-    const validationErrors = validateContentValues(
-      schema,
-      Object.fromEntries(flatValues.map((v) => [v.fieldName, v.value])),
-    );
-
+    // Validate the submitted data against the schema definition
+    const validationErrors = validateContentValues(schema, dto.data);
     if (validationErrors.length > 0) {
       throw new BadRequestException({
         message: 'Validation failed',
@@ -113,29 +107,26 @@ export class ContentEntryService {
       });
     }
 
+    // Retrieve the most recent version to determine the next version number
     const lastVersion = await this.db.contentVersionRepository.findOne({
       where: { entry: { id: entry.id } },
       order: { version: 'DESC' },
     });
 
+    // Create a new version
     const newVersion = this.db.contentVersionRepository.create({
       entry,
       version: (lastVersion?.version ?? 0) + 1,
       isPublished: false,
+      createdBy: user,
     });
     await this.db.contentVersionRepository.save(newVersion);
 
-    for (const value of flatValues) {
-      await this.db.contentValueRepository.save({
-        version: newVersion,
-        fieldName: value.fieldName,
-        locale: value.locale,
-        value: value.value,
-      });
-    }
-
-    entry.updatedBy = user;
-    await this.db.contentEntryRepository.save(entry);
+    // Store the entire JSON blob as a single value
+    await this.db.contentValueRepository.save({
+      version: newVersion,
+      value: dto.data,
+    });
 
     return {
       message: 'Entry updated',
@@ -144,7 +135,7 @@ export class ContentEntryService {
   }
 
   // List all versions of an entry
-  async getVersions(entryId: number) {
+  async getVersions(entryId: string) {
     const entry = await this.db.contentEntryRepository.findOne({
       where: { id: entryId },
     });
@@ -157,7 +148,7 @@ export class ContentEntryService {
   }
 
   // Publish a specific version (only one can be published at a time)
-  async publishVersion(versionId: number) {
+  async publishVersion(versionId: string) {
     const version = await this.db.contentVersionRepository.findOne({
       where: { id: versionId },
       relations: ['entry'],
@@ -178,7 +169,7 @@ export class ContentEntryService {
   }
 
   // Restore a previous version by copying its values into a new draft
-  async restoreVersion(versionId: number) {
+  async restoreVersion(versionId: string) {
     const version = await this.db.contentVersionRepository.findOne({
       where: { id: versionId },
       relations: ['entry'],
@@ -201,14 +192,10 @@ export class ContentEntryService {
     });
     await this.db.contentVersionRepository.save(newVersion);
 
-    for (const value of values) {
-      await this.db.contentValueRepository.save({
-        version: newVersion,
-        fieldName: value.fieldName,
-        locale: value.locale,
-        value: value.value,
-      });
-    }
+    await this.db.contentValueRepository.save({
+      version,
+      value: values,
+    });
 
     return {
       message: 'Version restored',
@@ -229,7 +216,7 @@ export class ContentEntryService {
   }
 
   // Get entry along with latest version and values
-  async getEntryWithLatestVersion(entryId: number) {
+  async getEntryWithLatestVersion(entryId: string) {
     const entry = await this.db.contentEntryRepository.findOne({
       where: { id: entryId },
       relations: ['schema', 'project'],
@@ -242,15 +229,12 @@ export class ContentEntryService {
       order: { createdAt: 'DESC' },
     });
 
-    const values = version
-      ? await this.db.contentValueRepository.find({
-          where: { version: { id: version.id } },
-        })
-      : [];
+    const value = await this.db.contentValueRepository.findOne({
+      where: { version: { id: version.id } },
+    });
 
     return {
       id: entry.id,
-      key: entry.key,
       schema: {
         slug: entry.schema.slug,
         definition: entry.schema.definition,
@@ -261,18 +245,14 @@ export class ContentEntryService {
             version: version.version,
             isPublished: version.isPublished,
             createdAt: version.createdAt,
-            values: values.map((v) => ({
-              fieldName: v.fieldName,
-              locale: v.locale,
-              value: v.value,
-            })),
+            values: value?.value ?? {}, // <- direkt der Blob
           }
         : null,
     };
   }
 
   // Delete entry by ID
-  async deleteEntry(entryId: number) {
+  async deleteEntry(entryId: string) {
     const entry = await this.db.contentEntryRepository.findOne({
       where: { id: entryId },
     });
