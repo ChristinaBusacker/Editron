@@ -8,6 +8,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Brackets } from 'typeorm';
+import { CreateProjectDto } from './dto/project.dto';
 
 @Injectable()
 export class ProjectService {
@@ -57,20 +58,26 @@ export class ProjectService {
     return project;
   }
 
-  async create(name: string, owner: UserEntity): Promise<ProjectEntity> {
+  async create(
+    dto: CreateProjectDto,
+    owner: UserEntity,
+  ): Promise<ProjectEntity> {
     const project = this.databaseService.projectRepository.create({
-      name,
+      ...dto,
       owner,
     });
     return this.databaseService.projectRepository.save(project);
   }
 
-  async updateName(id: string, name: string): Promise<ProjectEntity> {
+  async update(id: string, dto: CreateProjectDto): Promise<ProjectEntity> {
     const project = await this.databaseService.projectRepository.findOneBy({
       id,
     });
     if (!project) throw new NotFoundException('Project not found');
-    project.name = name;
+
+    project.name = dto.name;
+    project.settings = dto.settings;
+
     return this.databaseService.projectRepository.save(project);
   }
 

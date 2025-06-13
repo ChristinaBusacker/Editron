@@ -24,4 +24,7 @@ export class ProjectEntity {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @Column('jsonb', { default: {} })
+  settings: any;
 }

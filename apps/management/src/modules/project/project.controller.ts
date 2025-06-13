@@ -10,7 +10,7 @@ import {
   Get,
 } from '@nestjs/common';
 import { ProjectService } from './project.service';
-import { CreateProjectDto, UpdateProjectNameDto } from './dto/project.dto';
+import { CreateProjectDto, UpdateProjectDto } from './dto/project.dto';
 import {
   ApiTags,
   ApiOperation,
@@ -51,17 +51,17 @@ export class ProjectController {
   @ApiOperation({ summary: 'Create a new project' })
   @ApiResponse({ status: 201, description: 'Project successfully created' })
   async create(@Body() dto: CreateProjectDto, @Request() req) {
-    return this.projectService.create(dto.name, req.user);
+    return this.projectService.create(dto, req.user);
   }
 
   @Patch(':id')
-  @ApiOperation({ summary: 'Update the name of an existing project' })
+  @ApiOperation({ summary: 'Update an existing project' })
   @ApiResponse({
     status: 200,
-    description: 'Project name successfully updated',
+    description: 'Project successfully updated',
   })
-  async updateName(@Param('id') id: string, @Body() dto: UpdateProjectNameDto) {
-    return this.projectService.updateName(id, dto.name);
+  async update(@Param('id') id: string, @Body() dto: UpdateProjectDto) {
+    return this.projectService.update(id, dto);
   }
 
   @Delete(':id')

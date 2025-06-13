@@ -46,7 +46,7 @@ export class ProjectState {
     ctx: StateContext<ProjectStateModel>,
     action: UpdateProjectName,
   ) {
-    return this.api.updateName(action.id, action.payload).pipe(
+    return this.api.update(action.id, action.payload).pipe(
       switchMap(project => {
         const state = ctx.getState();
         const projects = state.projects.filter(p => p.id !== action.id);

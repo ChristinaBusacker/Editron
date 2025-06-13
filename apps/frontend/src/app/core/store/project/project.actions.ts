@@ -1,6 +1,6 @@
 import {
   CreateProjectPayload,
-  UpdateProjectNamePayload,
+  UpdateProjectPayload,
 } from '@frontend/shared/services/api/models/project.model';
 
 export class CreateProject {
@@ -9,10 +9,10 @@ export class CreateProject {
 }
 
 export class UpdateProjectName {
-  static readonly type = '[Project] Update Name';
+  static readonly type = '[Project] Update';
   constructor(
     public id: string,
-    public payload: UpdateProjectNamePayload,
+    public payload: UpdateProjectPayload,
   ) {}
 }
 

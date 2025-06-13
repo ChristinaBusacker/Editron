@@ -4,7 +4,7 @@ import { RequestService } from '@frontend/core/services/request/request.service'
 import {
   Project,
   CreateProjectPayload,
-  UpdateProjectNamePayload,
+  UpdateProjectPayload,
 } from './models/project.model';
 
 @Injectable({ providedIn: 'root' })
@@ -39,12 +39,9 @@ export class ProjectApiService {
   /**
    * Updates the name of an existing project
    * @param id Project ID
-   * @param payload New name payload
+   * @param payload project payload
    */
-  updateName(
-    id: string,
-    payload: UpdateProjectNamePayload,
-  ): Observable<Project> {
+  update(id: string, payload: UpdateProjectPayload): Observable<Project> {
     return this.request.patch<Project>(`${this.baseUrl}/${id}`, payload);
   }
 

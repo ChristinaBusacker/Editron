@@ -6,22 +6,17 @@
   </div>
 
   <div class="dialog-actions">
-    <button
-      *ngIf="buttonOptions?.cancel"
-      mat-button
-      (click)="action.emit('cancel')"
-      [color]="buttonOptions.cancel.color || null"
-    >
-      {{ buttonOptions.cancel.label || 'Cancel' }}
+    @if(buttonOptions?.decline) {
+    <button mat-button (click)="action.emit('cancel')" [color]="buttonOptions.decline.color || null">
+      {{ buttonOptions.decline.label || 'Cancel' }}
     </button>
 
-    <button
-      *ngIf="buttonOptions?.confirm"
-      mat-button
-      (click)="action.emit('confirm')"
-      [color]="buttonOptions.confirm.color || 'primary'"
-    >
+    }
+
+    @if(buttonOptions?.confirm) {
+    <button mat-button (click)="action.emit('confirm')" [color]="buttonOptions.confirm.color || 'primary'">
       {{ buttonOptions.confirm.label || 'OK' }}
     </button>
+    }
   </div>
 </section>

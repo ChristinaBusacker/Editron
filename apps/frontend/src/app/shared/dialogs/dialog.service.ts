@@ -10,7 +10,7 @@ export class DialogService {
 
   openCreateProjectDialog() {
     return this.matDialog.open(CreateProjectDialogComponent, {
-      maxWidth: '500px',
+      maxWidth: '90vw',
       width: '100%',
       ariaLabelledBy: 'dialog-title',
     });
