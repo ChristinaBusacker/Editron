@@ -21,21 +21,57 @@ export class ContentEntryService {
   async getEntriesForSchema(
     projectId: string,
     schemaSlug: string,
-  ): Promise<ContentEntryEntity[]> {
+  ): Promise<
+    {
+      entryId: string;
+      versionId: string;
+      versionNumber: number;
+      createdAt: Date;
+      isPublished: boolean;
+      content: any;
+    }[]
+  > {
     const schema = await this.db.contentSchemaRepository.findOne({
       where: { slug: schemaSlug },
     });
     if (!schema)
       throw new NotFoundException(`Schema "${schemaSlug}" not found`);
 
-    return this.db.contentEntryRepository.find({
+    const entries = await this.db.contentEntryRepository.find({
       where: {
         project: { id: projectId },
         schema: { id: schema.id },
       },
-      relations: ['schema', 'project'],
       order: { id: 'ASC' },
     });
+
+    const result = [];
+
+    for (const entry of entries) {
+      const version = await this.db.contentVersionRepository.findOne({
+        where: { entry: { id: entry.id } },
+        order: { createdAt: 'DESC' },
+        relations: ['createdBy'],
+      });
+
+      if (!version) continue;
+
+      const value = await this.db.contentValueRepository.findOne({
+        where: { version: { id: version.id } },
+      });
+
+      result.push({
+        id: entry.id,
+        versionId: version.id,
+        versionNumber: version.version,
+        updatedAt: version.createdAt,
+        updatedBy: version.createdBy,
+        isPublished: version.isPublished,
+        content: value?.value ?? {},
+      });
+    }
+
+    return result;
   }
 
   // Create a new entry, recording the user who created it

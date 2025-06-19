@@ -12,6 +12,10 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ContentApiService } from '@frontend/shared/services/api/content-api.service';
 import { CreateEntry } from '@frontend/core/store/content/content.actions';
 import { Project } from '@frontend/shared/services/api/models/project.model';
+import {
+  LanguageDefinition,
+  LANGUAGES,
+} from '@shared/declarations/interfaces/project/project-settings';
 @Component({
   selector: 'app-entry-editor',
   imports: [CommonModule, CmsFormComponent, MatExpansionModule],
@@ -31,6 +35,7 @@ export class EntryEditorComponent implements OnInit {
   renderer: string;
 
   currentProject!: Project;
+  projectLanguages!: Array<LanguageDefinition>;
 
   activePanel = signal('');
 
@@ -53,23 +58,32 @@ export class EntryEditorComponent implements OnInit {
     return this.formGroups[slug];
   }
 
+  getProjectLangauges() {
+    return this.currentProject.settings.languages.map(lang =>
+      LANGUAGES.find(obj => obj.isoCode === lang),
+    );
+  }
+
   initFormGroups() {
     this.setFormGroup(this.currentModule.slug);
     this.currentModule.extensions.forEach(ext => this.setFormGroup(ext.slug));
   }
 
-  logValues() {
+  async logValues() {
     const values = this.getFormGroup(this.currentModule.slug).value;
     Object.keys(this.formGroups).forEach(key => {
       if (key !== this.currentModule.slug) {
         values[key] = this.formGroups[key].value;
       }
     });
-    console.log(values);
 
-    this.store.dispatch(
-      new CreateEntry(this.currentProject.id, this.currentModule.slug),
-    );
+    this.contentService
+      .createEntry(this.currentProject.id, this.currentModule.slug, {
+        data: values,
+      })
+      .subscribe(data => {
+        console.log(values);
+      });
   }
 
   ngOnInit(): void {
@@ -83,6 +97,8 @@ export class EntryEditorComponent implements OnInit {
             this.currentModule = module;
             this.activePanel.set('main');
             this.initFormGroups();
+            this.projectLanguages = this.getProjectLangauges();
+            console.log(this.projectLanguages);
           }
         }),
       )

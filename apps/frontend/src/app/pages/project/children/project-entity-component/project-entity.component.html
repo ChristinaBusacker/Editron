@@ -1,1 +1,33 @@
-<a [routerLink]="['/', (project | async).id, (module | async).slug, 'create']" routerLinkActive="router-link-active" >Create new Entry</a> 
+<a
+  [routerLink]="['/', (project | async).id, (module | async).slug, 'create']"
+  routerLinkActive="router-link-active"
+  >Create new Entry</a
+>
+
+<table>
+  @for (entry of moduleEntries | async; track entry) {
+    <tr>
+      <td>
+        <a
+          [routerLink]="[
+            '/',
+            (project | async).id,
+            (module | async).slug,
+            entry.id,
+          ]"
+          >{{ entry.id }}</a
+        >
+      </td>
+      <td>
+        <span>
+          {{ entry.updatedAt }}
+        </span>
+      </td>
+      <td>
+        <span>
+          {{ entry.updatedBy.name }}
+        </span>
+      </td>
+    </tr>
+  }
+</table>

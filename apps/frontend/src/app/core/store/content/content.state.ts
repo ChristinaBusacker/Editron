@@ -34,6 +34,7 @@ export class ContentState {
         const entries = {
           ...state.entries,
         };
+
         entries[action.module] = entryResponse;
         ctx.patchState({ entries });
       }),

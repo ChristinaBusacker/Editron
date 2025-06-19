@@ -1,126 +1,310 @@
 <form [formGroup]="form" class="cms-form">
-    @for (field of fields(); track field.name) {
+  @for (field of fields(); track field.name) {
     <div class="field-wrapper">
-        <div class="field-label">{{ field.name }}</div>
+      <div class="field-label">{{ field.name }}</div>
 
-        @if (field.type === 'singleline') {
-        <mat-form-field appearance="outline" class="w-full">
+      <!-- singleline -->
+      @if (field.type === 'singleline') {
+        @if (!field.localizable) {
+          <mat-form-field appearance="outline" class="w-full">
             <mat-label>{{ field.name }}</mat-label>
             <input matInput [formControl]="getControl(field.name)" />
             <mat-error *ngFor="let error of getErrors(field.name)">
-                {{ error }}
+              {{ error }}
             </mat-error>
-        </mat-form-field>
+          </mat-form-field>
+        } @else {
+          @for (lang of project.settings.languages; track lang) {
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>{{ field.name }} ({{ lang }})</mat-label>
+              <input
+                matInput
+                [formControl]="getControlInGroup(field.name, lang)"
+              />
+              <mat-error *ngFor="let error of getErrors(field.name)">
+                {{ error }}
+              </mat-error>
+            </mat-form-field>
+          }
         }
+      }
 
-        @if (field.type === 'multiline') {
-        <mat-form-field appearance="outline" class="w-full">
+      <!-- multiline -->
+      @if (field.type === 'multiline') {
+        @if (!field.localizable) {
+          <mat-form-field appearance="outline" class="w-full">
             <mat-label>{{ field.name }}</mat-label>
-            <textarea matInput rows="4" [formControl]="getControl(field.name)"></textarea>
+            <textarea
+              matInput
+              rows="4"
+              [formControl]="getControl(field.name)"
+            ></textarea>
             <mat-error *ngFor="let error of getErrors(field.name)">
-                {{ error }}
+              {{ error }}
             </mat-error>
-        </mat-form-field>
+          </mat-form-field>
+        } @else {
+          @for (lang of project.settings.languages; track lang) {
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>{{ field.name }} ({{ lang }})</mat-label>
+              <textarea
+                matInput
+                rows="4"
+                [formControl]="getControlInGroup(field.name, lang)"
+              ></textarea>
+              <mat-error *ngFor="let error of getErrors(field.name)">
+                {{ error }}
+              </mat-error>
+            </mat-form-field>
+          }
         }
+      }
 
-        @if (field.type === 'boolean') {
-        <mat-checkbox [formControl]="getControl(field.name)" [checked]="false">
-            {{ field.name }}
+      <!-- boolean -->
+      @if (field.type === 'boolean') {
+        <mat-checkbox [formControl]="getControl(field.name)">
+          {{ field.name }}
         </mat-checkbox>
+      }
+
+      <!-- color -->
+      @if (field.type === 'color') {
+        @if (!field.localizable) {
+          <lib-cms-color-editor [control]="getControl(field.name)" />
+        } @else {
+          @for (lang of project.settings.languages; track lang) {
+            <lib-cms-color-editor
+              [control]="getControlInGroup(field.name, lang)"
+            />
+          }
         }
+      }
 
-        @if (field.type === 'color') {
-        <lib-cms-color-editor [control]="getControl(field.name)"></lib-cms-color-editor>
+      <!-- tags -->
+      @if (field.type === 'tags') {
+        @if (!field.localizable) {
+          <lib-cms-tag-editor
+            [control]="getControl(field.name)"
+            [label]="field.name"
+          />
+        } @else {
+          @for (lang of project.settings.languages; track lang) {
+            <lib-cms-tag-editor
+              [control]="getControlInGroup(field.name, lang)"
+              [label]="field.name + ' (' + lang + ')'"
+            />
+          }
         }
+      }
 
-        @if (field.type === 'tags') {
-        <lib-cms-tag-editor [control]="getControl(field.name)" [label]="field.name"></lib-cms-tag-editor>
+      <!-- html -->
+      @if (field.type === 'html') {
+        @if (!field.localizable) {
+          <lib-cms-html-editor [control]="getControl(field.name)" />
+        } @else {
+          @for (lang of project.settings.languages; track lang) {
+            <lib-cms-html-editor
+              [control]="getControlInGroup(field.name, lang)"
+            />
+          }
         }
+      }
 
-
-        @if (field.type === 'html') {
-        <lib-cms-html-editor [control]="getControl(field.name)" />
+      <!-- json -->
+      @if (field.type === 'json') {
+        @if (!field.localizable) {
+          <lib-cms-json-editor [control]="getControl(field.name)" />
+        } @else {
+          @for (lang of project.settings.languages; track lang) {
+            <lib-cms-json-editor
+              [control]="getControlInGroup(field.name, lang)"
+            />
+          }
         }
+      }
 
-        @if (field.type === 'json') {
-        <lib-cms-json-editor [control]="getControl(field.name)" />
-        }
-
-        @if (field.type === 'date') {
+      <!-- date -->
+      @if (field.type === 'date') {
         <mat-form-field appearance="outline" class="w-full">
-            <mat-label>{{ field.name }}</mat-label>
-            <input matInput [matDatepicker]="picker" [formControl]="getControl(field.name)" />
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-            <mat-error *ngFor="let error of getErrors(field.name)">
-                {{ error }}
-            </mat-error>
-        </mat-form-field>
-        }
-
-        @if (field.type === 'datetime') {
-        <mat-label>{{ field.name }}</mat-label>
-        <lib-cms-datetime-editor [control]="getControl(field.name)" />
-        }
-
-
-        @if (field.type === 'slug') {
-        <mat-form-field appearance="outline" class="w-full">
-            <mat-label>{{ field.name }}</mat-label>
-            <input matInput [formControl]="getControl(field.name)" (input)="onSlugInput(field.name)" />
-            <mat-error *ngFor="let error of getErrors(field.name)">
-                {{ error }}
-            </mat-error>
-        </mat-form-field>
-        }
-
-        @if (field.type === 'number') {
-        <mat-form-field appearance="outline" class="w-full">
-            <mat-label>{{ field.name }}</mat-label>
-            <input matInput type="number" [formControl]="getControl(field.name)" step="1" />
-            <mat-error *ngFor="let error of getErrors(field.name)">
-                {{ error }}
-            </mat-error>
-        </mat-form-field>
-        }
-
-        @if (field.type === 'float') {
-        <mat-form-field appearance="outline" class="w-full">
-            <mat-label>{{ field.name }}</mat-label>
-            <input matInput type="number" [formControl]="getControl(field.name)" step="any" />
-            <mat-error *ngFor="let error of getErrors(field.name)">
-                {{ error }}
-            </mat-error>
-        </mat-form-field>
-        }
-
-        @if (field.type === 'select') {
-        <mat-form-field appearance="outline" class="w-full">
-            <mat-label>{{ field.name }}</mat-label>
-            <mat-select [formControl]="getControl(field.name)">
-                @for (option of field.options ?? []; track option) {
-                <mat-option [value]="option">{{ option }}</mat-option>
-                }
-            </mat-select>
-            <mat-error *ngFor="let error of getErrors(field.name)">
-                {{ error }}
-            </mat-error>
-        </mat-form-field>
-        }
-
-        @if (field.type === 'richtext') {
-        <lib-cms-richtext-editor [control]="getControl(field.name)" />
-        <mat-error *ngFor="let error of getErrors(field.name)">
+          <mat-label>{{ field.name }}</mat-label>
+          <input
+            matInput
+            [matDatepicker]="picker"
+            [formControl]="getControl(field.name)"
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error *ngFor="let error of getErrors(field.name)">
             {{ error }}
-        </mat-error>
-        }
+          </mat-error>
+        </mat-form-field>
+      }
 
-        @if (field.type === 'geolocation') {
-        <lib-cms-geolocation-editor [control]="getControl(field.name)" />
-        <mat-error *ngFor="let error of getErrors(field.name)">
-            {{ error }}
-        </mat-error>
+      <!-- datetime -->
+      @if (field.type === 'datetime') {
+        @if (!field.localizable) {
+          <lib-cms-datetime-editor [control]="getControl(field.name)" />
+        } @else {
+          @for (lang of project.settings.languages; track lang) {
+            <lib-cms-datetime-editor
+              [control]="getControlInGroup(field.name, lang)"
+            />
+          }
         }
+      }
+
+      <!-- slug -->
+      @if (field.type === 'slug') {
+        @if (!field.localizable) {
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>{{ field.name }}</mat-label>
+            <input
+              matInput
+              [formControl]="getControl(field.name)"
+              (input)="onSlugInput(field.name)"
+            />
+            <mat-error *ngFor="let error of getErrors(field.name)">
+              {{ error }}
+            </mat-error>
+          </mat-form-field>
+        } @else {
+          @for (lang of project.settings.languages; track lang) {
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>{{ field.name }} ({{ lang }})</mat-label>
+              <input
+                matInput
+                [formControl]="getControlInGroup(field.name, lang)"
+                (input)="onSlugInput(field.name)"
+              />
+              <mat-error *ngFor="let error of getErrors(field.name)">
+                {{ error }}
+              </mat-error>
+            </mat-form-field>
+          }
+        }
+      }
+
+      <!-- number -->
+      @if (field.type === 'number') {
+        @if (!field.localizable) {
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>{{ field.name }}</mat-label>
+            <input
+              matInput
+              type="number"
+              [formControl]="getControl(field.name)"
+              step="1"
+            />
+            <mat-error *ngFor="let error of getErrors(field.name)">
+              {{ error }}
+            </mat-error>
+          </mat-form-field>
+        } @else {
+          @for (lang of project.settings.languages; track lang) {
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>{{ field.name }} ({{ lang }})</mat-label>
+              <input
+                matInput
+                type="number"
+                [formControl]="getControlInGroup(field.name, lang)"
+                step="1"
+              />
+              <mat-error *ngFor="let error of getErrors(field.name)">
+                {{ error }}
+              </mat-error>
+            </mat-form-field>
+          }
+        }
+      }
+
+      <!-- float -->
+      @if (field.type === 'float') {
+        @if (!field.localizable) {
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>{{ field.name }}</mat-label>
+            <input
+              matInput
+              type="number"
+              [formControl]="getControl(field.name)"
+              step="any"
+            />
+            <mat-error *ngFor="let error of getErrors(field.name)">
+              {{ error }}
+            </mat-error>
+          </mat-form-field>
+        } @else {
+          @for (lang of project.settings.languages; track lang) {
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>{{ field.name }} ({{ lang }})</mat-label>
+              <input
+                matInput
+                type="number"
+                [formControl]="getControlInGroup(field.name, lang)"
+                step="any"
+              />
+              <mat-error *ngFor="let error of getErrors(field.name)">
+                {{ error }}
+              </mat-error>
+            </mat-form-field>
+          }
+        }
+      }
+
+      <!-- select -->
+      @if (field.type === 'select') {
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>{{ field.name }}</mat-label>
+          <mat-select [formControl]="getControl(field.name)">
+            @for (option of field.options ?? []; track option) {
+              <mat-option [value]="option">{{ option }}</mat-option>
+            }
+          </mat-select>
+          <mat-error *ngFor="let error of getErrors(field.name)">
+            {{ error }}
+          </mat-error>
+        </mat-form-field>
+      }
+
+      <!-- richtext -->
+      @if (field.type === 'richtext') {
+        @if (!field.localizable) {
+          <lib-cms-richtext-editor [control]="getControl(field.name)" />
+          <mat-error *ngFor="let error of getErrors(field.name)">
+            {{ error }}
+          </mat-error>
+        } @else {
+          @for (lang of project.settings.languages; track lang) {
+            <lib-cms-richtext-editor
+              [control]="getControlInGroup(field.name, lang)"
+            />
+            <mat-error *ngFor="let error of getErrors(field.name)">
+              {{ error }}
+            </mat-error>
+          }
+        }
+      }
+
+      <!-- geolocation -->
+      @if (field.type === 'geolocation') {
+        @if (!field.localizable) {
+          <lib-cms-geolocation-editor [control]="getControl(field.name)" />
+          <mat-error *ngFor="let error of getErrors(field.name)">
+            {{ error }}
+          </mat-error>
+        } @else {
+          @for (lang of project.settings.languages; track lang) {
+            <lib-cms-geolocation-editor
+              [control]="getControlInGroup(field.name, lang)"
+            />
+            <mat-error *ngFor="let error of getErrors(field.name)">
+              {{ error }}
+            </mat-error>
+          }
+        }
+      }
     </div>
-    }
+  }
 </form>

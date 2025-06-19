@@ -7,7 +7,8 @@
             </mat-panel-description>
         </mat-expansion-panel-header>
         @if(renderer === 'form') {
-        <lib-cms-form [schemaDefinition]="schema" [form]="getFormGroup(currentModule.slug)"></lib-cms-form>
+        <lib-cms-form [schemaDefinition]="schema" [form]="getFormGroup(currentModule.slug)"
+            [project]="currentProject"></lib-cms-form>
         } @else {
         selected renderer {{renderer}}
         }
@@ -20,7 +21,8 @@
                 Description
             </mat-panel-description>
         </mat-expansion-panel-header>
-        <lib-cms-form [schemaDefinition]="extension.definition" [form]="getFormGroup(extension.slug)"></lib-cms-form>
+        <lib-cms-form [schemaDefinition]="extension.definition" [form]="getFormGroup(extension.slug)"
+            [project]="currentProject"></lib-cms-form>
     </mat-expansion-panel>
 
     }

@@ -12,7 +12,6 @@ import { UserEntity } from '@database/user/user.entity';
 import { ContentVersionEntity } from '@database/content-version/content-version.entity';
 
 @Entity('content_entries')
-@Index(['project', 'schema'], { unique: true })
 export class ContentEntryEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;

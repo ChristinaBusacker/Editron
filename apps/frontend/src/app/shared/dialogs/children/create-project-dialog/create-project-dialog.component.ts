@@ -1,4 +1,4 @@
-import { Component, HostListener, inject, signal } from '@angular/core';
+import { Component, HostListener, inject, OnInit, signal } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -22,6 +22,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { CmsModuleState } from '@frontend/core/store/cmsModules/cmsModules.state';
 import { CommonModule } from '@angular/common';
 import { CmsModule } from 'libs/cmsmodules/src/modules/cms-module';
+import { map } from 'rxjs';
 @Component({
   selector: 'app-create-project-dialog',
   imports: [
@@ -39,16 +40,17 @@ import { CmsModule } from 'libs/cmsmodules/src/modules/cms-module';
   templateUrl: './create-project-dialog.component.html',
   styleUrl: './create-project-dialog.component.scss',
 })
-export class CreateProjectDialogComponent {
+export class CreateProjectDialogComponent implements OnInit {
   dialogRef = inject(MatDialogRef<CreateProjectDialogComponent>);
-  modules = this.store.select(CmsModuleState.cmsModules);
 
   name = signal('');
   nameTouched = signal(false);
 
   activePanel = signal('');
 
+  availableModules: Array<CmsModule> = [];
   selectedModules: Array<CmsModule> = [];
+  modulesInit = false;
 
   languages = LANGUAGES;
   selectedLangauges = [this.languages.shift()];
@@ -127,5 +129,14 @@ export class CreateProjectDialogComponent {
   handleEscape(event: KeyboardEvent) {
     event.preventDefault();
     this.close('cancel');
+  }
+
+  ngOnInit(): void {
+    this.store.select(CmsModuleState.cmsModules).subscribe(modules => {
+      if (!this.modulesInit) {
+        this.availableModules = [...modules];
+        this.modulesInit = true;
+      }
+    });
   }
 }

@@ -6,6 +6,7 @@ import { NavigationState } from '@frontend/core/store/navigation/navigation.stat
 import { Project } from '@frontend/shared/services/api/models/project.model';
 import { Store } from '@ngxs/store';
 import { CmsModule } from 'libs/cmsmodules/src/modules/cms-module';
+import { combineLatest, map } from 'rxjs';
 
 @Component({
   selector: 'app-sidenav',
@@ -16,6 +17,12 @@ import { CmsModule } from 'libs/cmsmodules/src/modules/cms-module';
 export class SidenavComponent {
   public project = this.store.select(NavigationState.currentProject);
   public modules = this.store.select(CmsModuleState.cmsModules);
+
+  public projectModules = combineLatest([this.project, this.modules]).pipe(
+    map(([project, modules]) => {
+      return modules.filter(m => project.settings.modules.includes(m.slug));
+    }),
+  );
 
   constructor(private store: Store) {}
 }

@@ -1,7 +1,7 @@
 import { ContentSchemaDefinition } from '@shared/declarations/interfaces/content/content-schema-definition';
 
 export interface CreateEntry {
-  key: string;
+  data: any;
 }
 export interface EntryValue {
   fieldName: string;

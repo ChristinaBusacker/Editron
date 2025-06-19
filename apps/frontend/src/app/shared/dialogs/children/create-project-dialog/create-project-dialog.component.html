@@ -77,9 +77,9 @@
       <div class="example-container">
         <h4>Available</h4>
 
-        <div cdkDropList #moduleList="cdkDropList" [cdkDropListData]="modules | async"
+        <div cdkDropList #moduleList="cdkDropList" [cdkDropListData]="availableModules"
           [cdkDropListConnectedTo]="[selectedList]" class="example-list" (cdkDropListDropped)="drop($event)">
-          @for (item of modules | async; track item) {
+          @for (item of availableModules; track item) {
           <div class="example-box" cdkDrag>{{item.name}}</div>
           }
         </div>

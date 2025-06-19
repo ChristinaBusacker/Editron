@@ -35,17 +35,17 @@ export const routes: Routes = [
       {
         path: ':moduleSlug',
         component: ProjectEntityComponent,
-        resolve: { entries: moduleEntityResolver },
+        resolve: { entries: moduleEntityResolver, modules: cmsModulesResolver },
       },
       {
         path: ':moduleSlug/create',
         component: EntryEditorComponent,
-        resolve: { entries: moduleEntityResolver },
+        resolve: { entries: moduleEntityResolver, modules: cmsModulesResolver },
       },
       {
         path: ':moduleSlug/:entityId',
         component: EntryEditorComponent,
-        resolve: { entries: moduleEntityResolver },
+        resolve: { entries: moduleEntityResolver, modules: cmsModulesResolver },
       },
       {
         path: '',

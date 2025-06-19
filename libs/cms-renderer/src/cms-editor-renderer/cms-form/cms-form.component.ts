@@ -25,6 +25,7 @@ import { CmsHtmlEditorComponent } from '../cms-html-editor/cms-html-editor.compo
 import { CmsColorEditorComponent } from '../cms-color-editor/cms-color-editor.component';
 import { CmsTagEditorComponent } from '../cms-tag-editor/cms-tag-editor.component';
 import { CmsJsonEditorComponent } from '../cms-json-editor/cms-json-editor.component';
+import { Project } from '@frontend/shared/services/api/models/project.model';
 
 @Component({
   selector: 'lib-cms-form',
@@ -51,6 +52,9 @@ import { CmsJsonEditorComponent } from '../cms-json-editor/cms-json-editor.compo
 export class CmsFormComponent implements OnInit {
   @Input({ required: true }) schemaDefinition!: ContentSchemaDefinition;
   @Input() form: FormGroup = this.fb.group({});
+
+  @Input() project: Project;
+
   fields = signal<FieldDefinition[]>([]);
 
   constructor(private fb: FormBuilder) {}
@@ -112,33 +116,17 @@ export class CmsFormComponent implements OnInit {
     return errors;
   }
 
-  ngOnInit(): void {
-    if (!this.schemaDefinition) {
-      return;
-    }
-    this.fields.set(this.schemaDefinition.fields);
-
-    for (const field of this.fields()) {
-      const validators = this.buildValidators(field);
-
-      // Setting global defaults
-      let defaultValue = null;
-      if (field.type === 'boolean') {
-        defaultValue = false;
-      }
-
-      // overwrite with explicit defaults
-      defaultValue = field.default || defaultValue;
-
-      this.form.addControl(
-        field.name,
-        new FormControl(defaultValue, validators),
-      );
-    }
-  }
-
   getControl(name: string) {
     return this.form.get(name) as FormControl;
+  }
+
+  getGroup(name: string) {
+    return this.form.get(name) as FormGroup;
+  }
+
+  getControlInGroup(groupName: string, controlName: string) {
+    const group = this.form.get(groupName) as FormGroup;
+    return group.get(controlName);
   }
 
   onSlugInput(fieldName: string) {
@@ -155,5 +143,40 @@ export class CmsFormComponent implements OnInit {
       .replace(/-+/g, '-');
 
     control.setValue(slug, { emitEvent: false });
+  }
+
+  ngOnInit(): void {
+    if (!this.schemaDefinition) {
+      return;
+    }
+    this.fields.set(this.schemaDefinition.fields);
+
+    const projectlanguages = this.project.settings.languages;
+
+    for (const field of this.fields()) {
+      const validators = this.buildValidators(field);
+
+      // Setting global defaults
+      let defaultValue = null;
+      if (field.type === 'boolean') {
+        defaultValue = false;
+      }
+
+      // overwrite with explicit defaults
+      defaultValue = field.default || defaultValue;
+
+      if (field.localizable) {
+        this.form.addControl(field.name, new FormGroup({}));
+        const group = this.getGroup(field.name);
+        projectlanguages.forEach(lang =>
+          group.addControl(lang, new FormControl(defaultValue, validators)),
+        );
+      } else {
+        this.form.addControl(
+          field.name,
+          new FormControl(defaultValue, validators),
+        );
+      }
+    }
   }
 }
