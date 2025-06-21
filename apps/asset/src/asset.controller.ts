@@ -1,27 +1,22 @@
 import {
+  BadRequestException,
   Controller,
-  Post,
-  UseGuards,
-  UploadedFile,
-  UseInterceptors,
   Get,
+  NotFoundException,
   Param,
+  Post,
   Query,
   Res,
-  NotFoundException,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AssetService } from './asset.service';
 
-import { UserEntity } from '@database/user/user.entity';
-import { CurrentUser } from '@shared/decorators/current-user.decorator';
 import { AuthGuard } from '@auth';
-import { ALLOWED_MIME_TYPES } from './declarations/constants/allowed-mime-types.constant';
-import { hashFile } from './utils/hash.utils';
-import * as path from 'path';
-import { assetUploadOptions } from './utils/upload.config';
-import { AssetProcessor } from './asset.processor';
-import { Response } from 'express';
+import { UserEntity } from '@database/user/user.entity';
+import { Body } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -31,7 +26,19 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { CurrentUser } from '@shared/decorators/current-user.decorator';
+import * as fs from 'fs';
+import * as crypto from 'crypto';
+import { Response } from 'express';
 import { customAlphabet } from 'nanoid';
+import * as path from 'path';
+import { v4 as uuidv4 } from 'uuid';
+import { AssetProcessor } from './asset.processor';
+import { ALLOWED_MIME_TYPES } from './declarations/constants/allowed-mime-types.constant';
+import { UploadAssetFromDataDto } from './dto/upload-asset-from-data.dto';
+import { hashFile } from './utils/hash.utils';
+import { assetUploadOptions } from './utils/upload.config';
+import axios from 'axios';
 
 @ApiTags('Assets')
 @ApiBearerAuth()
@@ -100,6 +107,76 @@ export class AssetController {
 
     return {
       id: processed.id,
+      filename: asset.originalFilename,
+      variants: asset.variants,
+    };
+  }
+
+  @Post('from-data')
+  @UseGuards(AuthGuard)
+  @ApiHeader({
+    name: 'x-auth',
+    description: 'Authentication token for the request',
+    required: true,
+  })
+  @ApiOperation({ summary: 'Upload an asset from base64 or URL' })
+  @ApiResponse({ status: 201, description: 'Asset created from data' })
+  async uploadFromData(
+    @Body() dto: UploadAssetFromDataDto,
+    @CurrentUser() user: UserEntity,
+  ) {
+    const id = this.generateId();
+    const ext = path.extname(dto.filename) || '.png';
+    const storedFilename = `${id}${ext}`;
+    const originalPath = path.join('uploads/originals', storedFilename);
+
+    let buffer: Buffer;
+    if (dto.data) {
+      buffer = Buffer.from(dto.data, 'base64');
+    } else if (dto.url) {
+      const response = await axios.get(dto.url, {
+        responseType: 'arraybuffer',
+      });
+      buffer = Buffer.from(response.data);
+    } else {
+      throw new BadRequestException('Either data or url must be provided');
+    }
+
+    await fs.promises.writeFile(originalPath, buffer);
+
+    const hash = crypto.createHash('sha256').update(buffer).digest('hex');
+    const existing = await this.assetService.findByHash(hash);
+    if (existing) {
+      return {
+        id: existing.id,
+        filename: existing.originalFilename,
+        note: 'duplicate',
+      };
+    }
+
+    const processed = await this.assetProcessor.process({
+      buffer,
+      mimetype: dto.mimeType,
+      originalname: dto.filename,
+      path: originalPath,
+      filename: storedFilename,
+    } as any);
+
+    console.log(dto.filename);
+    const asset = await this.assetService.create({
+      id,
+      originalFilename: dto.filename,
+      storedFilename,
+      mimeType: dto.mimeType,
+      size: buffer.length,
+      uploadedBy: user,
+      hash,
+      variants: processed.variants,
+      blurhash: processed.blurhash,
+    });
+
+    return {
+      id: asset.id,
       filename: asset.originalFilename,
       variants: asset.variants,
     };

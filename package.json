@@ -44,6 +44,7 @@
     "@ngxmc/datetime-picker": "^19.3.1",
     "@ngxs/devtools-plugin": "19.0.0",
     "@ngxs/store": "^19.0.0",
+    "axios": "^1.10.0",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "blurhash": "^2.0.5",
