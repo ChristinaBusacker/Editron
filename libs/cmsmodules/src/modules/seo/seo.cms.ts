@@ -9,6 +9,7 @@ export const SeoCMSModule: CmsModule = {
       {
         name: 'metaTitle',
         type: 'singleline',
+        isTitle: true,
         localizable: true,
         validation: { maxLength: 60 },
       },

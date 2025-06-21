@@ -1,4 +1,8 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import {
+  ApplicationConfig,
+  LOCALE_ID,
+  provideZoneChangeDetection,
+} from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import {
@@ -23,6 +27,11 @@ import {
   MAT_DATE_LOCALE,
   provideNativeDateAdapter,
 } from '@angular/material/core';
+import { registerLocaleData } from '@angular/common';
+import localeDe from '@angular/common/locales/de';
+import { LanguageService } from './core/services/language/language.service';
+
+registerLocaleData(localeDe);
 
 const states = [
   AuthState,
@@ -38,6 +47,7 @@ const coreServices = [
   RequestService,
   SnackbarService,
   DialogService,
+  LanguageService,
 ];
 
 export const appConfig: ApplicationConfig = {
@@ -51,6 +61,7 @@ export const appConfig: ApplicationConfig = {
       provide: MAT_DATE_LOCALE,
       useValue: navigator.language || navigator.languages[0] || 'en-US',
     },
+    { provide: LOCALE_ID, useValue: 'de' },
     provideStore([...states], withNgxsReduxDevtoolsPlugin()),
   ],
 };

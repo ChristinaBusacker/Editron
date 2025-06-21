@@ -1,14 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Component, effect, OnInit, signal, Signal } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
 import { ContentState } from '@frontend/core/store/content/content.state';
 import { NavigationState } from '@frontend/core/store/navigation/navigation.state';
 import { Store } from '@ngxs/store';
 import { BehaviorSubject, combineLatest, map } from 'rxjs';
+import { ItemTableComponent } from '../../../../shared/components/item-table/item-table.component';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-project-entity',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, ItemTableComponent, MatButtonModule],
   templateUrl: './project-entity.component.html',
   styleUrl: './project-entity.component.scss',
 })
@@ -19,13 +21,32 @@ export class ProjectEntityComponent implements OnInit {
 
   moduleEntries = new BehaviorSubject([]);
 
-  constructor(private store: Store) {}
+  selectedItemsSignal = signal<Set<any>>(new Set<any>());
+
+  projectId: string;
+  moduleSlug: string;
+
+  constructor(
+    private store: Store,
+    private router: Router,
+  ) {
+    effect(() => {
+      // External selection change
+      const current = this.selectedItemsSignal();
+    });
+  }
+
+  navigate2Editor(entityId = 'create') {
+    this.router.navigate(['/', this.projectId, this.moduleSlug, entityId]);
+  }
 
   ngOnInit(): void {
     combineLatest([this.entries, this.module, this.project])
       .pipe(
         map(([entries, module, project]) => {
           if (entries && module) {
+            this.moduleSlug = module.slug;
+            this.projectId = project.id;
             this.moduleEntries.next(entries[module.slug]);
           }
         }),

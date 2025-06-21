@@ -10,6 +10,7 @@ export const WipMSModule: CmsModule = {
       {
         name: 'singleline',
         type: 'singleline',
+        isTitle: true,
         localizable: true,
         validation: { required: true, maxLength: 120 },
       },

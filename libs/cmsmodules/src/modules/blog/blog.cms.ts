@@ -12,6 +12,7 @@ export const BlogCMSModule: CmsModule = {
         name: 'title',
         type: 'singleline',
         localizable: true,
+        isTitle: true,
         validation: { required: true, maxLength: 120 },
       },
       {

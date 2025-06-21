@@ -33,6 +33,7 @@ export interface FieldDefinition {
   validation?: FieldValidation;
   default?: any;
   options?: string[];
+  isTitle?: boolean;
   relation?: {
     schema: string;
     multiple: boolean;
