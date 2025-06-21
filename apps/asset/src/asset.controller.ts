@@ -31,11 +31,17 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { customAlphabet } from 'nanoid';
 
 @ApiTags('Assets')
 @ApiBearerAuth()
 @Controller('assets')
 export class AssetController {
+  private generateId = customAlphabet(
+    '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
+    12,
+  );
+
   constructor(
     private readonly assetService: AssetService,
     private readonly assetProcessor: AssetProcessor,
@@ -81,7 +87,7 @@ export class AssetController {
     const processed = await this.assetProcessor.process(file);
 
     const asset = await this.assetService.create({
-      id: processed.assetId,
+      id: processed.id,
       originalFilename: file.originalname,
       storedFilename: file.filename,
       mimeType: file.mimetype,
@@ -93,7 +99,7 @@ export class AssetController {
     });
 
     return {
-      id: asset.id,
+      id: processed.id,
       filename: asset.originalFilename,
       variants: asset.variants,
     };

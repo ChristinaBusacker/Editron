@@ -51,9 +51,4 @@ export class AssetEntity {
 
   @CreateDateColumn()
   uploadedAt: Date;
-
-  @BeforeInsert()
-  generateId() {
-    this.id = generateId();
-  }
 }

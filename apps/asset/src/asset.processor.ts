@@ -15,20 +15,20 @@ export class AssetProcessor {
    * - Generates blurhash
    */
   async process(file: Express.Multer.File): Promise<{
-    assetId: string;
+    id: string;
     variants: Record<string, { webp: string; fallback: string }>;
     blurhash: string;
   }> {
-    const assetId = uuidv4(); // ID used as folder name
-
     const ext = path.extname(file.originalname).toLowerCase();
     const isWebp = ext === '.webp' || file.mimetype === 'image/webp';
+
+    const id = file.filename.split('.')[0];
 
     const fallbackFormat: 'jpeg' | 'png' = isWebp
       ? 'png'
       : (mime.extension(file.mimetype) as 'jpeg' | 'png');
 
-    const outputDir = path.join('uploads/variants', assetId);
+    const outputDir = path.join('uploads/variants', id);
     const inputPath = path.join('uploads/originals', file.filename);
 
     const variants = await processImageVariants(
@@ -40,7 +40,7 @@ export class AssetProcessor {
     const blurhash = await generateBlurhash(inputPath);
 
     return {
-      assetId,
+      id,
       variants,
       blurhash,
     };
