@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CookieService } from '../cookie/cookie.service.js';
+import { buildAuthHeaders } from '@frontend/core/utils/build-auth-header.util.js';
 
 @Injectable({ providedIn: 'root' })
 export class RequestService {
@@ -16,12 +17,7 @@ export class RequestService {
    * Builds the default headers including the x-auth header if the Session cookie is set
    */
   private buildHeaders(): HttpHeaders {
-    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    const session = this.cookieService.get('Session');
-    if (session) {
-      headers = headers.set('x-auth', session);
-    }
-    return headers;
+    return buildAuthHeaders(this.cookieService);
   }
 
   /**

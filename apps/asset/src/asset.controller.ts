@@ -1,7 +1,10 @@
 import {
   BadRequestException,
+  Body,
   Controller,
   Get,
+  HttpCode,
+  HttpStatus,
   NotFoundException,
   Param,
   Post,
@@ -10,10 +13,8 @@ import {
   UploadedFile,
   UseGuards,
   UseInterceptors,
-  HttpCode,
-  HttpStatus,
-  Body,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -23,23 +24,21 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { Response } from 'express';
-import * as path from 'path';
-import * as fs from 'fs';
 import * as crypto from 'crypto';
+import { Response } from 'express';
+import * as fs from 'fs';
 import { customAlphabet } from 'nanoid';
+import * as path from 'path';
 
-import { AssetService } from './asset.service';
 import { AssetProcessor } from './asset.processor';
+import { AssetService } from './asset.service';
 import { UploadAssetFromDataDto } from './dto/upload-asset-from-data.dto';
 
-import { assetUploadOptions } from './utils/upload.config';
-import { ALLOWED_MIME_TYPES } from './declarations/constants/allowed-mime-types.constant';
-import { hashFile } from './utils/hash.utils';
 import { AuthGuard } from '@auth';
-import { CurrentUser } from '@shared/decorators/current-user.decorator';
 import { UserEntity } from '@database/user/user.entity';
+import { CurrentUser } from '@shared/decorators/current-user.decorator';
+import { ALLOWED_MIME_TYPES } from './declarations/constants/allowed-mime-types.constant';
+import { assetUploadOptions } from './utils/upload.config';
 
 @ApiTags('Assets')
 @ApiBearerAuth()
