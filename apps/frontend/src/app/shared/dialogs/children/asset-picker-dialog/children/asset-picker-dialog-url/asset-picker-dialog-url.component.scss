@@ -1,0 +1,47 @@
+:host {
+  padding: 20px;
+  height: 70vh;
+  display: block;
+
+  .preview {
+    width: 250px;
+    height: 250px;
+    border: 1px solid black;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    & p {
+      width: 75%;
+    }
+  }
+}
+
+.upc {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  &-content {
+    background-color: rgba(255, 255, 255, 0.9);
+    width: 50%;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 10px;
+    -webkit-box-shadow: 5px 5px 15px 5px rgba(0, 0, 0, 0.26);
+    box-shadow: 5px 5px 15px 5px rgba(0, 0, 0, 0.26);
+  }
+}

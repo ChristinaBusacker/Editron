@@ -1,6 +1,7 @@
 export interface DialogButton {
   label: string;
   color?: string;
+  disabled?: boolean;
 }
 
 export interface DialogButtonOptions {

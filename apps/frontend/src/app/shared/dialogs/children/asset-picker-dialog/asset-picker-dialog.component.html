@@ -1,0 +1,57 @@
+<app-dialog
+  [buttonOptions]="{
+    confirm: getConfirmButton(),
+    decline: {
+      label: 'Cancel',
+      color: 'secondary',
+    },
+  }"
+  title="Select Asset"
+  (action)="close($event)"
+>
+  <mat-drawer-container class="drawer">
+    <mat-drawer mode="side" opened>
+      <div class="nav">
+        <button mat-button (click)="module = 'selection'">
+          <mat-icon
+            aria-hidden="false"
+            aria-label="Example home icon"
+            fontIcon="view_module"
+          ></mat-icon>
+          Selection
+        </button>
+        <button mat-button (click)="module = 'upload'">
+          <mat-icon
+            aria-hidden="false"
+            aria-label="Example home icon"
+            fontIcon="file_upload"
+          ></mat-icon>
+          Upload
+        </button>
+        <button mat-button (click)="module = 'url'">
+          <mat-icon
+            aria-hidden="false"
+            aria-label="Example home icon"
+            fontIcon="link"
+          ></mat-icon>
+          Insert by Link
+        </button>
+      </div>
+    </mat-drawer>
+    <mat-drawer-content>
+      <div class="content">
+        @if (module === 'selection') {
+          <app-asset-picker-dialog-selection
+            (onAssetSelect)="onAssetSelect($event)"
+          />
+        }
+        @if (module === 'upload') {
+          <app-asset-picker-dialog-upload (fileUploaded)="onFileUplaod()" />
+        }
+        @if (module === 'url') {
+          <app-asset-picker-dialog-url (fileUploaded)="onFileUplaod()" />
+        }
+      </div>
+    </mat-drawer-content>
+  </mat-drawer-container>
+</app-dialog>

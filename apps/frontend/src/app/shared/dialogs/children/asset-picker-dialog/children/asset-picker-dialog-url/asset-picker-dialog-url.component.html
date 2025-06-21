@@ -1,0 +1,37 @@
+<mat-form-field appearance="outline" class="w-full">
+  <mat-label>Asset Url</mat-label>
+  <input matInput [formControl]="control" />
+</mat-form-field>
+<div class="preview">
+  @if (isValidUrl) {
+    <video
+      *ngIf="mimeType.startsWith('video/')"
+      [src]="previewUrl"
+      controls
+      width="100%"
+    ></video>
+    <img
+      *ngIf="mimeType.startsWith('image/')"
+      [src]="previewUrl"
+      alt="Could not load"
+      width="100%"
+    />
+  } @else {
+    <p>Preview will be shown after url change</p>
+  }
+</div>
+<button
+  mat-flat-button
+  color="primary"
+  [disabled]="!isValidUrl"
+  (click)="uploadFile()"
+>
+  Upload image
+</button>
+@if (isUploading) {
+  <div class="upc">
+    <div class="upc-content">
+      <h4>Please wait...</h4>
+    </div>
+  </div>
+}

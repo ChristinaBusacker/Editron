@@ -1,7 +1,13 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpEvent,
+  HttpEventType,
+  HttpHeaders,
+  HttpParams,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import {
   UploadAssetResponse,
   UploadAssetFromDataPayload,
@@ -14,7 +20,7 @@ import { buildAuthHeaders } from '@frontend/core/utils/build-auth-header.util';
   providedIn: 'root',
 })
 export class AssetService {
-  private readonly baseUrl = '/api/assets';
+  public readonly baseUrl = 'https://localhost:3002/asset';
 
   constructor(
     private http: HttpClient,
@@ -25,16 +31,55 @@ export class AssetService {
    * Builds the default headers including the x-auth header if the Session cookie is set
    */
   private buildHeaders(): HttpHeaders {
-    return buildAuthHeaders(this.cookieService);
+    let headers = new HttpHeaders();
+    const session = this.cookieService.get('Session');
+    if (session) {
+      headers = headers.set('x-auth', session);
+    }
+    return headers;
   }
 
-  uploadAsset(file: File): Observable<UploadAssetResponse> {
+  detectMimeTypeFromUrl(url: string): Observable<string> {
+    return this.http
+      .post<{
+        mimeType: string;
+        valid: boolean;
+      }>(`${this.baseUrl}/validate-url`, { url }, { headers: this.buildHeaders() })
+      .pipe(
+        map(response => {
+          if (!response.valid) {
+            throw new Error(`Unsupported file type: ${response.mimeType}`);
+          }
+          return response.mimeType;
+        }),
+      );
+  }
+
+  uploadAsset(file: File): Observable<UploadAssetResponse | number> {
     const formData = new FormData();
     formData.append('file', file);
 
-    return this.http.post<UploadAssetResponse>(this.baseUrl, formData, {
-      headers: this.buildHeaders(),
-    });
+    return this.http
+      .post<UploadAssetResponse>(this.baseUrl, formData, {
+        headers: this.buildHeaders(),
+        reportProgress: true,
+        observe: 'events',
+      })
+      .pipe(
+        map((event: HttpEvent<UploadAssetResponse>) => {
+          switch (event.type) {
+            case HttpEventType.UploadProgress:
+              // Fortschritt berechnen
+              return Math.round((event.loaded / (event.total ?? 1)) * 100);
+
+            case HttpEventType.Response:
+              return event.body!;
+
+            default:
+              return 0;
+          }
+        }),
+      );
   }
 
   uploadFromData(

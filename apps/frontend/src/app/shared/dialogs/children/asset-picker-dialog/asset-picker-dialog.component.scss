@@ -1,0 +1,19 @@
+:host {
+  .drawer {
+    & .nav {
+      display: flex;
+      flex-direction: column;
+      padding: 10px;
+
+      & button {
+        display: grid;
+        grid-template-columns: 1fr 3fr;
+        text-align: left;
+      }
+    }
+
+    .content {
+      height: 100%;
+    }
+  }
+}

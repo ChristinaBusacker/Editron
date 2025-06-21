@@ -39,6 +39,8 @@ import { UserEntity } from '@database/user/user.entity';
 import { CurrentUser } from '@shared/decorators/current-user.decorator';
 import { ALLOWED_MIME_TYPES } from './declarations/constants/allowed-mime-types.constant';
 import { assetUploadOptions } from './utils/upload.config';
+import { detectMimeTypeFromUrlLegacy } from './utils/detect-mime-type.util';
+import { parseDataUrl } from './utils/parse-data-url.util';
 
 @ApiTags('Assets')
 @ApiBearerAuth()
@@ -91,31 +93,83 @@ export class AssetController {
   @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.CREATED)
   @ApiHeader({ name: 'x-auth', required: true, description: 'Session token' })
-  @ApiOperation({ summary: 'Upload asset from base64 or URL' })
+  @ApiOperation({
+    summary: 'Upload asset from base64, data URL or external URL',
+  })
   @ApiResponse({ status: 201, description: 'Asset uploaded' })
   async uploadFromData(
     @Body() dto: UploadAssetFromDataDto,
     @CurrentUser() user: UserEntity,
   ) {
     let buffer: Buffer;
+    let mimeType = dto.mimeType;
 
     if (dto.data) {
       buffer = Buffer.from(dto.data, 'base64');
+      if (!mimeType) {
+        throw new BadRequestException('Missing MIME type for base64 upload');
+      }
     } else if (dto.url) {
-      buffer = await this.downloadFromUrl(dto.url);
+      if (dto.url.startsWith('data:')) {
+        try {
+          const result = parseDataUrl(dto.url);
+          buffer = result.buffer;
+          mimeType = result.mimeType;
+        } catch (err) {
+          throw new BadRequestException('Invalid data URL');
+        }
+      } else {
+        const result = await detectMimeTypeFromUrlLegacy(dto.url);
+        buffer = result.buffer;
+        mimeType = result.mimeType;
+      }
     } else {
       throw new BadRequestException('Either data or url must be provided');
     }
 
-    const ext = path.extname(dto.filename) || '.png';
+    const ext = path.extname(dto.filename || 'file.png') || '.png';
     const storedFilename = `${this.generateId()}${ext}`;
 
     return this.handleAssetBufferUpload(buffer, {
-      filename: dto.filename,
-      mimetype: dto.mimeType,
+      filename: dto.filename || 'upload' + ext,
+      mimetype: mimeType,
       storedFilename,
       user,
     });
+  }
+
+  @Post('validate-url')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Validate URL or data URL and detect MIME type' })
+  @ApiResponse({ status: 200, description: 'Detected MIME type and file info' })
+  async validateUrl(@Body('url') url: string) {
+    if (!url) {
+      throw new BadRequestException('URL is required');
+    }
+
+    try {
+      let mimeType: string;
+
+      if (url.startsWith('data:')) {
+        const result = parseDataUrl(url);
+        mimeType = result.mimeType;
+      } else {
+        const result = await detectMimeTypeFromUrlLegacy(url);
+        mimeType = result.mimeType;
+      }
+
+      const allowed = ['image/', 'video/'];
+      const isAllowed = allowed.some(prefix => mimeType.startsWith(prefix));
+
+      return {
+        valid: isAllowed,
+        mimeType,
+      };
+    } catch (error) {
+      throw new BadRequestException(
+        `URL check failed: ${(error as Error).message}`,
+      );
+    }
   }
 
   // === List All Assets ===

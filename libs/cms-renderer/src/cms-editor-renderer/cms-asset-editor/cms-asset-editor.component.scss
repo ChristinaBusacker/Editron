@@ -1,0 +1,13 @@
+:host {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  & .preview {
+    & img {
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      height: 64px;
+    }
+  }
+}

@@ -26,6 +26,7 @@ import { CmsColorEditorComponent } from '../cms-color-editor/cms-color-editor.co
 import { CmsTagEditorComponent } from '../cms-tag-editor/cms-tag-editor.component';
 import { CmsJsonEditorComponent } from '../cms-json-editor/cms-json-editor.component';
 import { Project } from '@frontend/shared/services/api/models/project.model';
+import { CmsAssetEditorComponent } from '../cms-asset-editor/cms-asset-editor.component';
 
 @Component({
   selector: 'lib-cms-form',
@@ -46,6 +47,7 @@ import { Project } from '@frontend/shared/services/api/models/project.model';
     CmsColorEditorComponent,
     CmsJsonEditorComponent,
     CmsTagEditorComponent,
+    CmsAssetEditorComponent,
   ],
   templateUrl: './cms-form.component.html',
 })

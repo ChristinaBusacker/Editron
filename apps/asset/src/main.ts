@@ -21,6 +21,12 @@ async function bootstrap() {
 
   const configService = app.get(ConfigService);
 
+  app.enableCors({
+    origin: [configService.get<string>('FRONTEND_URL')],
+    methods: 'GET,POST,PUT,DELETE',
+    allowedHeaders: 'Content-Type, x-auth',
+  });
+
   const config = new DocumentBuilder()
     .setTitle('Editron Asset Documentation')
     .setDescription('Die API Beschreibung')

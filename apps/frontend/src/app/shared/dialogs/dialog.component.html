@@ -6,17 +6,25 @@
   </div>
 
   <div class="dialog-actions">
-    @if(buttonOptions?.decline) {
-    <button mat-button (click)="action.emit('cancel')" [color]="buttonOptions.decline.color || null">
-      {{ buttonOptions.decline.label || 'Cancel' }}
-    </button>
-
+    @if (buttonOptions?.decline) {
+      <button
+        mat-button
+        (click)="action.emit('cancel')"
+        [color]="buttonOptions.decline.color || null"
+      >
+        {{ buttonOptions.decline.label || 'Cancel' }}
+      </button>
     }
 
-    @if(buttonOptions?.confirm) {
-    <button mat-button (click)="action.emit('confirm')" [color]="buttonOptions.confirm.color || 'primary'">
-      {{ buttonOptions.confirm.label || 'OK' }}
-    </button>
+    @if (buttonOptions?.confirm) {
+      <button
+        mat-flat-button
+        (click)="action.emit('confirm')"
+        [color]="'primary'"
+        [disabled]="buttonOptions.confirm.disabled"
+      >
+        {{ buttonOptions.confirm.label || 'OK' }}
+      </button>
     }
   </div>
 </section>

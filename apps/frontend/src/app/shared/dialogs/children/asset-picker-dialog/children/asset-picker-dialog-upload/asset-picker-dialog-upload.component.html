@@ -1,0 +1,34 @@
+<div
+  class="area"
+  appDropZone
+  (filesDropped)="handleDrop($event)"
+  (filesHovered)="isHovering = $event"
+  [class.hover]="isHovering"
+>
+  <span
+    >Upload your files per Dreag&Drop or use the Button below to select an File
+    via the native Explorer.</span
+  >
+  <button mat-flat-button color="primary" (click)="fileInp.click()">
+    Open File Explorer
+  </button>
+  <input
+    type="file"
+    style="display: none"
+    #fileInp
+    (change)="onFileSelected($event)"
+  />
+
+  <span>Max File Size is 200MB. Allowed are mostly images at the moment.</span>
+</div>
+@if (isUploading) {
+  <div class="upc">
+    <div class="upc-content">
+      <h4>Uploading...</h4>
+      <mat-progress-bar
+        mode="determinate"
+        [value]="uploadingProgress"
+      ></mat-progress-bar>
+    </div>
+  </div>
+}

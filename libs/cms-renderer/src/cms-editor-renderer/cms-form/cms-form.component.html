@@ -305,6 +305,13 @@
           }
         }
       }
+
+      <!-- asset -->
+      @if (field.type === 'asset') {
+        <lib-cms-asset-editor
+          [control]="getControl(field.name)"
+        ></lib-cms-asset-editor>
+      }
     </div>
   }
 </form>

@@ -1,0 +1,9 @@
+@if (this.control.value) {
+  <div class="preview">
+    <img [src]="generateThumbnailIdAssetUrl(this.control.value)" />
+  </div>
+}
+
+<button mat-flat-button color="accent" (click)="openAssetDialog()">
+  Select Asset
+</button>

@@ -1,0 +1,34 @@
+<div
+  class="asset-list"
+  appDropZone
+  (filesDropped)="handleDrop($event)"
+  (filesHovered)="isHovering = $event"
+  [class.hover]="isHovering"
+>
+  @for (asset of assets; track asset.id) {
+    <div
+      class="item"
+      [style.backgroundImage]="
+        'url(' + generateThumbnailIdAssetUrl(asset.id) + ')'
+      "
+      (click)="selectAsset(asset)"
+      [class.selected]="selectedAsset?.id === asset.id"
+    >
+      <input
+        type="checkbox"
+        [checked]="selectedAsset?.id === asset.id ? 'checked' : null"
+      />
+    </div>
+  }
+</div>
+@if (isUploading) {
+  <div class="upc">
+    <div class="upc-content">
+      <h4>Uploading...</h4>
+      <mat-progress-bar
+        mode="determinate"
+        [value]="uploadingProgress"
+      ></mat-progress-bar>
+    </div>
+  </div>
+}

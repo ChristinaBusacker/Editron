@@ -27,4 +27,7 @@ export const assetUploadOptions = {
       cb(null, filename);
     },
   }),
+  limits: {
+    fileSize: 200 * 1024 * 1024, // 200 MB
+  },
 };
