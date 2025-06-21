@@ -4,12 +4,13 @@ import { AppService } from './app.service';
 
 import { ConfigModule } from '@nestjs/config';
 import { MigrationModule } from './core/migration/migration.module';
-import { AuthModule } from './modules/auth/auth.module';
+
 import { ContentModule } from './modules/content/content.module';
 import { ProjectMemberModule } from './modules/project-member/project-member.module';
 import { ProjectModule } from './modules/project/project.module';
 import { UserModule } from './modules/user/user.module';
 import { DatabaseModule } from '@database/database.module';
+import { AuthModule } from '@auth';
 
 
 @Module({

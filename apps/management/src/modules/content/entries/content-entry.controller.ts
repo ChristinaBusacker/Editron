@@ -20,9 +20,9 @@ import { ContentEntryService } from './content-entry.service';
 import { UpdateEntryDto } from '../dto/update-entry.dto';
 import { RestoreVersionDto } from '../dto/restore-version.dto';
 import { ValidateEntryDto } from '../dto/validate-entry.dto';
-import { AuthGuard } from '@management/modules/auth/auth.guard';
 import { CurrentUser } from '@shared/decorators/current-user.decorator';
 import { UserEntity } from '@database/user/user.entity';
+import { AuthGuard } from '@auth';
 
 @ApiTags('Content Entries')
 @UseGuards(AuthGuard)

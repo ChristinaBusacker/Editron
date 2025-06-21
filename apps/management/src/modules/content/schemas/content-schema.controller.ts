@@ -7,7 +7,7 @@ import {
   ApiHeader,
 } from '@nestjs/swagger';
 import { ContentSchemaService } from './content-schema.service';
-import { AuthGuard } from '@management/modules/auth/auth.guard';
+import { AuthGuard } from '@auth';
 
 @ApiTags('Content Schemas')
 @UseGuards(AuthGuard)

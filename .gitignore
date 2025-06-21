@@ -7,6 +7,8 @@ dist
 /out-tsc
 /bazel-out
 
+/uploads
+
 # Node
 /apps/*/node_modules
 node_modules

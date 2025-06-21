@@ -28,6 +28,9 @@ export class AssetEntity {
   @Column()
   mimeType: string;
 
+  @Column({ nullable: true })
+  blurhash?: string;
+
   @Column()
   size: number;
 
@@ -40,8 +43,8 @@ export class AssetEntity {
   @Column({ nullable: true })
   hash?: string;
 
-  @Column('jsonb', { default: {} })
-  variants: Record<string, string>;
+  @Column('jsonb', { nullable: true })
+  variants: Record<string, { webp: string; fallback: string }>;
 
   @ManyToOne(() => UserEntity, { nullable: false })
   uploadedBy: UserEntity;

@@ -21,12 +21,24 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@database/": ["libs/database/src"],
-      "@database/*": ["libs/database/src/*"],
-      "@shared": ["libs/shared/src"],
-      "@shared/*": ["libs/shared/src/*"],
-      "@frontend/*": ["apps/frontend/src/app/*"],
-      "@management/*": ["apps/management/src/*"],
+      "@database/": [
+        "libs/database/src"
+      ],
+      "@database/*": [
+        "libs/database/src/*"
+      ],
+      "@shared": [
+        "libs/shared/src"
+      ],
+      "@shared/*": [
+        "libs/shared/src/*"
+      ],
+      "@frontend/*": [
+        "apps/frontend/src/app/*"
+      ],
+      "@management/*": [
+        "apps/management/src/*"
+      ],
       "@cmsmodules/*": [
         "apps/cmsmodules/src/*"
       ],
@@ -36,9 +48,22 @@
       "@cmsrenderer/*": [
         "libs/cms-renderer/src/*"
       ],
-      "three": ["node_modules/three"],
-      "three/examples/jsm/*": ["node_modules/three/examples/jsm/*"]
+      "three": [
+        "node_modules/three"
+      ],
+      "three/examples/jsm/*": [
+        "node_modules/three/examples/jsm/*"
+      ],
+      "@auth": [
+        "libs/auth/src"
+      ],
+      "@auth/*": [
+        "libs/auth/src/*"
+      ]
     }
   },
-  "exclude": ["node_modules", "./dist/**/*"]
+  "exclude": [
+    "node_modules",
+    "./dist/**/*"
+  ]
 }
