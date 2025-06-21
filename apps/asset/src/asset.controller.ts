@@ -10,13 +10,10 @@ import {
   UploadedFile,
   UseGuards,
   UseInterceptors,
+  HttpCode,
+  HttpStatus,
+  Body,
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { AssetService } from './asset.service';
-
-import { AuthGuard } from '@auth';
-import { UserEntity } from '@database/user/user.entity';
-import { Body } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -26,22 +23,27 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { CurrentUser } from '@shared/decorators/current-user.decorator';
-import axios from 'axios';
-import * as crypto from 'crypto';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
-import * as fs from 'fs';
-import { customAlphabet } from 'nanoid';
 import * as path from 'path';
+import * as fs from 'fs';
+import * as crypto from 'crypto';
+import { customAlphabet } from 'nanoid';
+
+import { AssetService } from './asset.service';
 import { AssetProcessor } from './asset.processor';
-import { ALLOWED_MIME_TYPES } from './declarations/constants/allowed-mime-types.constant';
 import { UploadAssetFromDataDto } from './dto/upload-asset-from-data.dto';
-import { hashFile } from './utils/hash.utils';
+
 import { assetUploadOptions } from './utils/upload.config';
+import { ALLOWED_MIME_TYPES } from './declarations/constants/allowed-mime-types.constant';
+import { hashFile } from './utils/hash.utils';
+import { AuthGuard } from '@auth';
+import { CurrentUser } from '@shared/decorators/current-user.decorator';
+import { UserEntity } from '@database/user/user.entity';
 
 @ApiTags('Assets')
 @ApiBearerAuth()
-@Controller('assets')
+@Controller()
 export class AssetController {
   private generateId = customAlphabet(
     '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
@@ -53,15 +55,13 @@ export class AssetController {
     private readonly assetProcessor: AssetProcessor,
   ) {}
 
+  // === Upload via Form ===
   @Post()
   @UseGuards(AuthGuard)
-  @ApiHeader({
-    name: 'x-auth',
-    description: 'Authentication token for the request',
-    required: true,
-  })
   @UseInterceptors(FileInterceptor('file', assetUploadOptions))
-  @ApiOperation({ summary: 'Upload an asset file' })
+  @HttpCode(HttpStatus.CREATED)
+  @ApiHeader({ name: 'x-auth', required: true, description: 'Session token' })
+  @ApiOperation({ summary: 'Upload asset via file' })
   @ApiConsumes('multipart/form-data')
   @ApiBody({
     schema: {
@@ -69,78 +69,129 @@ export class AssetController {
       properties: { file: { type: 'string', format: 'binary' } },
     },
   })
-  @ApiResponse({ status: 201, description: 'Asset uploaded successfully' })
+  @ApiResponse({ status: 201, description: 'Asset uploaded' })
   async uploadAsset(
     @UploadedFile() file: Express.Multer.File,
     @CurrentUser() user: UserEntity,
   ) {
     if (!ALLOWED_MIME_TYPES.includes(file.mimetype)) {
-      throw new Error(`Unsupported file type: ${file.mimetype}`);
+      throw new BadRequestException(`Unsupported file type: ${file.mimetype}`);
     }
 
-    const fullPath = path.join('uploads/originals', file.filename);
-    const hash = await hashFile(fullPath);
-
-    const existing = await this.assetService.findByHash(hash);
-    if (existing) {
-      return {
-        id: existing.id,
-        filename: existing.originalFilename,
-        note: 'duplicate',
-      };
-    }
-
-    const processed = await this.assetProcessor.process(file);
-
-    const asset = await this.assetService.create({
-      id: processed.id,
-      originalFilename: file.originalname,
+    const buffer = await fs.promises.readFile(file.path);
+    return this.handleAssetBufferUpload(buffer, {
+      filename: file.originalname,
+      mimetype: file.mimetype,
       storedFilename: file.filename,
-      mimeType: file.mimetype,
-      size: file.size,
-      uploadedBy: user,
-      hash,
-      variants: processed.variants,
-      blurhash: processed.blurhash,
+      user,
     });
-
-    return {
-      id: processed.id,
-      filename: asset.originalFilename,
-      variants: asset.variants,
-    };
   }
 
+  // === Upload via Base64 or URL ===
   @Post('from-data')
   @UseGuards(AuthGuard)
-  @ApiHeader({
-    name: 'x-auth',
-    description: 'Authentication token for the request',
-    required: true,
-  })
-  @ApiOperation({ summary: 'Upload an asset from base64 or URL' })
-  @ApiResponse({ status: 201, description: 'Asset created from data' })
+  @HttpCode(HttpStatus.CREATED)
+  @ApiHeader({ name: 'x-auth', required: true, description: 'Session token' })
+  @ApiOperation({ summary: 'Upload asset from base64 or URL' })
+  @ApiResponse({ status: 201, description: 'Asset uploaded' })
   async uploadFromData(
     @Body() dto: UploadAssetFromDataDto,
     @CurrentUser() user: UserEntity,
   ) {
-    const id = this.generateId();
-    const ext = path.extname(dto.filename) || '.png';
-    const storedFilename = `${id}${ext}`;
-    const originalPath = path.join('uploads/originals', storedFilename);
-
     let buffer: Buffer;
+
     if (dto.data) {
       buffer = Buffer.from(dto.data, 'base64');
     } else if (dto.url) {
-      const response = await axios.get(dto.url, {
-        responseType: 'arraybuffer',
-      });
-      buffer = Buffer.from(response.data);
+      buffer = await this.downloadFromUrl(dto.url);
     } else {
       throw new BadRequestException('Either data or url must be provided');
     }
 
+    const ext = path.extname(dto.filename) || '.png';
+    const storedFilename = `${this.generateId()}${ext}`;
+
+    return this.handleAssetBufferUpload(buffer, {
+      filename: dto.filename,
+      mimetype: dto.mimeType,
+      storedFilename,
+      user,
+    });
+  }
+
+  // === List All Assets ===
+  @Get()
+  @UseGuards(AuthGuard)
+  @HttpCode(HttpStatus.OK)
+  @ApiHeader({ name: 'x-auth', required: true })
+  @ApiOperation({ summary: 'List all assets' })
+  @ApiResponse({ status: 200, description: 'Returns asset list' })
+  async listAssets() {
+    return this.assetService.findAllWithUser();
+  }
+
+  // === Get Asset Metadata ===
+  @Get(':id')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Get asset metadata' })
+  @ApiResponse({ status: 200, description: 'Asset metadata returned' })
+  async getAsset(@Param('id') id: string) {
+    const asset = await this.assetService.findByIdWithUser(id);
+    if (!asset) throw new NotFoundException('Asset not found');
+    return asset;
+  }
+
+  // === Download Original File ===
+  @Get(':id/download')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Download original asset file' })
+  @ApiResponse({ status: 200, description: 'Returns original file' })
+  async downloadAsset(@Param('id') id: string, @Res() res: Response) {
+    const asset = await this.assetService.findById(id);
+    if (!asset) throw new NotFoundException('Asset not found');
+
+    const filePath = path.resolve('uploads/originals', asset.storedFilename);
+    res.sendFile(filePath);
+  }
+
+  // === Serve Variant ===
+  @Get(':id/:variant')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Get asset variant (e.g. thumbnail)' })
+  @ApiResponse({ status: 200, description: 'Returns variant file' })
+  async getVariant(
+    @Param('id') id: string,
+    @Param('variant') variant: string,
+    @Query('webp') webp: string,
+    @Res() res: Response,
+  ) {
+    const asset = await this.assetService.findById(id);
+    if (!asset) throw new NotFoundException('Asset not found');
+
+    const entry = asset.variants?.[variant];
+    if (!entry) {
+      throw new NotFoundException(`Variant '${variant}' not found`);
+    }
+
+    const filePath = path.resolve(
+      webp === 'true' ? entry.webp : entry.fallback,
+    );
+
+    res.sendFile(filePath);
+  }
+
+  // === Internal helper ===
+  private async handleAssetBufferUpload(
+    buffer: Buffer,
+    opts: {
+      filename: string;
+      mimetype: string;
+      storedFilename: string;
+      user: UserEntity;
+    },
+  ) {
+    const id = this.generateId();
+    const originalPath = path.join('uploads/originals', opts.storedFilename);
     await fs.promises.writeFile(originalPath, buffer);
 
     const hash = crypto.createHash('sha256').update(buffer).digest('hex');
@@ -155,19 +206,19 @@ export class AssetController {
 
     const processed = await this.assetProcessor.process({
       buffer,
-      mimetype: dto.mimeType,
-      originalname: dto.filename,
+      mimetype: opts.mimetype,
+      originalname: opts.filename,
       path: originalPath,
-      filename: storedFilename,
+      filename: opts.storedFilename,
     } as any);
 
     const asset = await this.assetService.create({
       id,
-      originalFilename: dto.filename,
-      storedFilename,
-      mimeType: dto.mimeType,
+      originalFilename: opts.filename,
+      storedFilename: opts.storedFilename,
+      mimeType: opts.mimetype,
       size: buffer.length,
-      uploadedBy: user,
+      uploadedBy: opts.user,
       hash,
       variants: processed.variants,
       blurhash: processed.blurhash,
@@ -180,53 +231,21 @@ export class AssetController {
     };
   }
 
-  @Get()
-  @UseGuards(AuthGuard)
-  @ApiHeader({
-    name: 'x-auth',
-    description: 'Authentication token for the request',
-    required: true,
-  })
-  @ApiOperation({ summary: 'List all uploaded assets' })
-  @ApiResponse({ status: 200, description: 'Array of assets' })
-  async listAssets() {
-    return this.assetService.findAll();
-  }
-
-  @Get(':id')
-  @ApiOperation({ summary: 'Get asset metadata by ID' })
-  @ApiResponse({ status: 200, description: 'Asset metadata' })
-  async getAsset(@Param('id') id: string) {
-    const asset = await this.assetService.findById(id);
-    if (!asset) throw new NotFoundException('Asset not found');
-    return asset;
-  }
-
-  @Get(':id/:variant')
-  @ApiOperation({ summary: 'Get a specific variant of an asset' })
-  @ApiResponse({ status: 200, description: 'Serves the file variant' })
-  async getVariant(
-    @Param('id') id: string,
-    @Param('variant') variant: string,
-    @Query('webp') webp: string,
-    @Res() res: Response,
-  ) {
-    const asset = await this.assetService.findById(id);
-    if (!asset) throw new NotFoundException('Asset not found');
-
-    const variantEntry = asset.variants?.[variant];
-    if (!variantEntry) {
-      throw new NotFoundException(`Variant '${variant}' not found for asset.`);
-    }
-
-    const finalPath = path.resolve(
-      webp === 'true' ? variantEntry.webp : variantEntry.fallback,
-    );
-
-    if (!path.isAbsolute(finalPath)) {
-      throw new NotFoundException(`Path for variant '${variant}' is invalid.`);
-    }
-
-    res.sendFile(path.resolve(finalPath));
+  private async downloadFromUrl(url: string): Promise<Buffer> {
+    return new Promise((resolve, reject) => {
+      const client = url.startsWith('https')
+        ? require('https')
+        : require('http');
+      client
+        .get(url, res => {
+          if (res.statusCode !== 200) {
+            return reject(new Error(`Failed to fetch: ${res.statusCode}`));
+          }
+          const chunks: Uint8Array[] = [];
+          res.on('data', chunk => chunks.push(chunk));
+          res.on('end', () => resolve(Buffer.concat(chunks)));
+        })
+        .on('error', reject);
+    });
   }
 }
