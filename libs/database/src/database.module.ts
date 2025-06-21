@@ -13,6 +13,7 @@ import { ContentSchemaEntity } from './content-schema/content-schema.entity';
 import { ContentVersionTableModule } from './content-version/content-version.module';
 import { ContentValueTableModule } from './content-value/content-value.module';
 import { ContentSchemaTableModule } from './content-schema/content-schema.module';
+import { AssetTableModule } from './asset/asset.module';
 
 @Module({
   imports: [
@@ -26,7 +27,8 @@ import { ContentSchemaTableModule } from './content-schema/content-schema.module
     ContentEntryTableModule,
     ContentSchemaTableModule,
     ContentVersionTableModule,
-    ContentValueTableModule
+    ContentValueTableModule,
+    AssetTableModule
   ],
   providers: [...databaseProviders, DatabaseService],
   exports: [...databaseProviders, DatabaseService],

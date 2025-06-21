@@ -11,4 +11,5 @@ export enum RepositoryKey {
   contentSchema = 'CONTENTSCHEMA_REPOSITORY',
   contentVersion = 'CONTENTVERSION_REPOSITORY',
   contentValue = 'CONTENTVALUE_REPOSITORY',
+  asset = 'ASSET_REPOSITORY',
 }

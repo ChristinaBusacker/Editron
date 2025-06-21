@@ -12,6 +12,7 @@ import { ContentEntryEntity } from './content-entry/content-entry.entity';
 import { ContentSchemaEntity } from './content-schema/content-schema.entity';
 import { ContentVersionEntity } from './content-version/content-version.entity';
 import { ContentValueEntity } from './content-value/content-value.entity';
+import { AssetEntity } from './asset/asset.entity';
 
 @Injectable()
 export class DatabaseService {
@@ -38,5 +39,7 @@ export class DatabaseService {
     public readonly contentVersionRepository: Repository<ContentVersionEntity>,
     @Inject(RepositoryKey.contentValue)
     public readonly contentValueRepository: Repository<ContentValueEntity>,
+    @Inject(RepositoryKey.asset)
+    public readonly assetRepository: Repository<AssetEntity>,
   ) {}
 }
