@@ -22,16 +22,14 @@ export async function processImageVariants(
   const result: Record<string, { webp: string; fallback: string }> = {};
 
   for (const [variant, width] of Object.entries(IMAGE_VARIANTS)) {
-    const baseName = variant; // no need for hash in filename since in its own folder
+    const baseName = variant;
     const webpPath = path.join(outputDir, `${baseName}.webp`);
     const fallbackPath = path.join(outputDir, `${baseName}.${fallbackFormat}`);
 
     const pipeline = Sharp(inputPath).resize({ width });
 
-    // Create WebP variant
     await pipeline.clone().webp({ quality: 85 }).toFile(webpPath);
 
-    // Create fallback variant
     if (fallbackFormat === 'jpeg') {
       await pipeline.clone().jpeg({ quality: 90 }).toFile(fallbackPath);
     } else {

@@ -1,6 +1,6 @@
+import { Injectable } from '@nestjs/common';
 import { DatabaseService } from '@database/database.service';
 import { AssetEntity } from '@database/asset/asset.entity';
-import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class AssetService {
@@ -12,15 +12,32 @@ export class AssetService {
   }
 
   async findById(id: string): Promise<AssetEntity | null> {
-    return this.db.assetRepository.findOne({ where: { id } });
+    return this.db.assetRepository.findOne({
+      where: { id },
+      relations: ['uploadedBy'],
+    });
   }
 
-  async findByHash(hash: string): Promise<AssetEntity | null> {
-    return this.db.assetRepository.findOne({ where: { hash } });
+  async findByIdWithUser(id: string): Promise<AssetEntity | null> {
+    return this.db.assetRepository.findOne({
+      where: { id },
+      relations: ['uploadedBy'],
+    });
   }
 
   async findAll(): Promise<AssetEntity[]> {
     return this.db.assetRepository.find();
+  }
+
+  async findAllWithUser(): Promise<AssetEntity[]> {
+    return this.db.assetRepository.find({
+      relations: ['uploadedBy'],
+      order: { uploadedAt: 'DESC' },
+    });
+  }
+
+  async findByHash(hash: string): Promise<AssetEntity | null> {
+    return this.db.assetRepository.findOne({ where: { hash } });
   }
 
   async deleteById(id: string): Promise<void> {

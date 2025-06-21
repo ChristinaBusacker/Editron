@@ -27,18 +27,17 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { CurrentUser } from '@shared/decorators/current-user.decorator';
-import * as fs from 'fs';
+import axios from 'axios';
 import * as crypto from 'crypto';
 import { Response } from 'express';
+import * as fs from 'fs';
 import { customAlphabet } from 'nanoid';
 import * as path from 'path';
-import { v4 as uuidv4 } from 'uuid';
 import { AssetProcessor } from './asset.processor';
 import { ALLOWED_MIME_TYPES } from './declarations/constants/allowed-mime-types.constant';
 import { UploadAssetFromDataDto } from './dto/upload-asset-from-data.dto';
 import { hashFile } from './utils/hash.utils';
 import { assetUploadOptions } from './utils/upload.config';
-import axios from 'axios';
 
 @ApiTags('Assets')
 @ApiBearerAuth()
@@ -162,7 +161,6 @@ export class AssetController {
       filename: storedFilename,
     } as any);
 
-    console.log(dto.filename);
     const asset = await this.assetService.create({
       id,
       originalFilename: dto.filename,
