@@ -18,9 +18,26 @@ import {
 } from '@shared/declarations/interfaces/project/project-settings';
 import { ActivatedRoute } from '@angular/router';
 import { EntryDetails } from '@frontend/shared/services/api/models/content.model';
+import { CopyToClipboardDirective } from '@frontend/core/directives/copy-to-clipboard.directive';
+import { UserBadgeDirective } from '@frontend/core/directives/user-badge.directive';
+import { FormatDateDirective } from '@frontend/core/directives/format-date.directive';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 @Component({
   selector: 'app-entry-editor',
-  imports: [CommonModule, CmsFormComponent, MatExpansionModule],
+  imports: [
+    CommonModule,
+    CmsFormComponent,
+    MatExpansionModule,
+    CopyToClipboardDirective,
+    UserBadgeDirective,
+    FormatDateDirective,
+    MatButtonModule,
+    MatIconModule,
+    MatTooltipModule,
+  ],
   templateUrl: './entry-editor.component.html',
   styleUrl: './entry-editor.component.scss',
 })
@@ -43,6 +60,16 @@ export class EntryEditorComponent implements OnInit {
   activePanel = signal('');
 
   readonly panelOpenState = signal(false);
+
+  getActiveVersion() {
+    const published = this.entryData.versions.find(v => v.isPublished);
+
+    if (published) {
+      return published;
+    }
+
+    return this.entryData.versions[this.entryData.versions.length - 1];
+  }
 
   constructor(
     private store: Store,

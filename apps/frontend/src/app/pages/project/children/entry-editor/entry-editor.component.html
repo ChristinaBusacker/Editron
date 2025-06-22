@@ -1,44 +1,119 @@
-<mat-accordion class="example-headers-align">
-  <mat-expansion-panel
-    [expanded]="activePanel() === 'main'"
-    (opened)="activePanel.set('main')"
-  >
-    <mat-expansion-panel-header>
-      <mat-panel-title> {{ currentModule.name }} </mat-panel-title>
-      <mat-panel-description> Description </mat-panel-description>
-    </mat-expansion-panel-header>
-    @if (renderer === 'form') {
-      <lib-cms-form
-        [schemaDefinition]="schema"
-        [form]="getFormGroup(currentModule.slug)"
-        [project]="currentProject"
-        [values]="entryData.value"
-      ></lib-cms-form>
-    } @else {
-      selected renderer {{ renderer }}
-    }
-  </mat-expansion-panel>
-  @for (extension of currentModule.extensions; track extension.slug) {
+<section>
+  <mat-accordion class="example-headers-align">
     <mat-expansion-panel
-      [expanded]="activePanel() === extension.slug"
-      (opened)="activePanel.set(extension.slug)"
+      [expanded]="activePanel() === 'main'"
+      (opened)="activePanel.set('main')"
     >
       <mat-expansion-panel-header>
-        <mat-panel-title> {{ extension.name }} </mat-panel-title>
+        <mat-panel-title> {{ currentModule.name }} </mat-panel-title>
         <mat-panel-description> Description </mat-panel-description>
       </mat-expansion-panel-header>
-      <lib-cms-form
-        [schemaDefinition]="extension.definition"
-        [form]="getFormGroup(extension.slug)"
-        [project]="currentProject"
-        [values]="entryData.value[extension.slug]"
-      ></lib-cms-form>
+      @if (renderer === 'form') {
+        <lib-cms-form
+          [schemaDefinition]="schema"
+          [form]="getFormGroup(currentModule.slug)"
+          [project]="currentProject"
+          [values]="entryData.value"
+        ></lib-cms-form>
+      } @else {
+        selected renderer {{ renderer }}
+      }
     </mat-expansion-panel>
+    @for (extension of currentModule.extensions; track extension.slug) {
+      <mat-expansion-panel
+        [expanded]="activePanel() === extension.slug"
+        (opened)="activePanel.set(extension.slug)"
+      >
+        <mat-expansion-panel-header>
+          <mat-panel-title> {{ extension.name }} </mat-panel-title>
+          <mat-panel-description> Description </mat-panel-description>
+        </mat-expansion-panel-header>
+        <lib-cms-form
+          [schemaDefinition]="extension.definition"
+          [form]="getFormGroup(extension.slug)"
+          [project]="currentProject"
+          [values]="entryData.value[extension.slug]"
+        ></lib-cms-form>
+      </mat-expansion-panel>
+    }
+  </mat-accordion>
+
+  @if (entryData) {
+    <button (click)="updateEntry()">Save Entry</button>
+  } @else {
+    <button (click)="logValues()">Create Entry</button>
   }
-</mat-accordion>
+</section>
 
 @if (entryData) {
-  <button (click)="updateEntry()">Save Entry</button>
-} @else {
-  <button (click)="logValues()">Create Entry</button>
+  <aside>
+    <mat-expansion-panel [expanded]="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title> Entity Details</mat-panel-title>
+      </mat-expansion-panel-header>
+      <table>
+        <tr>
+          <td>ID</td>
+          <td>
+            <div appCopyToClipboard matTooltip="Copy to clipboard">
+              {{ entryData.id }}
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>Updated By</td>
+          <td style="display: flex; align-items: center; gap: 5px">
+            <div [userBadge]="getActiveVersion().createdBy" [size]="16"></div>
+            <span> {{ getActiveVersion().createdBy.name }}</span>
+          </td>
+        </tr>
+        <tr>
+          <td>Updated At</td>
+          <td style="display: flex; align-items: center; gap: 5px">
+            <div
+              [formatDate]="getActiveVersion().createdAt"
+              format="dd.MM.yyyy HH:mm"
+            ></div>
+          </td>
+        </tr>
+      </table>
+      <div class="entry-controls">
+        <button mat-flat-button color="accent">Save</button>
+        <button mat-flat-button color="primary">Publish</button>
+      </div>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel [expanded]="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title> Versions</mat-panel-title>
+      </mat-expansion-panel-header>
+      @for (version of entryData.versions; track version.id) {
+        <div class="card">
+          <span class="card-title">Version {{ version.version }}</span>
+          <div class="card-container">
+            <div class="card-content">
+              <div style="display: flex; align-items: center; gap: 5px">
+                <span [userBadge]="version.createdBy" [size]="16"></span>
+                <span>{{ version.createdBy.name }}</span>
+              </div>
+              <div>
+                <div
+                  [formatDate]="version.createdAt"
+                  format="dd.MM.yyyy HH:mm"
+                ></div>
+              </div>
+            </div>
+            <div class="card-controls">
+              <button matTooltip="Compare to current">
+                <mat-icon>compare_arrows</mat-icon>
+              </button>
+              <button matTooltip="Revoke Version">
+                <mat-icon>update</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+    </mat-expansion-panel>
+  </aside>
 }

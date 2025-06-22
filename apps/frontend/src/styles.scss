@@ -35,3 +35,16 @@ lib-cms-geolocation-editor
   display: none;
 }
 
+.clipboard-area {
+  transition: background-color 0.2s;
+  background-color: #dedede;
+  padding: 1px 5px;
+  border-radius: 4px;
+  user-select: none;
+  -webkit-user-select: none; /* Für Safari */
+  cursor: copy;
+  &.copied {
+    background-color: #d4edda;
+  }
+}
+

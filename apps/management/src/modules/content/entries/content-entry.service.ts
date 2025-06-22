@@ -156,6 +156,7 @@ export class ContentEntryService {
       version: (lastVersion?.version ?? 0) + 1,
       isPublished: false,
       createdBy: user,
+      createdAt: new Date(),
     });
     await this.db.contentVersionRepository.save(newVersion);
 
@@ -342,7 +343,7 @@ export class ContentEntryService {
         createdBy: v.createdBy
           ? {
               id: v.createdBy.id,
-              displayName: v.createdBy.name,
+              name: v.createdBy.name,
             }
           : null,
         value: valueMap.get(v.id) ?? {},
