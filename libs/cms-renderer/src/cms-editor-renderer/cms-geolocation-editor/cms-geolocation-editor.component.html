@@ -1,24 +1,47 @@
 <div class="controls">
-    <mat-form-field style="width: 100%;">
-        <input matInput type="text" [formControl]="addressControl" placeholder="Adresse suchen"
-            [matAutocomplete]="auto" />
-        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectAddress($event.option.value)">
-            <mat-option *ngFor="let result of filteredSuggestions$ | async" [value]="result">
-                {{ result.display_name }}
-            </mat-option>
-        </mat-autocomplete>
-    </mat-form-field>
+  <mat-form-field style="width: 100%">
+    <input
+      matInput
+      type="text"
+      [formControl]="addressControl"
+      placeholder="Adresse suchen"
+      [matAutocomplete]="auto"
+    />
+    <mat-autocomplete
+      #auto="matAutocomplete"
+      (optionSelected)="selectAddress($event.option.value)"
+    >
+      <mat-option
+        *ngFor="let result of filteredSuggestions$ | async"
+        [value]="result"
+      >
+        {{ result.display_name }}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
 
-    <div class="latlon">
-        <mat-form-field style="width: 100%;">
-            <mat-label>Latitude</mat-label>
-            <input matInput type="number" step="0.001" [value]="latSignal()" (input)="setLat($event.target.value)" />
-        </mat-form-field>
-        <mat-form-field style="width: 100%;">
-            <mat-label>Longitute</mat-label>
-            <input matInput type="number" step="0.001" [value]="lonSignal()" (input)="setLon($event.target.value)" />
-        </mat-form-field>
-    </div>
+  <div class="latlon">
+    <mat-form-field style="width: 100%">
+      <mat-label>Latitude</mat-label>
+      <input
+        matInput
+        type="number"
+        step="0.001"
+        [value]="latSignal()"
+        (input)="setLat($event.target.value)"
+      />
+    </mat-form-field>
+    <mat-form-field style="width: 100%">
+      <mat-label>Longitute</mat-label>
+      <input
+        matInput
+        type="number"
+        step="0.001"
+        [value]="lonSignal()"
+        (input)="setLon($event.target.value)"
+      />
+    </mat-form-field>
+  </div>
 </div>
 
-<div id="map" style="width: 100%;" class="map"></div>
+<div id="map" style="width: 100%" class="map"></div>
