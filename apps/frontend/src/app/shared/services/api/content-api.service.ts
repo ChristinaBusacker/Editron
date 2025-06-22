@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {
   CreateEntry,
+  EntryDetails,
   UpdateEntry,
   ValidateEntry,
 } from './models/content.model';
@@ -48,15 +49,15 @@ export class ContentApiService {
     );
   }
 
-  getEntryDetails(entryId: number): Observable<any> {
-    return this.request.get(`${this.baseUrl}/entries/${entryId}`);
+  getEntryDetails(entryId: string): Observable<EntryDetails> {
+    return this.request.get(`${this.baseUrl}/entries/${entryId}/details`);
   }
 
-  updateEntry(entryId: number, dto: UpdateEntry): Observable<any> {
+  updateEntry(entryId: string, dto: UpdateEntry): Observable<any> {
     return this.request.put(`${this.baseUrl}/entries/${entryId}`, dto);
   }
 
-  deleteEntry(entryId: number): Observable<any> {
+  deleteEntry(entryId: string): Observable<any> {
     return this.request.delete(`${this.baseUrl}/entries/${entryId}`);
   }
 

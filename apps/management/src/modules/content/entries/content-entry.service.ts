@@ -12,6 +12,7 @@ import { UpdateEntryDto } from '../dto/update-entry.dto';
 import { ValidateEntryDto } from '../dto/validate-entry.dto';
 import { UserEntity } from '@database/user/user.entity';
 import { ContentValueEntity } from '@database/content-value/content-value.entity';
+import { In } from 'typeorm';
 
 @Injectable()
 export class ContentEntryService {
@@ -284,6 +285,68 @@ export class ContentEntryService {
             values: value?.value ?? {}, // <- direkt der Blob
           }
         : null,
+    };
+  }
+
+  async getEntryDetails(entryId: string) {
+    const entry = await this.db.contentEntryRepository.findOne({
+      where: { id: entryId },
+      relations: ['schema', 'project'],
+    });
+
+    if (!entry) {
+      throw new NotFoundException(`Entry with ID ${entryId} not found`);
+    }
+
+    const versions = await this.db.contentVersionRepository.find({
+      where: { entry: { id: entryId } },
+      order: { createdAt: 'DESC' },
+      relations: ['createdBy'],
+    });
+
+    if (!versions.length) {
+      return {
+        entryId,
+        value: null,
+        versions: [],
+      };
+    }
+
+    const allValues = await this.db.contentValueRepository.find({
+      where: {
+        version: {
+          id: In(versions.map((v) => v.id)),
+        },
+      },
+      relations: ['version'],
+    });
+
+    const valueMap = new Map<string, any>();
+    allValues.forEach((val) => {
+      valueMap.set(val.version.id, val.value);
+    });
+
+    const publishedVersion = versions.find((v) => v.isPublished);
+    const fallbackVersion = versions[0];
+    const mainVersion = publishedVersion || fallbackVersion;
+    const mainValue = valueMap.get(mainVersion.id) ?? {};
+
+    return {
+      id: entry.id,
+      value: mainValue,
+      versions: versions.map((v) => ({
+        id: v.id,
+        version: v.version,
+        isPublished: v.isPublished,
+        createdAt: v.createdAt,
+        createdBy: v.createdBy
+          ? {
+              id: v.createdBy.id,
+              displayName: v.createdBy.name,
+            }
+          : null,
+        value: valueMap.get(v.id) ?? {},
+      })),
     };
   }
 

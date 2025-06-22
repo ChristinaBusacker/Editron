@@ -10,7 +10,7 @@ export interface EntryValue {
 }
 
 export interface UpdateEntry {
-  values: EntryValue[];
+  data: EntryValue[];
 }
 
 export interface ValidateEntryValue {
@@ -22,4 +22,22 @@ export interface ValidateEntryValue {
 export interface ValidateEntry {
   schemaDefinition: ContentSchemaDefinition;
   values: ValidateEntryValue[];
+}
+
+export interface EntryVersion {
+  id: string;
+  version: number;
+  isPublished: boolean;
+  createdAt: Date;
+  createdBy: {
+    id: string;
+    displayName: string;
+  } | null;
+  value: any;
+}
+
+export interface EntryDetails {
+  id: string;
+  value: any;
+  versions: EntryVersion[];
 }

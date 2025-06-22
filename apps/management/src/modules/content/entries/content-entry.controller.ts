@@ -88,8 +88,20 @@ export class ContentEntryController {
     description: 'Entry with latest version returned',
   })
   @ApiResponse({ status: 404, description: 'Entry not found' })
-  getEntryDetails(@Param('entryId') entryId: string) {
+  getEntryWithLatestVersion(@Param('entryId') entryId: string) {
     return this.contentEntryService.getEntryWithLatestVersion(entryId);
+  }
+
+  @Get('entries/:entryId/details')
+  @ApiOperation({ summary: 'Get entry details with latest version and values' })
+  @ApiParam({ name: 'entryId', type: String })
+  @ApiResponse({
+    status: 200,
+    description: 'Entry with latest version returned',
+  })
+  @ApiResponse({ status: 404, description: 'Entry not found' })
+  getEntryDetails(@Param('entryId') entryId: string) {
+    return this.contentEntryService.getEntryDetails(entryId);
   }
 
   @Put('entries/:entryId')

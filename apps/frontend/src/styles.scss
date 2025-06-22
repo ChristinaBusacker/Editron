@@ -17,6 +17,11 @@ body {
   &.w-half {
     width: 50% !important;
   }
+
+  &.w-25 {
+    width: 25% !important;
+    min-width: 250px;
+  }
 }
 
 a.link {
@@ -29,3 +34,4 @@ lib-cms-geolocation-editor
   .mat-mdc-form-field-subscript-wrapper.mat-mdc-form-field-bottom-align {
   display: none;
 }
+

@@ -16,6 +16,8 @@ import {
   LanguageDefinition,
   LANGUAGES,
 } from '@shared/declarations/interfaces/project/project-settings';
+import { ActivatedRoute } from '@angular/router';
+import { EntryDetails } from '@frontend/shared/services/api/models/content.model';
 @Component({
   selector: 'app-entry-editor',
   imports: [CommonModule, CmsFormComponent, MatExpansionModule],
@@ -33,6 +35,7 @@ export class EntryEditorComponent implements OnInit {
   formGroups: { [key: string]: FormGroup } = {};
 
   renderer: string;
+  entryData?: EntryDetails;
 
   currentProject!: Project;
   projectLanguages!: Array<LanguageDefinition>;
@@ -45,7 +48,11 @@ export class EntryEditorComponent implements OnInit {
     private store: Store,
     private fb: FormBuilder,
     private contentService: ContentApiService,
-  ) {}
+    private route: ActivatedRoute,
+  ) {
+    this.entryData = this.route.snapshot.data['entry'] as EntryDetails;
+    console.log('Entry', this.entryData);
+  }
 
   setFormGroup(slug: string) {
     if (!this.formGroups[slug]) {
@@ -62,6 +69,23 @@ export class EntryEditorComponent implements OnInit {
     return this.currentProject.settings.languages.map(lang =>
       LANGUAGES.find(obj => obj.isoCode === lang),
     );
+  }
+
+  updateEntry() {
+    const values = this.getFormGroup(this.currentModule.slug).value;
+    Object.keys(this.formGroups).forEach(key => {
+      if (key !== this.currentModule.slug) {
+        values[key] = this.formGroups[key].value;
+      }
+    });
+
+    this.contentService
+      .updateEntry(this.entryData.id, {
+        data: values,
+      })
+      .subscribe(data => {
+        console.log(values);
+      });
   }
 
   initFormGroups() {

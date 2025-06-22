@@ -12,6 +12,7 @@ import { ProjectEntityComponent } from './pages/project/children/project-entity-
 import { ProjectComponent } from './pages/project/project.component';
 import { moduleEntityResolver } from './core/resolvers/module-entity.resolver';
 import { EntryEditorComponent } from './pages/project/children/entry-editor/entry-editor.component';
+import { entryResolver } from './core/resolvers/entry.resolver';
 
 // app-routing.module.ts
 export const routes: Routes = [
@@ -45,7 +46,11 @@ export const routes: Routes = [
       {
         path: ':moduleSlug/:entityId',
         component: EntryEditorComponent,
-        resolve: { entries: moduleEntityResolver, modules: cmsModulesResolver },
+        resolve: {
+          entries: moduleEntityResolver,
+          modules: cmsModulesResolver,
+          entry: entryResolver,
+        },
       },
       {
         path: '',

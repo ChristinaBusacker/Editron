@@ -1,31 +1,44 @@
 <mat-accordion class="example-headers-align">
-    <mat-expansion-panel [expanded]="activePanel() === 'main'" (opened)="activePanel.set('main')">
-        <mat-expansion-panel-header>
-            <mat-panel-title> {{currentModule.name}} </mat-panel-title>
-            <mat-panel-description>
-                Description
-            </mat-panel-description>
-        </mat-expansion-panel-header>
-        @if(renderer === 'form') {
-        <lib-cms-form [schemaDefinition]="schema" [form]="getFormGroup(currentModule.slug)"
-            [project]="currentProject"></lib-cms-form>
-        } @else {
-        selected renderer {{renderer}}
-        }
-    </mat-expansion-panel>
-    @for(extension of currentModule.extensions; track extension.slug) {
-    <mat-expansion-panel [expanded]="activePanel() === extension.slug" (opened)="activePanel.set(extension.slug)">
-        <mat-expansion-panel-header>
-            <mat-panel-title> {{extension.name}} </mat-panel-title>
-            <mat-panel-description>
-                Description
-            </mat-panel-description>
-        </mat-expansion-panel-header>
-        <lib-cms-form [schemaDefinition]="extension.definition" [form]="getFormGroup(extension.slug)"
-            [project]="currentProject"></lib-cms-form>
-    </mat-expansion-panel>
-
+  <mat-expansion-panel
+    [expanded]="activePanel() === 'main'"
+    (opened)="activePanel.set('main')"
+  >
+    <mat-expansion-panel-header>
+      <mat-panel-title> {{ currentModule.name }} </mat-panel-title>
+      <mat-panel-description> Description </mat-panel-description>
+    </mat-expansion-panel-header>
+    @if (renderer === 'form') {
+      <lib-cms-form
+        [schemaDefinition]="schema"
+        [form]="getFormGroup(currentModule.slug)"
+        [project]="currentProject"
+        [values]="entryData.value"
+      ></lib-cms-form>
+    } @else {
+      selected renderer {{ renderer }}
     }
+  </mat-expansion-panel>
+  @for (extension of currentModule.extensions; track extension.slug) {
+    <mat-expansion-panel
+      [expanded]="activePanel() === extension.slug"
+      (opened)="activePanel.set(extension.slug)"
+    >
+      <mat-expansion-panel-header>
+        <mat-panel-title> {{ extension.name }} </mat-panel-title>
+        <mat-panel-description> Description </mat-panel-description>
+      </mat-expansion-panel-header>
+      <lib-cms-form
+        [schemaDefinition]="extension.definition"
+        [form]="getFormGroup(extension.slug)"
+        [project]="currentProject"
+        [values]="entryData.value[extension.slug]"
+      ></lib-cms-form>
+    </mat-expansion-panel>
+  }
 </mat-accordion>
 
-<button (click)="logValues()">Save</button>
+@if (entryData) {
+  <button (click)="updateEntry()">Save Entry</button>
+} @else {
+  <button (click)="logValues()">Create Entry</button>
+}

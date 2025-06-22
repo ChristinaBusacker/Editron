@@ -24,6 +24,7 @@ export class CmsFormComponent implements OnInit {
   @Input({ required: true }) schemaDefinition!: ContentSchemaDefinition;
   @Input({ required: true }) project!: Project;
   @Input() form: FormGroup = this.fb.group({});
+  @Input() values?: { [key: string]: any };
 
   fields = signal<FieldDefinition[]>([]);
 
@@ -44,13 +45,24 @@ export class CmsFormComponent implements OnInit {
         const langGroup = this.fb.group({});
         for (const lang of languages) {
           langGroup.addControl(lang, new FormControl(defaultValue, validators));
+
+          if (this.values) {
+            langGroup.get(lang).patchValue(this.values[field.name][lang], {
+              emit: false,
+            });
+          }
         }
+
         this.form.addControl(field.name, langGroup);
       } else {
         this.form.addControl(
           field.name,
           new FormControl(defaultValue, validators),
         );
+
+        if (this.values) {
+          this.form.get(field.name).patchValue(this.values[field.name]);
+        }
       }
     }
 
