@@ -1,0 +1,175 @@
+@if (!field.localizable) {
+  @if (field.type === 'singleline') {
+    <lib-cms-input-editor
+      [control]="getControl(field.name)"
+      [label]="field.name"
+      type="text"
+    />
+  }
+  @if (field.type === 'multiline') {
+    <lib-cms-input-editor
+      [control]="getControl(field.name)"
+      [label]="field.name"
+      type="textarea"
+    />
+  }
+  @if (field.type === 'slug') {
+    <lib-cms-input-editor
+      [control]="getControl(field.name)"
+      [label]="field.name"
+      type="slug"
+    />
+  }
+  @if (field.type === 'number') {
+    <lib-cms-input-editor
+      [control]="getControl(field.name)"
+      [label]="field.name"
+      type="number"
+      step="1"
+    />
+  }
+  @if (field.type === 'float') {
+    <lib-cms-input-editor
+      [control]="getControl(field.name)"
+      [label]="field.name"
+      type="number"
+      step="any"
+    />
+  }
+  @if (field.type === 'date') {
+    <lib-cms-input-editor
+      [control]="getControl(field.name)"
+      [label]="field.name"
+      type="date"
+    />
+  }
+  @if (field.type === 'select') {
+    <lib-cms-input-editor
+      [control]="getControl(field.name)"
+      [label]="field.name"
+      type="select"
+      [options]="field.options || []"
+    />
+  }
+  @if (field.type === 'boolean') {
+    <div>
+      <mat-checkbox [formControl]="getControl(field.name)">
+        {{ field.name }}
+      </mat-checkbox>
+    </div>
+  }
+  @if (field.type === 'color') {
+    <lib-cms-color-editor [control]="getControl(field.name)" />
+  }
+  @if (field.type === 'tags') {
+    <lib-cms-tag-editor
+      [control]="getControl(field.name)"
+      [label]="field.name"
+    />
+  }
+  @if (field.type === 'html') {
+    <lib-cms-html-editor [control]="getControl(field.name)" />
+  }
+  @if (field.type === 'json') {
+    <lib-cms-json-editor [control]="getControl(field.name)" />
+  }
+  @if (field.type === 'datetime') {
+    <lib-cms-datetime-editor [control]="getControl(field.name)" />
+  }
+  @if (field.type === 'richtext') {
+    <lib-cms-richtext-editor [control]="getControl(field.name)" />
+  }
+  @if (field.type === 'geolocation') {
+    <lib-cms-geolocation-editor [control]="getControl(field.name)" />
+  }
+  @if (field.type === 'asset') {
+    <lib-cms-asset-editor [control]="getControl(field.name)" />
+  }
+}
+
+@if (field.localizable) {
+  @for (lang of languages; track lang) {
+    @if (field.type === 'singleline') {
+      <lib-cms-input-editor
+        [control]="getControlInGroup(field.name, lang)"
+        [label]="field.name + ' (' + lang + ')'"
+        type="text"
+      />
+    }
+    @if (field.type === 'multiline') {
+      <lib-cms-input-editor
+        [control]="getControlInGroup(field.name, lang)"
+        [label]="field.name + ' (' + lang + ')'"
+        type="textarea"
+      />
+    }
+    @if (field.type === 'slug') {
+      <lib-cms-input-editor
+        [control]="getControlInGroup(field.name, lang)"
+        [label]="field.name + ' (' + lang + ')'"
+        type="slug"
+      />
+    }
+    @if (field.type === 'number') {
+      <lib-cms-input-editor
+        [control]="getControlInGroup(field.name, lang)"
+        [label]="field.name + ' (' + lang + ')'"
+        type="number"
+        step="1"
+      />
+    }
+    @if (field.type === 'float') {
+      <lib-cms-input-editor
+        [control]="getControlInGroup(field.name, lang)"
+        [label]="field.name + ' (' + lang + ')'"
+        type="number"
+        step="any"
+      />
+    }
+    @if (field.type === 'date') {
+      <lib-cms-input-editor
+        [control]="getControlInGroup(field.name, lang)"
+        [label]="field.name + ' (' + lang + ')'"
+        type="date"
+      />
+    }
+    @if (field.type === 'select') {
+      <lib-cms-input-editor
+        [control]="getControlInGroup(field.name, lang)"
+        [label]="field.name + ' (' + lang + ')'"
+        type="select"
+        [options]="field.options || []"
+      />
+    }
+    @if (field.type === 'color') {
+      <lib-cms-color-editor [control]="getControlInGroup(field.name, lang)" />
+    }
+    @if (field.type === 'tags') {
+      <lib-cms-tag-editor
+        [control]="getControlInGroup(field.name, lang)"
+        [label]="field.name + ' (' + lang + ')'"
+      />
+    }
+    @if (field.type === 'html') {
+      <lib-cms-html-editor [control]="getControlInGroup(field.name, lang)" />
+    }
+    @if (field.type === 'json') {
+      <lib-cms-json-editor [control]="getControlInGroup(field.name, lang)" />
+    }
+    @if (field.type === 'datetime') {
+      <lib-cms-datetime-editor
+        [control]="getControlInGroup(field.name, lang)"
+      />
+    }
+    @if (field.type === 'richtext') {
+      <lib-cms-richtext-editor
+        [control]="getControlInGroup(field.name, lang)"
+      />
+    }
+    @if (field.type === 'geolocation') {
+      <lib-cms-geolocation-editor
+        [control]="getControlInGroup(field.name, lang)"
+      />
+    }
+  }
+}

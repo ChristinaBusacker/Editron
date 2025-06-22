@@ -1,0 +1,50 @@
+<mat-form-field appearance="outline" class="w-full">
+  <mat-label>{{ label }}</mat-label>
+
+  <!-- Text -->
+  @if (type === 'text') {
+    <input matInput [formControl]="control" />
+  }
+
+  <!-- Slug -->
+  @if (type === 'slug') {
+    <input matInput [formControl]="control" (input)="slugify(control)" />
+  }
+
+  <!-- Multiline -->
+  @if (type === 'textarea') {
+    <textarea matInput rows="4" [formControl]="control"></textarea>
+  }
+
+  <!-- Number / Float -->
+  @if (type === 'number') {
+    <input
+      matInput
+      type="number"
+      [step]="step || 'any'"
+      [formControl]="control"
+    />
+  }
+
+  <!-- Date -->
+  @if (type === 'date') {
+    <ng-container>
+      <input matInput [matDatepicker]="picker" [formControl]="control" />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </ng-container>
+  }
+
+  <!-- Select -->
+  @if (type === 'select') {
+    {{ field | json }}
+    <mat-select [formControl]="control" [attr.name]="label || 'select'">
+      @for (option of options; track option) {
+        <mat-option [value]="option">{{ option }}</mat-option>
+      }
+    </mat-select>
+  }
+
+  <!-- Fehleranzeige -->
+  <mat-error *ngFor="let error of getErrors()">{{ error }}</mat-error>
+</mat-form-field>
