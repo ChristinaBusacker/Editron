@@ -1,2 +1,10 @@
-<input [(colorPicker)]="color" [style.background]="color" (colorPickerChange)="onChange($event)" [cpEyeDropper]="true"
-    [cpPresetColors]="presetColors" />
+<input
+  [(colorPicker)]="color"
+  [style.background]="color"
+  [value]="color"
+  (colorPickerChange)="onChange($event)"
+  [cpEyeDropper]="true"
+  [cpPresetColors]="presetColors"
+  [style.color]="getContrastColor(color)"
+  [style.borderColor]="getContrastColor(color)"
+/>
