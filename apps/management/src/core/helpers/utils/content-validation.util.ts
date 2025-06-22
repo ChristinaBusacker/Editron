@@ -139,8 +139,15 @@ function validateSingleField(
       break;
 
     case 'json':
-      if (typeof value !== 'object' || value === null || Array.isArray(value)) {
-        errors.push('must be a JSON object');
+      if (typeof value === 'string') {
+        try {
+          const json = JSON.parse(value);
+          if (typeof json !== 'object') {
+            throw new Error();
+          }
+        } catch (ex) {
+          errors.push('must be a JSON object');
+        }
       }
       break;
 

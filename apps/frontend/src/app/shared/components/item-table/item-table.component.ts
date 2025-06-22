@@ -29,6 +29,7 @@ import {
 import { UserBadgeDirective } from '@frontend/core/directives/user-badge.directive';
 import { FormatDateDirective } from '@frontend/core/directives/format-date.directive';
 import { LanguageService } from '@frontend/core/services/language/language.service';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 
 @Component({
   selector: 'app-item-table',
@@ -44,6 +45,7 @@ import { LanguageService } from '@frontend/core/services/language/language.servi
     ReactiveFormsModule,
     UserBadgeDirective,
     FormatDateDirective,
+    MatSortModule,
   ],
 })
 export class ItemTableComponent implements AfterViewInit {
@@ -52,6 +54,7 @@ export class ItemTableComponent implements AfterViewInit {
   @Input({ required: true }) selectedItemsSignal!: Signal<Set<any>>;
 
   @Output() idClicked = new EventEmitter<string>();
+  @ViewChild(MatSort) sort!: MatSort;
 
   schemas = this.store.select(CmsModuleState.schemas);
   schema?: ContentSchemaDefinition;
@@ -130,6 +133,28 @@ export class ItemTableComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+
+    this.dataSource.sortingDataAccessor = (item, property) => {
+      if (property === 'user') {
+        return item.updatedBy?.name || '';
+      }
+
+      if (property === 'date') {
+        return new Date(item.updatedAt).getTime();
+      }
+
+      if (property.startsWith('custom')) {
+        const fieldName = property.replace('custom', '');
+        const value = item.content?.[fieldName];
+        if (typeof value === 'object') {
+          return value?.[this.languageService.language()] ?? '';
+        }
+        return value ?? '';
+      }
+
+      return item[property];
+    };
   }
 
   readFieldValue(field: FieldDefinition, element: any) {
