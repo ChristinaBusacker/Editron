@@ -7,6 +7,8 @@ import {
   signal,
   computed,
   inject,
+  OnInit,
+  AfterViewInit,
 } from '@angular/core';
 import * as L from 'leaflet';
 import { CmsGeolocationEditorService } from './cms-geolocation-editor.service';
@@ -42,7 +44,7 @@ import { NominatimSearchResult } from '@shared/declarations/interfaces/nominatim
   templateUrl: './cms-geolocation-editor.component.html',
   styleUrl: './cms-geolocation-editor.component.scss',
 })
-export class CmsGeolocationEditorComponent {
+export class CmsGeolocationEditorComponent implements AfterViewInit, OnInit {
   @Input() control: FormControl<{ lat: number; lon: number }>;
   @Output() locationChange = new EventEmitter<{ lat: number; lon: number }>();
 
@@ -67,11 +69,12 @@ export class CmsGeolocationEditorComponent {
       this.locationChange.emit({ lat, lon });
       this.reverseGeocode(lat, lon);
       this.control.setValue({ lat, lon }, { emitEvent: true });
+      console.log('effect');
     });
 
     this.filteredSuggestions$ = this.addressControl.valueChanges.pipe(
       startWith(''),
-      debounceTime(1000),
+      debounceTime(500),
       distinctUntilChanged(),
       switchMap(query => this.service.searchAddress(query || '')),
     );
@@ -131,5 +134,11 @@ export class CmsGeolocationEditorComponent {
     this.lonSignal.set(lon);
     this.address.set(result.display_name);
     this.addressControl.setValue(result.display_name, { emitEvent: false });
+  }
+
+  ngOnInit(): void {
+    const value = this.control.value;
+    this.setLat(value.lat + '');
+    this.setLon(value.lon + '');
   }
 }
