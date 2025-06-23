@@ -67,7 +67,23 @@
         {{ field.name }}
       </th>
       <td mat-cell *matCellDef="let element">
-        {{ readFieldValue(field, element) }}
+        @if (field.type === 'color') {
+          <div
+            class="color"
+            [style.backgroundColor]="readFieldValue(field, element)"
+            [style.color]="getContrastColor(readFieldValue(field, element))"
+            style="
+              padding: 0 10px;
+              text-align: center;
+              cursor: pointer;
+              user-select: all;
+            "
+          >
+            {{ readFieldValue(field, element) }}
+          </div>
+        } @else {
+          {{ readFieldValue(field, element) }}
+        }
       </td>
     </ng-container>
   }
