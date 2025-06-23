@@ -7,6 +7,7 @@ import { Store } from '@ngxs/store';
 import { BehaviorSubject, combineLatest, map } from 'rxjs';
 import { ItemTableComponent } from '../../../../shared/components/item-table/item-table.component';
 import { MatButtonModule } from '@angular/material/button';
+import { DialogService } from '@frontend/shared/dialogs/dialog.service';
 
 @Component({
   selector: 'app-project-entity',
@@ -29,10 +30,18 @@ export class ProjectEntityComponent implements OnInit {
   constructor(
     private store: Store,
     private router: Router,
+    private dialogService: DialogService,
   ) {
     effect(() => {
       // External selection change
       const current = this.selectedItemsSignal();
+    });
+  }
+
+  testDialog() {
+    this.dialogService.openConfirmDeleteDialog({
+      title: 'Are you sure?',
+      message: 'Du bist dabei diese Einträge unwiederruflich zu löschen',
     });
   }
 

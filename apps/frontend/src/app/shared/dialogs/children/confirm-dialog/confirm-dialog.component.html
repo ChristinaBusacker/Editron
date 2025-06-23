@@ -1,0 +1,16 @@
+<app-dialog
+  [buttonOptions]="{
+    confirm: {
+      label: dialogData.confirm?.label || 'Bestätigen',
+      color: dialogData.confirm?.color || 'primary',
+    },
+    decline: {
+      label: 'Cancel',
+      color: 'secondary',
+    },
+  }"
+  [title]="dialogData.title"
+  (action)="close($event)"
+>
+  <p>{{ dialogData.message }}</p>
+</app-dialog>

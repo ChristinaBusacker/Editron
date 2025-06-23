@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateProjectDialogComponent } from './children/create-project-dialog/create-project-dialog.component';
 import { AssetPickerDialogComponent } from './children/asset-picker-dialog/asset-picker-dialog.component';
+import { ConfirmDialogData } from '@frontend/core/declarations/interfaces/dialog.interfaces';
+import { ConfirmDialogComponent } from './children/confirm-dialog/confirm-dialog.component';
+import { ConfirmDeleteDialogComponent } from './children/confirm-delete-dialog/confirm-delete-dialog.component';
 
 @Injectable({
   providedIn: 'root',
@@ -24,6 +27,26 @@ export class DialogService {
       maxHeight: '90vh',
       width: '100%',
       ariaLabelledBy: 'dialog-title',
+    });
+  }
+
+  openConfirmDialog(data: ConfirmDialogData) {
+    return this.matDialog.open(ConfirmDialogComponent, {
+      maxWidth: '400px',
+      maxHeight: '90vh',
+      width: '100%',
+      ariaLabelledBy: 'dialog-title',
+      data,
+    });
+  }
+
+  openConfirmDeleteDialog(data: ConfirmDialogData) {
+    return this.matDialog.open(ConfirmDeleteDialogComponent, {
+      maxWidth: '400px',
+      maxHeight: '90vh',
+      width: '100%',
+      ariaLabelledBy: 'dialog-title',
+      data,
     });
   }
 }

@@ -1,36 +1,51 @@
-<app-dialog [buttonOptions]="{
+<app-dialog
+  [buttonOptions]="{
     confirm: {
       label: 'Add',
       color: 'primary',
     },
     decline: {
       label: 'Cancel',
-      color: 'secondary'
-    }
-  }" title="Create new Project" (action)="close($event)">
+      color: 'secondary',
+    },
+  }"
+  title="Create new Project"
+  (action)="close($event)"
+>
   <mat-form-field appearance="fill">
     <mat-label>Project Name</mat-label>
-    <input matInput [value]="name()" (input)="name.set($event.target.value)" placeholder="Projectname">
+    <input
+      matInput
+      [value]="name()"
+      (input)="name.set($event.target.value)"
+      placeholder="Projectname"
+    />
   </mat-form-field>
 
-
-
-
   <mat-accordion class="example-headers-align">
-    <mat-expansion-panel [expanded]="activePanel() === 'languages'" (opened)="activePanel.set('languages')">
+    <mat-expansion-panel
+      [expanded]="activePanel() === 'languages'"
+      (opened)="activePanel.set('languages')"
+    >
       <mat-expansion-panel-header>
         <mat-panel-title> Languages </mat-panel-title>
         <mat-panel-description>
-          {{listSelectedLanguages()}}
+          {{ listSelectedLanguages() }}
         </mat-panel-description>
       </mat-expansion-panel-header>
       <div class="example-container">
         <h4>Selected</h4>
 
-        <div cdkDropList #selectedLangList="cdkDropList" [cdkDropListData]="selectedLangauges"
-          [cdkDropListConnectedTo]="[languagesList]" class="example-list selected" (cdkDropListDropped)="drop($event)">
+        <div
+          cdkDropList
+          #selectedLangList="cdkDropList"
+          [cdkDropListData]="selectedLangauges"
+          [cdkDropListConnectedTo]="[languagesList]"
+          class="example-list selected"
+          (cdkDropListDropped)="drop($event)"
+        >
           @for (item of selectedLangauges; track item) {
-          <div class="example-box" cdkDrag>{{item.name}}</div>
+            <div class="example-box" cdkDrag>{{ item.name }}</div>
           }
         </div>
       </div>
@@ -38,10 +53,16 @@
       <div class="example-container">
         <h4>Available</h4>
 
-        <div cdkDropList #languagesList="cdkDropList" [cdkDropListData]="languages"
-          [cdkDropListConnectedTo]="[selectedLangList]" class="example-list" (cdkDropListDropped)="drop($event)">
+        <div
+          cdkDropList
+          #languagesList="cdkDropList"
+          [cdkDropListData]="languages"
+          [cdkDropListConnectedTo]="[selectedLangList]"
+          class="example-list"
+          (cdkDropListDropped)="drop($event)"
+        >
           @for (item of languages; track item) {
-          <div class="example-box" cdkDrag>{{item.name}}</div>
+            <div class="example-box" cdkDrag>{{ item.name }}</div>
           }
         </div>
       </div>
@@ -50,26 +71,35 @@
         <mat-label>Default Language</mat-label>
         <mat-select [(ngModel)]="defaultLanguage">
           @for (lang of selectedLangauges; track lang) {
-          <mat-option [value]="lang.isoCode">{{lang.name}}</mat-option>
+            <mat-option [value]="lang.isoCode">{{ lang.name }}</mat-option>
           }
         </mat-select>
       </mat-form-field>
     </mat-expansion-panel>
 
-    <mat-expansion-panel [expanded]="activePanel() === 'modules'" (opened)="activePanel.set('modules')">
+    <mat-expansion-panel
+      [expanded]="activePanel() === 'modules'"
+      (opened)="activePanel.set('modules')"
+    >
       <mat-expansion-panel-header>
         <mat-panel-title> Modules </mat-panel-title>
         <mat-panel-description>
-          {{listSelectedModules()}}
+          {{ listSelectedModules() }}
         </mat-panel-description>
       </mat-expansion-panel-header>
       <div class="example-container">
         <h4>Selected</h4>
 
-        <div cdkDropList #selectedList="cdkDropList" [cdkDropListData]="selectedModules"
-          [cdkDropListConnectedTo]="[moduleList]" class="example-list selected" (cdkDropListDropped)="drop($event)">
-          @for (item of selectedModules ; track item) {
-          <div class="example-box" cdkDrag>{{item.name}}</div>
+        <div
+          cdkDropList
+          #selectedList="cdkDropList"
+          [cdkDropListData]="selectedModules"
+          [cdkDropListConnectedTo]="[moduleList]"
+          class="example-list selected"
+          (cdkDropListDropped)="drop($event)"
+        >
+          @for (item of selectedModules; track item) {
+            <div class="example-box" cdkDrag>{{ item.name }}</div>
           }
         </div>
       </div>
@@ -77,15 +107,19 @@
       <div class="example-container">
         <h4>Available</h4>
 
-        <div cdkDropList #moduleList="cdkDropList" [cdkDropListData]="availableModules"
-          [cdkDropListConnectedTo]="[selectedList]" class="example-list" (cdkDropListDropped)="drop($event)">
+        <div
+          cdkDropList
+          #moduleList="cdkDropList"
+          [cdkDropListData]="availableModules"
+          [cdkDropListConnectedTo]="[selectedList]"
+          class="example-list"
+          (cdkDropListDropped)="drop($event)"
+        >
           @for (item of availableModules; track item) {
-          <div class="example-box" cdkDrag>{{item.name}}</div>
+            <div class="example-box" cdkDrag>{{ item.name }}</div>
           }
         </div>
       </div>
     </mat-expansion-panel>
-
-
   </mat-accordion>
 </app-dialog>

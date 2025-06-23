@@ -7,4 +7,10 @@
     display: flex;
     justify-content: space-between;
   }
+
+  & .dialog-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
 }

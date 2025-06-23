@@ -13,3 +13,12 @@ export interface DialogResponse<T> {
   action: 'confirm' | 'decline' | 'cancel';
   data: T;
 }
+
+export interface ConfirmDialogData {
+  title: string;
+  message: string;
+  confirm?: {
+    label: string;
+    color: string;
+  };
+}

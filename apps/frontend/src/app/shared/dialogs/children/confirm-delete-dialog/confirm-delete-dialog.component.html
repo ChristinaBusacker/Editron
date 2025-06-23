@@ -1,0 +1,24 @@
+<app-dialog
+  [buttonOptions]="{
+    confirm: {
+      label: dialogData?.confirm?.label || 'Delete',
+      color: dialogData?.confirm?.color || 'warn',
+      disabled: !isConfirmed,
+    },
+    decline: {
+      label: 'Cancel',
+      color: 'secondary',
+    },
+  }"
+  [title]="dialogData.title"
+  (action)="close($event)"
+>
+  <div class="content">
+    <p>{{ dialogData.message }}</p>
+    <mat-form-field class="example-full-width" appearance="outline">
+      <mat-label>DELETE</mat-label>
+      <input matInput [formControl]="formControl" />
+      <mat-hint>Type in DELETE to confirm</mat-hint>
+    </mat-form-field>
+  </div>
+</app-dialog>
