@@ -138,7 +138,9 @@ export class CmsGeolocationEditorComponent implements AfterViewInit, OnInit {
 
   ngOnInit(): void {
     const value = this.control.value;
-    this.setLat(value.lat + '');
-    this.setLon(value.lon + '');
+    if (value) {
+      this.setLat(value.lat + '');
+      this.setLon(value.lon + '');
+    }
   }
 }

@@ -52,8 +52,9 @@ export class ItemTableComponent implements AfterViewInit {
   @Input({ required: true }) entries: Observable<any[]>;
   @Input({ required: true }) module: Observable<CmsModule>;
   @Input({ required: true }) selectedItemsSignal!: Signal<Set<any>>;
-
   @Output() idClicked = new EventEmitter<string>();
+  @Output() onDuplicate = new EventEmitter<string>();
+  @Output() onDelete = new EventEmitter<string>();
   @ViewChild(MatSort) sort!: MatSort;
 
   schemas = this.store.select(CmsModuleState.schemas);

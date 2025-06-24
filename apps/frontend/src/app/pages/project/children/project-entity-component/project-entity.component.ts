@@ -8,6 +8,8 @@ import { BehaviorSubject, combineLatest, map } from 'rxjs';
 import { ItemTableComponent } from '../../../../shared/components/item-table/item-table.component';
 import { MatButtonModule } from '@angular/material/button';
 import { DialogService } from '@frontend/shared/dialogs/dialog.service';
+import { ContentApiService } from '@frontend/shared/services/api/content-api.service';
+import { FetchModuleEntries } from '@frontend/core/store/content/content.actions';
 
 @Component({
   selector: 'app-project-entity',
@@ -31,6 +33,7 @@ export class ProjectEntityComponent implements OnInit {
     private store: Store,
     private router: Router,
     private dialogService: DialogService,
+    private contentApi: ContentApiService,
   ) {
     effect(() => {
       // External selection change
@@ -44,6 +47,27 @@ export class ProjectEntityComponent implements OnInit {
       message: 'Du bist dabei diese Einträge unwiederruflich zu löschen',
     });
   }
+
+  duplicateEntry(entryId: string) {
+    this.dialogService
+      .openConfirmDialog({
+        title: 'Do you want to duplicate this entry?',
+        message:
+          'All values will be duplicated. You should edit important fields like slug afterwards',
+      })
+      .afterClosed()
+      .subscribe(response => {
+        if (response.action === 'confirm') {
+          this.contentApi.duplicate(entryId).subscribe(data => {
+            if (data.id) {
+              this.navigate2Editor(data.id);
+            }
+          });
+        }
+      });
+  }
+
+  deleteEntry(entryId: string) {}
 
   navigate2Editor(entityId = 'create') {
     this.router.navigate(['/', this.projectId, this.moduleSlug, entityId]);

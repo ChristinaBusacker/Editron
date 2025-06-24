@@ -4,11 +4,17 @@ import { Injectable } from '@nestjs/common';
 import { BlogCMSModule } from 'libs/cmsmodules/src/modules/blog/blog.cms';
 import { CmsModule } from 'libs/cmsmodules/src/modules/cms-module';
 import { HomepageCMSModule } from 'libs/cmsmodules/src/modules/homepage/homepage.cms';
+import { Test2Module } from 'libs/cmsmodules/src/modules/test2/test2';
 import { WipMSModule } from 'libs/cmsmodules/src/modules/wip/wip.cms';
 
 @Injectable()
 export class AppService {
-  private modules = [BlogCMSModule, HomepageCMSModule, WipMSModule];
+  private modules = [
+    BlogCMSModule,
+    HomepageCMSModule,
+    WipMSModule,
+    Test2Module,
+  ];
 
   constructor(private databaseService: DatabaseService) {}
 

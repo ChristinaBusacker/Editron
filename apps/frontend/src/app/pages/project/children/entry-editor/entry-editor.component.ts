@@ -16,7 +16,7 @@ import {
   LanguageDefinition,
   LANGUAGES,
 } from '@shared/declarations/interfaces/project/project-settings';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { EntryDetails } from '@frontend/shared/services/api/models/content.model';
 import { CopyToClipboardDirective } from '@frontend/core/directives/copy-to-clipboard.directive';
 import { UserBadgeDirective } from '@frontend/core/directives/user-badge.directive';
@@ -37,6 +37,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatButtonModule,
     MatIconModule,
     MatTooltipModule,
+    RouterModule,
   ],
   templateUrl: './entry-editor.component.html',
   styleUrl: './entry-editor.component.scss',
@@ -76,6 +77,7 @@ export class EntryEditorComponent implements OnInit {
     private fb: FormBuilder,
     private contentService: ContentApiService,
     private route: ActivatedRoute,
+    private router: Router,
   ) {
     this.entryData = this.route.snapshot.data['entry'] as EntryDetails;
     console.log('Entry', this.entryData);
@@ -120,7 +122,7 @@ export class EntryEditorComponent implements OnInit {
     this.currentModule.extensions.forEach(ext => this.setFormGroup(ext.slug));
   }
 
-  async logValues() {
+  async createEntry() {
     const values = this.getFormGroup(this.currentModule.slug).value;
     Object.keys(this.formGroups).forEach(key => {
       if (key !== this.currentModule.slug) {
@@ -133,7 +135,13 @@ export class EntryEditorComponent implements OnInit {
         data: values,
       })
       .subscribe(data => {
-        console.log(values);
+        if (data.id) {
+          this.router.navigate([
+            this.currentProject.id,
+            this.currentModule.slug,
+            data.id,
+          ]);
+        }
       });
   }
 

@@ -41,7 +41,10 @@ export const routes: Routes = [
       {
         path: ':moduleSlug/create',
         component: EntryEditorComponent,
-        resolve: { entries: moduleEntityResolver, modules: cmsModulesResolver },
+        resolve: {
+          entries: moduleEntityResolver,
+          modules: cmsModulesResolver,
+        },
       },
       {
         path: ':moduleSlug/:entityId',

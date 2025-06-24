@@ -125,6 +125,43 @@ export class ContentEntryService {
     return entry;
   }
 
+  // Duplicate an existing entry using the latest version as a base
+  async duplicateEntry(
+    entryId: string,
+    user: UserEntity,
+  ): Promise<ContentEntryEntity> {
+    const originalEntry = await this.db.contentEntryRepository.findOne({
+      where: { id: entryId },
+      relations: ['schema', 'project'],
+    });
+    if (!originalEntry) {
+      throw new NotFoundException(`Entry with ID ${entryId} not found`);
+    }
+
+    const latestVersion = await this.db.contentVersionRepository.findOne({
+      where: { entry: { id: entryId } },
+      order: { createdAt: 'DESC' },
+    });
+    if (!latestVersion) {
+      throw new NotFoundException(`No version found for entry ${entryId}`);
+    }
+
+    const value = await this.db.contentValueRepository.findOne({
+      where: { version: { id: latestVersion.id } },
+    });
+
+    const dto: CreateEntryDto = {
+      data: value?.value ?? {},
+    };
+
+    return this.createEntry(
+      originalEntry.project.id,
+      originalEntry.schema.slug,
+      dto,
+      user,
+    );
+  }
+
   // Update entry by creating a new version and validating values
   async updateEntry(entryId: string, dto: UpdateEntryDto, user: UserEntity) {
     const entry = await this.db.contentEntryRepository.findOne({

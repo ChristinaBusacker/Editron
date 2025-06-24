@@ -13,7 +13,7 @@
           [schemaDefinition]="schema"
           [form]="getFormGroup(currentModule.slug)"
           [project]="currentProject"
-          [values]="entryData.value"
+          [values]="entryData?.value || undefined"
         ></lib-cms-form>
       } @else {
         selected renderer {{ renderer }}
@@ -32,16 +32,15 @@
           [schemaDefinition]="extension.definition"
           [form]="getFormGroup(extension.slug)"
           [project]="currentProject"
-          [values]="entryData.value[extension.slug]"
+          [values]="entryData?.value[extension.slug] || undefined"
         ></lib-cms-form>
       </mat-expansion-panel>
     }
   </mat-accordion>
 
   @if (entryData) {
-    <button (click)="updateEntry()">Save Entry</button>
   } @else {
-    <button (click)="logValues()">Create Entry</button>
+    <button (click)="createEntry()">Create Entry</button>
   }
 </section>
 
@@ -107,7 +106,7 @@
               <button matTooltip="Compare to current">
                 <mat-icon>compare_arrows</mat-icon>
               </button>
-              <button matTooltip="Revoke Version">
+              <button matTooltip="Revoke Version" (click)="updateEntry()">
                 <mat-icon>update</mat-icon>
               </button>
             </div>

@@ -49,6 +49,13 @@ export class ContentApiService {
     );
   }
 
+  duplicate(entryId: string): Observable<any> {
+    return this.request.post(
+      `${this.baseUrl}/entries/${entryId}/duplicate`,
+      {},
+    );
+  }
+
   getEntryDetails(entryId: string): Observable<EntryDetails> {
     return this.request.get(`${this.baseUrl}/entries/${entryId}/details`);
   }

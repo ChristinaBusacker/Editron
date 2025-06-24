@@ -121,6 +121,22 @@ export class ContentEntryController {
     return this.contentEntryService.updateEntry(entryId, dto, user);
   }
 
+  @Post('entries/:entryId/duplicate')
+  @ApiOperation({ summary: 'Update an entry (creates a new version)' })
+  @ApiParam({ name: 'entryId', type: String })
+  @ApiResponse({
+    status: 200,
+    description: 'Entry updated (new version created)',
+  })
+  @ApiResponse({ status: 400, description: 'Validation failed' })
+  @ApiResponse({ status: 404, description: 'Entry not found' })
+  duplicate(
+    @Param('entryId') entryId: string,
+    @CurrentUser() user: UserEntity,
+  ) {
+    return this.contentEntryService.duplicateEntry(entryId, user);
+  }
+
   @Delete('entries/:entryId')
   @ApiOperation({
     summary: 'Delete an entry and all associated versions/values',
