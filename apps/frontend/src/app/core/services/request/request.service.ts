@@ -3,6 +3,9 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CookieService } from '../cookie/cookie.service.js';
 import { buildAuthHeaders } from '@frontend/core/utils/build-auth-header.util.js';
+import { Store } from '@ngxs/store';
+import { catchError, finalize, tap } from 'rxjs/operators';
+import { SetLoading } from '@frontend/core/store/navigation/navigation.actions.js';
 
 @Injectable({ providedIn: 'root' })
 export class RequestService {
@@ -11,6 +14,7 @@ export class RequestService {
   constructor(
     private http: HttpClient,
     private cookieService: CookieService,
+    private store: Store,
   ) {}
 
   /**
@@ -18,6 +22,13 @@ export class RequestService {
    */
   private buildHeaders(): HttpHeaders {
     return buildAuthHeaders(this.cookieService);
+  }
+
+  private trackLoading<T>(obs$: Observable<T>): Observable<T> {
+    this.store.dispatch(new SetLoading(true));
+    return obs$.pipe(
+      finalize(() => this.store.dispatch(new SetLoading(false))),
+    );
   }
 
   /**
@@ -32,10 +43,12 @@ export class RequestService {
       });
     }
 
-    return this.http.get<T>(this.baseUrl + url, {
+    const request = this.http.get<T>(this.baseUrl + url, {
       headers: this.buildHeaders(),
       params: httpParams,
     });
+
+    return this.trackLoading(request);
   }
 
   /**
@@ -44,9 +57,11 @@ export class RequestService {
    * @param body Payload
    */
   post<T>(url: string, body: any): Observable<T> {
-    return this.http.post<T>(this.baseUrl + url, body, {
+    const request = this.http.post<T>(this.baseUrl + url, body, {
       headers: this.buildHeaders(),
     });
+
+    return this.trackLoading(request);
   }
 
   /**
@@ -54,9 +69,11 @@ export class RequestService {
    * @param url Endpoint URL
    */
   delete<T>(url: string): Observable<T> {
-    return this.http.delete<T>(this.baseUrl + url, {
+    const request = this.http.delete<T>(this.baseUrl + url, {
       headers: this.buildHeaders(),
     });
+
+    return this.trackLoading(request);
   }
 
   /**
@@ -65,9 +82,11 @@ export class RequestService {
    * @param body Payload
    */
   patch<T>(url: string, body: any): Observable<T> {
-    return this.http.patch<T>(this.baseUrl + url, body, {
+    const request = this.http.patch<T>(this.baseUrl + url, body, {
       headers: this.buildHeaders(),
     });
+
+    return this.trackLoading(request);
   }
 
   /**
@@ -76,8 +95,10 @@ export class RequestService {
    * @param body Payload
    */
   put<T>(url: string, body: any): Observable<T> {
-    return this.http.put<T>(this.baseUrl + url, body, {
+    const request = this.http.put<T>(this.baseUrl + url, body, {
       headers: this.buildHeaders(),
     });
+
+    return this.trackLoading(request);
   }
 }

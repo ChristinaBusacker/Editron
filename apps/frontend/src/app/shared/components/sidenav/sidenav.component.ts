@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { RouterModule } from '@angular/router';
 import { CmsModuleState } from '@frontend/core/store/cmsModules/cmsModules.state';
 import { NavigationState } from '@frontend/core/store/navigation/navigation.state';
@@ -10,7 +12,7 @@ import { combineLatest, map } from 'rxjs';
 
 @Component({
   selector: 'app-sidenav',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, MatExpansionModule, MatButtonModule],
   templateUrl: './sidenav.component.html',
   styleUrl: './sidenav.component.scss',
 })

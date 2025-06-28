@@ -17,11 +17,12 @@ export class ProjectService {
   getAll(user: UserEntity) {
     return this.databaseService.projectRepository
       .createQueryBuilder('project')
-      .leftJoin('project.owner', 'owner')
+      .leftJoinAndSelect('project.owner', 'owner')
       .leftJoin(ProjectMemberEntity, 'member', 'member.project = project.id')
       .leftJoin('member.user', 'memberUser')
       .where('owner.id = :userId', { userId: user.id })
       .orWhere('memberUser.id = :userId', { userId: user.id })
+      .orderBy('project.createdAt', 'DESC')
       .getMany();
   }
 

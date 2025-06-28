@@ -1,11 +1,46 @@
 :host {
-  & .project-tile {
-    width: 200px;
-    height: 50px;
-    background-color: lightgrey;
+  & .projectlist {
     display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
     align-items: center;
     justify-content: center;
-    margin: 5px;
+    & .project-tile {
+      height: 200px;
+      background-color: whitesmoke;
+      margin: 5px;
+      aspect-ratio: 1 / 1;
+      padding: 20px;
+      text-decoration: none;
+      color: black;
+      border-radius: 4px;
+
+      &:hover {
+        -webkit-box-shadow: 5px 5px 15px 5px rgba(0, 0, 0, 0.26);
+        box-shadow: 5px 5px 15px 5px rgba(0, 0, 0, 0.26);
+      }
+
+      & .tags {
+        font-size: 0.8rem;
+        display: flex;
+        gap: 5px;
+        margin-top: 10px;
+
+        & > * {
+          background-color: #aeaeae;
+          padding: 3px;
+          border-radius: 4px;
+        }
+      }
+      & .owner {
+        display: flex;
+        gap: 5px;
+        font-size: 0.8rem;
+      }
+
+      & .updated {
+        font-size: 0.8rem;
+      }
+    }
   }
 }

@@ -1,8 +1,32 @@
-<h3>Modules</h3>
-<hr />
+<mat-expansion-panel [expanded]="true">
+  <mat-expansion-panel-header>
+    <mat-panel-title> {{ (project | async).name }}</mat-panel-title>
+  </mat-expansion-panel-header>
+  <nav class="menu">
+    <button
+      mat-button
+      [routerLink]="['/', (project | async).id, 'details']"
+      routerLinkActive="router-link-active"
+    >
+      Details
+    </button>
+    <button mat-button>Settings</button>
+  </nav>
+</mat-expansion-panel>
 
-@for(module of projectModules | async; track module.slug) {
-<a class="module" [routerLink]="['/', (project | async).id, module.slug]" routerLinkActive="router-link-active">
-    {{module.name}}
-</a>
-}
+<mat-expansion-panel [expanded]="true">
+  <mat-expansion-panel-header>
+    <mat-panel-title> Modules</mat-panel-title>
+  </mat-expansion-panel-header>
+  <nav class="menu">
+    @for (module of projectModules | async; track module.slug) {
+      <button
+        mat-button
+        [routerLink]="['/', (project | async).id, module.slug]"
+        routerLinkActive="router-link-active"
+      >
+        {{ module.name }}
+      </button>
+    }
+  </nav>
+</mat-expansion-panel>

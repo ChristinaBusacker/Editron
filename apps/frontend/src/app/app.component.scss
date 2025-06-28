@@ -1,0 +1,50 @@
+:host {
+  header {
+    border-bottom: 1px solid lightgrey;
+    position: fixed;
+    height: 45px;
+    width: 100%;
+    top: 0;
+    z-index: 9;
+    background-color: white;
+    .header-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+
+      & .controls {
+        display: flex;
+      }
+      & nav {
+        & ul {
+          list-style: none;
+          display: flex;
+          gap: 10px;
+          & li {
+            background-color: red;
+            padding: 5px 10px;
+            & a {
+            }
+          }
+        }
+      }
+    }
+
+    & h2 {
+      margin: 0;
+    }
+  }
+
+  & .global-spinner {
+    height: 4px;
+
+    mat-progress-bar {
+      height: 4px;
+    }
+  }
+
+  .page-content {
+    margin-top: 65px;
+  }
+}

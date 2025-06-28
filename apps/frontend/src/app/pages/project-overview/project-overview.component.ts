@@ -1,7 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { Router, RouterModule } from '@angular/router';
 import { DialogResponse } from '@frontend/core/declarations/interfaces/dialog.interfaces';
+import { FormatDateDirective } from '@frontend/core/directives/format-date.directive';
+import { UserBadgeDirective } from '@frontend/core/directives/user-badge.directive';
 import { Logout } from '@frontend/core/store/auth/auth.actions';
 import { ProjectState } from '@frontend/core/store/project/project.state';
 import { AdminWrapperComponent } from '@frontend/shared/components/admin-wrapper/admin-wrapper.component';
@@ -13,7 +16,14 @@ import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-project-overview',
-  imports: [CommonModule, AdminWrapperComponent, RouterModule],
+  imports: [
+    CommonModule,
+    AdminWrapperComponent,
+    RouterModule,
+    MatButtonModule,
+    UserBadgeDirective,
+    FormatDateDirective,
+  ],
   templateUrl: './project-overview.component.html',
   styleUrl: './project-overview.component.scss',
 })

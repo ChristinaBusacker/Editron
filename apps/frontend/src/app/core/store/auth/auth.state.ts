@@ -37,6 +37,11 @@ export class AuthState {
   }
 
   @Selector()
+  static currentUser(state: AuthStateModel): User | null {
+    return state?.user || null;
+  }
+
+  @Selector()
   static sessionId(state: AuthStateModel): string {
     return state.sessionId;
   }
@@ -65,7 +70,7 @@ export class AuthState {
   logout(ctx: StateContext<AuthStateModel>) {
     return this.authApi.logout().pipe(
       map(() => {
-        ctx.setState({
+        ctx.patchState({
           user: null,
           sessionId: null,
         });

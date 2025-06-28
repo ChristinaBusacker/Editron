@@ -1,6 +1,68 @@
-
-@if(isAuthenticated | async) {
-  <header>EINGELOGT</header>
+@if (isAuthenticated | async) {
+  <header>
+    <div class="header-content">
+      <h2>Editron CMS</h2>
+      <div class="controls">
+        <div class="user">
+          <button
+            mat-icon-button
+            [matMenuTriggerFor]="userMenu"
+            aria-label="Example icon-button with a menu"
+          >
+            <div [userBadge]="currentUser | async" [size]="24"></div>
+          </button>
+          <mat-menu #userMenu="matMenu">
+            <button
+              mat-menu-item
+              [routerLink]="['/']"
+              routerLinkActive="router-link-active"
+            >
+              <mat-icon>dialpad</mat-icon>
+              <span>Settings</span>
+            </button>
+            <button mat-menu-item (click)="logout()">
+              <mat-icon>logout</mat-icon>
+              <span>Logout</span>
+            </button>
+          </mat-menu>
+        </div>
+        <div class="menu">
+          <button
+            mat-icon-button
+            [matMenuTriggerFor]="menu"
+            aria-label="Example icon-button with a menu"
+          >
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button
+              mat-menu-item
+              [routerLink]="['/']"
+              routerLinkActive="router-link-active"
+            >
+              <mat-icon>dialpad</mat-icon>
+              <span>Projects</span>
+            </button>
+            <button mat-menu-item disabled>
+              <mat-icon>voicemail</mat-icon>
+              <span>Check voice mail</span>
+            </button>
+            <button mat-menu-item>
+              <mat-icon>notifications_off</mat-icon>
+              <span>Disable alerts</span>
+            </button>
+          </mat-menu>
+        </div>
+      </div>
+    </div>
+    <div class="global-spinner">
+      @if (isLoading | async) {
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      }
+    </div>
+  </header>
 }
 
-<router-outlet />
+<div class="page-content">
+  <router-outlet />
+</div>

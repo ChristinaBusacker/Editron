@@ -1,13 +1,33 @@
-<p>project-overview works!</p>
-<button (click)="logout()">logout</button>
 <div class="projectlist">
-    @for(project of (projects | async); track project.id) {
-        <a class="project-tile" [routerLink]="['/', project.id, 'details']" >
-            <div>{{project.name}}</div>
-            <div>{{project.updatedAt}}</div>
-        </a>
-    }
+  @for (project of projects | async; track project.id) {
+    <a class="project-tile" [routerLink]="['/', project.id, 'details']">
+      <div class="title">
+        <h3>{{ project.name }}</h3>
+      </div>
+      <div class="updated">
+        Updated:
+        <span [formatDate]="project.updatedAt"></span>
+      </div>
+
+      <div class="owner">
+        Owner:
+        <div [userBadge]="project.owner" [size]="16"></div>
+        {{ project.owner.name }}
+      </div>
+
+      <div class="lang tags">
+        @for (lang of project.settings.languages; track lang) {
+          <span>{{ lang }}</span>
+        }
+      </div>
+      <div class="modules tags">
+        @for (lang of project.settings.modules; track lang) {
+          <span>{{ lang }}</span>
+        }
+      </div>
+    </a>
+  }
 </div>
 <app-admin-wrapper>
-    <button (click)="openCreateDialog()">new Project</button>
+  <button mat-flat-button (click)="openCreateDialog()">new Project</button>
 </app-admin-wrapper>

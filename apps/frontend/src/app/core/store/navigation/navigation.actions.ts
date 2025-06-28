@@ -10,3 +10,8 @@ export class SetCmsModule {
   static readonly type = '[Navigation] Set Modules';
   constructor(public payload: CmsModule) {}
 }
+
+export class SetLoading {
+  static readonly type = '[Navigation] Set Loading';
+  constructor(public payload: boolean) {}
+}
