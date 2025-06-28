@@ -13,6 +13,10 @@ import { ProjectComponent } from './pages/project/project.component';
 import { moduleEntityResolver } from './core/resolvers/module-entity.resolver';
 import { EntryEditorComponent } from './pages/project/children/entry-editor/entry-editor.component';
 import { entryResolver } from './core/resolvers/entry.resolver';
+import { ProjectSettingsComponent } from './pages/project/children/project-settings/project-settings.component';
+import { UserSettingsComponent } from './pages/user-settings/user-settings.component';
+import { UserManagementComponent } from './pages/user-management/user-management.component';
+import { adminGuard } from './core/guards/admin.guard';
 
 // app-routing.module.ts
 export const routes: Routes = [
@@ -22,6 +26,18 @@ export const routes: Routes = [
     component: ProjectOverviewComponent,
     canActivate: [authGuard],
     resolve: [projectListResolver, cmsModulesResolver],
+  },
+  {
+    path: 'settings',
+    component: UserSettingsComponent,
+    canActivate: [authGuard],
+    resolve: [projectListResolver],
+  },
+  {
+    path: 'users',
+    component: UserManagementComponent,
+    canActivate: [authGuard, adminGuard],
+    resolve: [projectListResolver],
   },
   {
     path: ':projectId',
@@ -34,7 +50,11 @@ export const routes: Routes = [
         component: ProjectDetailsComponent,
       },
       {
-        path: ':moduleSlug',
+        path: 'settings',
+        component: ProjectSettingsComponent,
+      },
+      {
+        path: ':moduleSlug/entries',
         component: ProjectEntityComponent,
         resolve: { entries: moduleEntityResolver, modules: cmsModulesResolver },
       },

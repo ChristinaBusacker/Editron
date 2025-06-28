@@ -54,7 +54,7 @@ export class CreateProjectDialogComponent implements OnInit {
 
   languages = LANGUAGES;
   selectedLangauges = [this.languages.shift()];
-  defaultLanguage = this.selectedLangauges[0].isoCode;
+  defaultLanguage = this.selectedLangauges[0].locale;
 
   constructor(private store: Store) {}
 
@@ -68,7 +68,7 @@ export class CreateProjectDialogComponent implements OnInit {
 
   getSettings(): ProjectSettings {
     return {
-      languages: this.selectedLangauges.map(lang => lang.isoCode),
+      languages: this.selectedLangauges.map(lang => lang.locale),
       defaultLanguage: this.defaultLanguage,
       modules: this.selectedModules.map(module => module.slug),
     };
@@ -85,7 +85,7 @@ export class CreateProjectDialogComponent implements OnInit {
   close(action: 'confirm' | 'cancel') {
     if (action === 'confirm') {
       this.nameTouched.set(true);
-      console.log(this.getSettings());
+
       if (!this.nameValid) return;
       this.store
         .dispatch(

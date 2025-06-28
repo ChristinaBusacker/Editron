@@ -10,7 +10,20 @@
     >
       Details
     </button>
-    <button mat-button>Settings</button>
+    <button
+      mat-button
+      [routerLink]="['/', (project | async).id, 'details']"
+      routerLinkActive="router-link-active"
+    >
+      API Usage
+    </button>
+    <button
+      mat-button
+      [routerLink]="['/', (project | async).id, 'settings']"
+      routerLinkActive="router-link-active"
+    >
+      Settings
+    </button>
   </nav>
 </mat-expansion-panel>
 
@@ -22,7 +35,7 @@
     @for (module of projectModules | async; track module.slug) {
       <button
         mat-button
-        [routerLink]="['/', (project | async).id, module.slug]"
+        [routerLink]="['/', (project | async).id, module.slug, 'entries']"
         routerLinkActive="router-link-active"
       >
         {{ module.name }}

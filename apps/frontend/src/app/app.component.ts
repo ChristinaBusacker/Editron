@@ -13,6 +13,7 @@ import { User } from './shared/services/api/models/user.model';
 import { NavigationState } from './core/store/navigation/navigation.state';
 import { Logout } from './core/store/auth/auth.actions';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { AdminWrapperComponent } from './shared/components/admin-wrapper/admin-wrapper.component';
 @Component({
   selector: 'app-root',
   imports: [
@@ -24,6 +25,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     MatMenuModule,
     MatButtonModule,
     UserBadgeDirective,
+    AdminWrapperComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',

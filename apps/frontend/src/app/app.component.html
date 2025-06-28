@@ -16,7 +16,7 @@
           <mat-menu #userMenu="matMenu">
             <button
               mat-menu-item
-              [routerLink]="['/']"
+              [routerLink]="['/', 'settings']"
               routerLinkActive="router-link-active"
             >
               <mat-icon>dialpad</mat-icon>
@@ -45,10 +45,17 @@
               <mat-icon>dialpad</mat-icon>
               <span>Projects</span>
             </button>
-            <button mat-menu-item disabled>
-              <mat-icon>voicemail</mat-icon>
-              <span>Check voice mail</span>
-            </button>
+            <app-admin-wrapper>
+              <button
+                mat-menu-item
+                [routerLink]="['/', 'users']"
+                routerLinkActive="router-link-active"
+              >
+                <mat-icon>supervisor_account</mat-icon>
+                <span>User Management</span>
+              </button>
+            </app-admin-wrapper>
+
             <button mat-menu-item>
               <mat-icon>notifications_off</mat-icon>
               <span>Disable alerts</span>
