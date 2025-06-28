@@ -47,6 +47,13 @@ export class ProjectController {
     return this.projectService.getProjectForUserOrThrow(id, user);
   }
 
+  @Get(':id/statistics')
+  @ApiOperation({ summary: 'Get statistics of a project by id' })
+  @ApiResponse({ status: 201, description: 'The reqquested Project' })
+  async getProjectStatistics(@Param('id') id: string, @CurrentUser() user) {
+    return this.projectService.getProjectStatistics(id);
+  }
+
   @Post()
   @ApiOperation({ summary: 'Create a new project' })
   @ApiResponse({ status: 201, description: 'Project successfully created' })

@@ -3,10 +3,16 @@
 body {
   margin: 0;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
+  min-height: 90vh;
+}
+
+body * {
+  box-sizing: border-box;
 }
 
 html {
   --mat-sys-corner-full: 4px;
+  min-height: 100%;
 }
 
 .mat-mdc-form-field {
@@ -57,3 +63,8 @@ mat-form-field.noBottomSpace {
 .nat-warn {
   color: red;
 }
+
+app-root {
+  height: 100%;
+}
+

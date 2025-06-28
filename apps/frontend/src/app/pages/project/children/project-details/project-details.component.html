@@ -1,3 +1,88 @@
 <ng-container *ngIf="project | async as p">
-    <h1>{{ p.name }}</h1>
+  <h1>{{ p.name }}</h1>
+  <ng-container *ngIf="statistics | async as stat">
+    <div class="details-grid">
+      <div class="details-card kpi">
+        <div
+          class="kpi-value animate-number"
+          [animateNumber]="stat.totalEntries"
+        >
+          {{ stat.totalEntries }}
+        </div>
+        <p>Total Entries</p>
+      </div>
+      <div class="details-card kpi">
+        <div
+          class="kpi-value animate-number"
+          [animateNumber]="stat.publishedVersions"
+        >
+          {{ stat.totalEntries }}
+        </div>
+        <p>Published Versions</p>
+      </div>
+      <div class="details-card kpi">
+        <div
+          class="kpi-value animate-number"
+          [animateNumber]="stat.unpublishedVersions"
+        >
+          {{ stat.totalEntries }}
+        </div>
+        <p>Unpublished Versions</p>
+      </div>
+
+      <div class="details-card span">
+        <span>Contributions in Time</span>
+        <div class="chart-wrapper">
+          <ngx-charts-heat-map
+            [scheme]="colorScheme"
+            [results]="heatmapData"
+            [xAxis]="showXAxis"
+            [yAxis]="showYAxis"
+            [gradient]="true"
+            [animations]="true"
+            [tooltipDisabled]="false"
+            [legend]="true"
+          >
+          </ngx-charts-heat-map>
+        </div>
+      </div>
+
+      <div class="details-card centered">
+        <span>Last change</span>
+        <p [formatDate]="stat.lastUpdatedAt"></p>
+        <div>
+          <p>
+            by
+            <span [userBadge]="stat.lastUpdatedBy" [size]="48"></span>
+            {{ stat.lastUpdatedBy.name }}
+          </p>
+        </div>
+
+        <button
+          mat-button
+          (click)="
+            navigate2Editor(stat.lastUpdatedModule, stat.lastUpdatedEntryId)
+          "
+        >
+          Entry öffnen
+        </button>
+      </div>
+
+      <div class="details-card span">
+        <span>Entries per Schema</span>
+        <div class="chart-wrapper">
+          <ngx-charts-bar-horizontal
+            [results]="entriesPerSchemaChartData"
+            [scheme]="colorScheme"
+            [xAxis]="true"
+            [yAxis]="false"
+            [legend]="true"
+            [showDataLabel]="true"
+            [dataLabelPosition]="'left'"
+            [animations]="true"
+          ></ngx-charts-bar-horizontal>
+        </div>
+      </div>
+    </div>
+  </ng-container>
 </ng-container>

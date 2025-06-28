@@ -59,6 +59,71 @@ export class ProjectService {
     return project;
   }
 
+  async getProjectStatistics(projectId: string) {
+    const entryRepo = this.databaseService.contentEntryRepository;
+    const versionRepo = this.databaseService.contentVersionRepository;
+
+    // Total entries
+    const totalEntries = await entryRepo.count({
+      where: { project: { id: projectId } },
+    });
+
+    // All versions for this project
+    const allVersions = await versionRepo
+      .createQueryBuilder('version')
+      .innerJoinAndSelect('version.entry', 'entry')
+      .innerJoinAndSelect('entry.schema', 'schema')
+      .leftJoinAndSelect('version.createdBy', 'createdBy')
+      .where('entry.projectId = :projectId', { projectId })
+      .orderBy('version.createdAt', 'DESC')
+      .getMany();
+
+    const publishedCount = allVersions.filter((v) => v.isPublished).length;
+    const unpublishedCount = allVersions.length - publishedCount;
+
+    const lastVersion = allVersions[0];
+
+    // Changes by date (for heatmap)
+    const changesByDate: Record<string, number> = {};
+    for (const version of allVersions) {
+      const dateStr = version.createdAt.toISOString().slice(0, 10);
+      changesByDate[dateStr] = (changesByDate[dateStr] || 0) + 1;
+    }
+
+    // Entries per schema/module
+    const entriesPerSchemaRaw = await entryRepo
+      .createQueryBuilder('entry')
+      .select('schema.slug', 'slug')
+      .addSelect('COUNT(*)', 'count')
+      .innerJoin('entry.schema', 'schema')
+      .where('entry.projectId = :projectId', { projectId })
+      .groupBy('schema.slug')
+      .orderBy('count', 'DESC')
+      .getRawMany();
+
+    const entriesPerSchema = entriesPerSchemaRaw.map((row) => ({
+      schema: row.slug,
+      count: parseInt(row.count, 10),
+    }));
+
+    return {
+      totalEntries,
+      publishedVersions: publishedCount,
+      unpublishedVersions: unpublishedCount,
+      lastUpdatedAt: lastVersion?.createdAt ?? null,
+      lastUpdatedEntryId: lastVersion?.entry.id ?? null,
+      lastUpdatedBy: lastVersion?.createdBy
+        ? {
+            id: lastVersion.createdBy.id,
+            name: lastVersion.createdBy.name,
+          }
+        : null,
+      lastUpdatedModule: lastVersion.entry.schema.slug,
+      changesByDate,
+      entriesPerSchema,
+    };
+  }
+
   async create(
     dto: CreateProjectDto,
     owner: UserEntity,

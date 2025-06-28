@@ -12,6 +12,7 @@ import { UserBadgeDirective } from './core/directives/user-badge.directive';
 import { User } from './shared/services/api/models/user.model';
 import { NavigationState } from './core/store/navigation/navigation.state';
 import { Logout } from './core/store/auth/auth.actions';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 @Component({
   selector: 'app-root',
   imports: [

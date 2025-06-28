@@ -5,6 +5,7 @@ import {
   Project,
   CreateProjectPayload,
   UpdateProjectPayload,
+  ProjectStatistics,
 } from './models/project.model';
 
 @Injectable({ providedIn: 'root' })
@@ -19,6 +20,16 @@ export class ProjectApiService {
    */
   get(id: string): Observable<Project> {
     return this.request.get<Project>(`${this.baseUrl}/${id}`);
+  }
+
+  /**
+   * Get Statistics of a project
+   * @param id Project ID
+   */
+  getStatistics(id: string): Observable<ProjectStatistics> {
+    return this.request.get<ProjectStatistics>(
+      `${this.baseUrl}/${id}/statistics`,
+    );
   }
 
   /**

@@ -30,6 +30,7 @@ import {
 import { registerLocaleData } from '@angular/common';
 import localeDe from '@angular/common/locales/de';
 import { LanguageService } from './core/services/language/language.service';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 registerLocaleData(localeDe);
 
@@ -57,6 +58,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptorsFromDi()),
     ...coreServices,
     provideNativeDateAdapter(),
+    provideAnimations(),
     {
       provide: MAT_DATE_LOCALE,
       useValue: navigator.language || navigator.languages[0] || 'en-US',
