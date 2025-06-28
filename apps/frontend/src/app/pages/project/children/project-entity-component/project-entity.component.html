@@ -1,14 +1,3 @@
-<button mat-flat-button color="primary" (click)="navigate2Editor()">
-  Create new Entry
-</button>
-
-@if (selectedItemsSignal().size > 0) {
-  <button mat-flat-button color="warn" (click)="navigate2Editor()">
-    {{ selectedItemsSignal().size > 1 ? 'Delte Entry' : 'Delete Entries' }}
-  </button>
-}
-
-<button (click)="testDialog()">TestDialog</button>
 <app-item-table
   [selectedItemsSignal]="selectedItemsSignal"
   [entries]="entries"
@@ -16,4 +5,14 @@
   (idClicked)="navigate2Editor($event)"
   (onDelete)="deleteEntry($event)"
   (onDuplicate)="duplicateEntry($event)"
-></app-item-table>
+>
+  <button mat-flat-button color="primary" (click)="navigate2Editor()">
+    <mat-icon>my_library_add</mat-icon>Create new Entry
+  </button>
+
+  @if (selectedItemsSignal().size > 0) {
+    <button mat-flat-button color="warn" (click)="navigate2Editor()">
+      {{ selectedItemsSignal().size > 1 ? 'Delte Entry' : 'Delete Entries' }}
+    </button>
+  }
+</app-item-table>

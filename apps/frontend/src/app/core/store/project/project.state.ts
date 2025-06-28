@@ -33,7 +33,7 @@ export class ProjectState {
     return this.api.create(action.payload).pipe(
       switchMap(project => {
         const state = ctx.getState();
-        ctx.setState({
+        ctx.patchState({
           projects: [...state.projects, project],
         });
         return of(project);
@@ -50,7 +50,7 @@ export class ProjectState {
       switchMap(project => {
         const state = ctx.getState();
         const projects = state.projects.filter(p => p.id !== action.id);
-        ctx.setState({
+        ctx.patchState({
           projects: [...projects, project],
         });
         return of(project);
@@ -63,11 +63,11 @@ export class ProjectState {
     return this.api.list().pipe(
       switchMap(projects => {
         const state = ctx.getState();
-
-        ctx.setState({
+        ctx.patchState({
           ...state,
           projects,
         });
+
         return of(projects);
       }),
     );

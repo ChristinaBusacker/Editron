@@ -1,15 +1,23 @@
-<mat-form-field style="width: 30%" appearance="outline">
-  <input
-    type="text"
-    placeholder="Search"
-    matInput
-    [formControl]="searchControl"
-    [matAutocomplete]="auto"
-  />
-  <mat-autocomplete #auto="matAutocomplete">
-    @for (item of filteredOptions ?? []; track item.id) {}
-  </mat-autocomplete>
-</mat-form-field>
+<div
+  class="controls"
+  style="display: flex; justify-content: space-between; align-items: center"
+>
+  <div>
+    <ng-content> </ng-content>
+  </div>
+  <mat-form-field style="width: 30%" appearance="fill" class="noBottomSpace">
+    <input
+      type="text"
+      placeholder="Search"
+      matInput
+      [formControl]="searchControl"
+      [matAutocomplete]="auto"
+    />
+    <mat-autocomplete #auto="matAutocomplete">
+      @for (item of filteredOptions ?? []; track item.id) {}
+    </mat-autocomplete>
+  </mat-form-field>
+</div>
 
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
   <!-- Select All Checkbox -->
@@ -37,11 +45,6 @@
       <div class="main">
         <div class="id">
           <a class="link" (click)="idClick(element.id)">{{ element.id }}</a>
-        </div>
-        <div class="controls">
-          <a class="link" (click)="idClick(element.id)"> Edit </a>
-          <a class="link" (click)="onDelete.emit(element.id)"> Delete </a>
-          <a class="link" (click)="onDuplicate.emit(element.id)"> Duplicate </a>
         </div>
       </div>
     </td>
@@ -96,6 +99,31 @@
       </td>
     </ng-container>
   }
+
+  <ng-container matColumnDef="controls">
+    <th mat-header-cell *matHeaderCellDef>Controls</th>
+    <td mat-cell *matCellDef="let element">
+      <div class="controls">
+        <button class="link" mat-button (click)="idClick(element.id)">
+          <mat-icon>mode_edit</mat-icon>Edit
+        </button>
+
+        <button class="link" mat-button (click)="onDuplicate.emit(element.id)">
+          <mat-icon>content_copy</mat-icon>Duplicate
+        </button>
+        <button
+          class="link"
+          mat-button
+          (click)="onDelete.emit(element.id)"
+          color="warn"
+          style="color: darkred"
+        >
+          <mat-icon>delete_forever</mat-icon>
+          Delete
+        </button>
+      </div>
+    </td>
+  </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>

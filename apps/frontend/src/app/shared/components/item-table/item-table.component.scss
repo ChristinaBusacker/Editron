@@ -1,6 +1,12 @@
 :host {
   display: block;
 
+  & .controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
   table {
     max-width: 100%;
   }
@@ -8,6 +14,11 @@
   .link {
     cursor: pointer;
     text-decoration: underline;
+    padding: 0;
+
+    &.warn {
+      color: red;
+    }
   }
 
   & .color {

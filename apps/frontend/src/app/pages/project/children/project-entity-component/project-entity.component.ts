@@ -10,10 +10,18 @@ import { MatButtonModule } from '@angular/material/button';
 import { DialogService } from '@frontend/shared/dialogs/dialog.service';
 import { ContentApiService } from '@frontend/shared/services/api/content-api.service';
 import { FetchModuleEntries } from '@frontend/core/store/content/content.actions';
+import { MatIconModule } from '@angular/material/icon';
+import { FetchProjectList } from '@frontend/core/store/project/project.actions';
 
 @Component({
   selector: 'app-project-entity',
-  imports: [CommonModule, RouterModule, ItemTableComponent, MatButtonModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    ItemTableComponent,
+    MatButtonModule,
+    MatIconModule,
+  ],
   templateUrl: './project-entity.component.html',
   styleUrl: './project-entity.component.scss',
 })
@@ -67,7 +75,26 @@ export class ProjectEntityComponent implements OnInit {
       });
   }
 
-  deleteEntry(entryId: string) {}
+  deleteEntry(entryId: string) {
+    this.dialogService
+      .openConfirmDeleteDialog({
+        title: 'Do you want to delete this entry?',
+        message:
+          'All values will be duplicated. You should edit important fields like slug afterwards',
+      })
+      .afterClosed()
+      .subscribe(response => {
+        if (response.action === 'confirm') {
+          this.contentApi.deleteEntry(entryId).subscribe(data => {
+            setTimeout(() => {
+              this.store.dispatch(
+                new FetchModuleEntries(this.projectId, this.moduleSlug),
+              );
+            }, 500);
+          });
+        }
+      });
+  }
 
   navigate2Editor(entityId = 'create') {
     this.router.navigate(['/', this.projectId, this.moduleSlug, entityId]);

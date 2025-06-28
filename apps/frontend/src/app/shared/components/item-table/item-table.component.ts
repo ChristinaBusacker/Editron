@@ -30,6 +30,8 @@ import { UserBadgeDirective } from '@frontend/core/directives/user-badge.directi
 import { FormatDateDirective } from '@frontend/core/directives/format-date.directive';
 import { LanguageService } from '@frontend/core/services/language/language.service';
 import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-item-table',
@@ -46,6 +48,8 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
     UserBadgeDirective,
     FormatDateDirective,
     MatSortModule,
+    MatButtonModule,
+    MatIconModule,
   ],
 })
 export class ItemTableComponent implements AfterViewInit {
@@ -61,7 +65,7 @@ export class ItemTableComponent implements AfterViewInit {
   schema?: ContentSchemaDefinition;
   items: any[] = [];
 
-  displayedColumns: string[] = ['select', 'id', 'name'];
+  displayedColumns: string[] = ['select', 'id', 'name', 'controls'];
   displayTypes = ['singleline', 'slug', 'number', 'color'];
 
   dataSource = new MatTableDataSource<any>();
@@ -109,10 +113,10 @@ export class ItemTableComponent implements AfterViewInit {
 
             this.displayedColumns = [
               'select',
-              'id',
               ...columns,
               'user',
               'date',
+              'controls',
             ];
 
             this.searchControl.valueChanges.subscribe(value => {

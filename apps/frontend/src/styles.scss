@@ -48,3 +48,12 @@ lib-cms-geolocation-editor
   }
 }
 
+mat-form-field.noBottomSpace {
+  & .mat-mdc-form-field-subscript-wrapper.mat-mdc-form-field-bottom-align {
+    display: none;
+  }
+}
+
+.nat-warn {
+  color: red;
+}

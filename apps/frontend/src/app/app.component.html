@@ -1,7 +1,9 @@
 @if (isAuthenticated | async) {
   <header>
     <div class="header-content">
-      <h2>Editron CMS</h2>
+      <h2 [routerLink]="['/']" routerLinkActive="router-link-active">
+        Editron CMS
+      </h2>
       <div class="controls">
         <div class="user">
           <button

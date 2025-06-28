@@ -5,12 +5,7 @@ import { ColorPickerComponent, ColorPickerDirective } from 'ngx-color-picker';
 
 @Component({
   selector: 'lib-cms-color-editor',
-  imports: [
-    ColorPickerComponent,
-    ColorPickerDirective,
-    FormsModule,
-    MatInputModule,
-  ],
+  imports: [ColorPickerDirective, FormsModule, MatInputModule],
   templateUrl: './cms-color-editor.component.html',
   styleUrl: './cms-color-editor.component.scss',
 })
