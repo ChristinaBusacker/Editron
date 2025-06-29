@@ -161,8 +161,9 @@ function validateSingleField(
       }
       break;
 
-    case 'relation':
     case 'asset':
+      break;
+    case 'relation':
       if (field.relation?.multiple) {
         if (!Array.isArray(value) || !value.every((v) => v && v.entryId)) {
           errors.push('must be an array of relations');

@@ -80,13 +80,11 @@ export class EntryEditorComponent implements OnInit {
     private router: Router,
   ) {
     this.entryData = this.route.snapshot.data['entry'] as EntryDetails;
-    console.log('Entry', this.entryData);
   }
 
   setFormGroup(slug: string) {
     if (!this.formGroups[slug]) {
       this.formGroups[slug] = this.fb.group({});
-      console.log(this.formGroups);
     }
   }
 
@@ -157,7 +155,6 @@ export class EntryEditorComponent implements OnInit {
             this.activePanel.set('main');
             this.initFormGroups();
             this.projectLanguages = this.getProjectLangauges();
-            console.log(this.projectLanguages);
           }
         }),
       )

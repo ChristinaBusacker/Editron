@@ -50,6 +50,9 @@ export class UserEntity {
   @Column({ default: 'de' })
   language: string;
 
+  @Column('text', { array: true, default: '{}' })
+  permissions: string[];
+
   @BeforeUpdate()
   updateLastActivity() {
     this.lastActivity = new Date();

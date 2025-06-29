@@ -61,7 +61,6 @@ export class AuthApiService {
   loadCurrentUser(): Observable<User> {
     return this.request.get<User>('/api/auth/user').pipe(
       map(response => {
-        console.log(response);
         return response;
       }),
     );

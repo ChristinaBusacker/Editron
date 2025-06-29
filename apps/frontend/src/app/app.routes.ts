@@ -2,9 +2,7 @@ import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { ProjectOverviewComponent } from './pages/project-overview/project-overview.component';
-
 import { cmsModulesResolver } from './core/resolvers/cmsmodules.resolver';
-
 import { projectListResolver } from './core/resolvers/project-list.resolver';
 import { projectResolver } from './core/resolvers/projectresolver';
 import { ProjectDetailsComponent } from './pages/project/children/project-details/project-details.component';
@@ -17,8 +15,8 @@ import { ProjectSettingsComponent } from './pages/project/children/project-setti
 import { UserSettingsComponent } from './pages/user-settings/user-settings.component';
 import { UserManagementComponent } from './pages/user-management/user-management.component';
 import { adminGuard } from './core/guards/admin.guard';
+import { userManagementResolver } from './core/resolvers/usermanagement.resolver';
 
-// app-routing.module.ts
 export const routes: Routes = [
   { path: 'login', component: LoginPageComponent },
   {
@@ -37,7 +35,7 @@ export const routes: Routes = [
     path: 'users',
     component: UserManagementComponent,
     canActivate: [authGuard, adminGuard],
-    resolve: [projectListResolver],
+    resolve: [projectListResolver, userManagementResolver],
   },
   {
     path: ':projectId',

@@ -12,6 +12,7 @@ import { ContentSchemaEntity } from './content-schema/content-schema.entity';
 import { ContentVersionEntity } from './content-version/content-version.entity';
 import { ContentValueEntity } from './content-value/content-value.entity';
 import { AssetEntity } from './asset/asset.entity';
+import { UserInviteEntity } from './user-invite/user-invite.entity';
 
 dotenv.config();
 
@@ -28,6 +29,7 @@ export const entities = [
   ContentVersionEntity,
   ContentValueEntity,
   AssetEntity,
+  UserInviteEntity,
 ];
 
 export const AppDataSource = new DataSource({

@@ -12,4 +12,5 @@ export enum RepositoryKey {
   contentVersion = 'CONTENTVERSION_REPOSITORY',
   contentValue = 'CONTENTVALUE_REPOSITORY',
   asset = 'ASSET_REPOSITORY',
+  userInvite = 'USERINVITE_REPOSITORY',
 }

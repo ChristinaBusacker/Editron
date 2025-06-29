@@ -1,1 +1,176 @@
-<p>user-management works!</p>
+<mat-expansion-panel expanded="true" style="grid-column: span 2">
+  <mat-expansion-panel-header>
+    <mat-panel-title> Current Users </mat-panel-title>
+    <mat-panel-description> Users</mat-panel-description>
+  </mat-expansion-panel-header>
+  <table mat-table [dataSource]="userDataSource">
+    <!-- ID Column -->
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef>ID</th>
+      <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+    </ng-container>
+
+    <!-- Email Column -->
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef>Email</th>
+      <td mat-cell *matCellDef="let element">{{ element.email }}</td>
+    </ng-container>
+
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="provider">
+      <th mat-header-cell *matHeaderCellDef>Provider</th>
+      <td mat-cell *matCellDef="let element">{{ element.provider }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="userDisplayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: userDisplayedColumns"></tr>
+  </table>
+
+  <mat-paginator
+    [pageSizeOptions]="[5, 10, 20]"
+    showFirstLastButtons
+    aria-label="Select page of users"
+    #userPaginator
+  >
+  </mat-paginator>
+</mat-expansion-panel>
+
+<mat-expansion-panel expanded="true">
+  <mat-expansion-panel-header>
+    <mat-panel-title> New Invite </mat-panel-title>
+    <mat-panel-description> </mat-panel-description>
+  </mat-expansion-panel-header>
+
+  <mat-form-field class="w-full">
+    <mat-label>Name</mat-label>
+    <input matInput [formControl]="nameFormControl" />
+    @if (
+      emailFormControl.hasError('required') &&
+      !emailFormControl.hasError('minLength')
+    ) {
+      <mat-error
+        >Name is <strong>required</strong> and needs minimum 4
+        characters</mat-error
+      >
+    }
+  </mat-form-field>
+
+  <mat-form-field class="w-full">
+    <mat-label>Email</mat-label>
+    <input matInput type="email" [formControl]="emailFormControl" />
+    @if (
+      emailFormControl.hasError('email') &&
+      !emailFormControl.hasError('required')
+    ) {
+      <mat-error>Please enter a valid email address</mat-error>
+    }
+    @if (emailFormControl.hasError('required')) {
+      <mat-error>Email is <strong>required</strong></mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field class="w-full">
+    <mat-label>Language</mat-label>
+    <mat-select [formControl]="languageFormControl">
+      <mat-option value="de">German</mat-option>
+      <mat-option value="fr">French</mat-option>
+      <mat-option value="en">English</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  @if (permissionsGroup && initDone) {
+    <div [formGroup]="permissionsGroup">
+      <p>Permissions</p>
+      @for (tag of permissionTags; track tag) {
+        <mat-checkbox
+          [formControlName]="tag"
+          [matTooltip]="getPermissionDescription(tag)"
+          >{{ tag }}</mat-checkbox
+        >
+      }
+    </div>
+  }
+
+  <div class="control">
+    <button
+      mat-flat-button
+      [disabled]="!inviteFormValid"
+      (click)="inviteUser()"
+    >
+      Send Invite
+    </button>
+  </div>
+</mat-expansion-panel>
+
+<mat-expansion-panel expanded="true">
+  <mat-expansion-panel-header>
+    <mat-panel-title> Invites </mat-panel-title>
+    <mat-panel-description> </mat-panel-description>
+  </mat-expansion-panel-header>
+  <table mat-table [dataSource]="inviteDataSource">
+    <!-- ID Column -->
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef>ID</th>
+      <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+    </ng-container>
+
+    <!-- Email Column -->
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef>Email</th>
+      <td mat-cell *matCellDef="let element">{{ element.email }}</td>
+    </ng-container>
+
+    <!-- Permission Column -->
+    <ng-container matColumnDef="permissions">
+      <th mat-header-cell *matHeaderCellDef>Permissions</th>
+      <td mat-cell *matCellDef="let element">
+        <span>{{ element.permissions.join(', ') }}</span>
+      </td>
+    </ng-container>
+
+    <!-- inviteCode Column -->
+    <ng-container matColumnDef="inviteCode">
+      <th mat-header-cell *matHeaderCellDef>inviteCode</th>
+      <td mat-cell *matCellDef="let element">
+        <span appCopyToClipboard>{{ element.inviteCode }}</span>
+      </td>
+    </ng-container>
+
+    <!-- Controls Column -->
+    <ng-container matColumnDef="controls">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let element">
+        <button class="link" mat-button>
+          <mat-icon>autorenew</mat-icon>Renew
+        </button>
+        <button class="link" mat-button color="warn" style="color: darkred">
+          <mat-icon>delete_forever</mat-icon>
+          Delete
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="inviteDisplayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: inviteDisplayedColumns"></tr>
+  </table>
+
+  <mat-paginator
+    [pageSizeOptions]="[5, 10, 20]"
+    showFirstLastButtons
+    aria-label="Select page of users"
+    #invitePaginator
+  >
+  </mat-paginator>
+</mat-expansion-panel>

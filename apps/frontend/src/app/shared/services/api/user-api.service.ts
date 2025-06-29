@@ -6,6 +6,10 @@ import {
   CreateUserPayload,
   UpdateUserPayload,
   UserListItem,
+  UserInvite,
+  CreateUserInvitePayload,
+  UpdateUserInvitePayload,
+  CreateUserFromInvitePayload,
 } from './models/user.model';
 
 @Injectable({ providedIn: 'root' })
@@ -14,35 +18,58 @@ export class UserApiService {
 
   constructor(private request: RequestService) {}
 
-  /**
-   * Creates a new user
-   * @param payload User creation payload
-   */
   create(payload: CreateUserPayload): Observable<User> {
     return this.request.post<User>(this.baseUrl, payload);
   }
 
-  /**
-   * Updates an existing user
-   * @param id User ID
-   * @param payload Partial update data
-   */
   update(id: string, payload: UpdateUserPayload): Observable<User> {
     return this.request.patch<User>(`${this.baseUrl}/${id}`, payload);
   }
 
-  /**
-   * Deletes a user by ID
-   * @param id User ID
-   */
   delete(id: string): Observable<void> {
     return this.request.delete<void>(`${this.baseUrl}/${id}`);
   }
 
-  /**
-   * Lists all users (limited fields)
-   */
   list(): Observable<UserListItem[]> {
     return this.request.get<UserListItem[]>(this.baseUrl);
+  }
+
+  getInvite(inviteCode: string): Observable<UserInvite> {
+    return this.request.get<UserInvite>(`${this.baseUrl}/invite/${inviteCode}`);
+  }
+
+  listInvites(): Observable<UserInvite[]> {
+    return this.request.get<UserInvite[]>(`${this.baseUrl}/invite`);
+  }
+
+  createInvite(payload: CreateUserInvitePayload): Observable<UserInvite> {
+    return this.request.post<UserInvite>(`${this.baseUrl}/invite`, payload);
+  }
+
+  updateInvite(
+    id: string,
+    payload: UpdateUserInvitePayload,
+  ): Observable<UserInvite> {
+    return this.request.patch<UserInvite>(
+      `${this.baseUrl}/invite/${id}`,
+      payload,
+    );
+  }
+
+  renewInvite(id: string): Observable<UserInvite> {
+    return this.request.patch<UserInvite>(
+      `${this.baseUrl}/invite/${id}/renew`,
+      {},
+    );
+  }
+
+  createUserFromInvite(
+    inviteCode: string,
+    payload: CreateUserFromInvitePayload,
+  ): Observable<string> {
+    return this.request.post<string>(
+      `${this.baseUrl}/invite/${inviteCode}`,
+      payload,
+    );
   }
 }

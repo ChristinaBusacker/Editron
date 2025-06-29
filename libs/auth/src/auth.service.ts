@@ -15,8 +15,10 @@ export class AuthService {
     password: string,
   ): Promise<UserEntity | null> {
     const user = await this.databaseService.userRepository.findOneBy({ email });
+    console.log(user);
     if (!user || !user.password) return null;
     const match = await bcrypt.compare(password, user.password);
+    console.log(match);
     return match ? user : null;
   }
 

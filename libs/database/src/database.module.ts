@@ -14,6 +14,7 @@ import { ContentVersionTableModule } from './content-version/content-version.mod
 import { ContentValueTableModule } from './content-value/content-value.module';
 import { ContentSchemaTableModule } from './content-schema/content-schema.module';
 import { AssetTableModule } from './asset/asset.module';
+import { UserInviteTableModule } from './user-invite/user-invite.module';
 
 @Module({
   imports: [
@@ -28,7 +29,8 @@ import { AssetTableModule } from './asset/asset.module';
     ContentSchemaTableModule,
     ContentVersionTableModule,
     ContentValueTableModule,
-    AssetTableModule
+    AssetTableModule,
+    UserInviteTableModule
   ],
   providers: [...databaseProviders, DatabaseService],
   exports: [...databaseProviders, DatabaseService],

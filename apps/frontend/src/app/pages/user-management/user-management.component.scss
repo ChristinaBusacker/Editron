@@ -1,0 +1,12 @@
+:host {
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 4fr 8fr;
+  gap: 20px;
+
+  & .control {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+  }
+}
