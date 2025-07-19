@@ -6,6 +6,11 @@
   .details-grid {
     display: grid;
     grid-template-columns: 4fr 4fr 4fr;
+
+    @media (max-width: 400px) {
+      grid-template-columns: 6fr 6fr;
+    }
+
     gap: 20px;
     & .details-card {
       background-color: whitesmoke;
@@ -15,6 +20,12 @@
       box-sizing: border-box;
       &.span {
         grid-column: span 2;
+      }
+
+      &.span-mobile {
+        @media (max-width: 400px) {
+          grid-column: span 2;
+        }
       }
 
       &.kpi {

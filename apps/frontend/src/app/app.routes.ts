@@ -12,13 +12,16 @@ import { moduleEntityResolver } from './core/resolvers/module-entity.resolver';
 import { EntryEditorComponent } from './pages/project/children/entry-editor/entry-editor.component';
 import { entryResolver } from './core/resolvers/entry.resolver';
 import { ProjectSettingsComponent } from './pages/project/children/project-settings/project-settings.component';
-import { UserSettingsComponent } from './pages/user-settings/user-settings.component';
+
 import { UserManagementComponent } from './pages/user-management/user-management.component';
 import { adminGuard } from './core/guards/admin.guard';
 import { userManagementResolver } from './core/resolvers/usermanagement.resolver';
+import { InvitationComponent } from './pages/invitation/invitation.component';
+import { UserSettingsComponent } from './pages/user-settings/user-settings.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginPageComponent },
+  { path: 'invitation', component: InvitationComponent },
   {
     path: 'projects',
     component: ProjectOverviewComponent,

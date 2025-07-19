@@ -1,0 +1,25 @@
+<app-dialog
+  [buttonOptions]="{
+    confirm: {
+      label: 'save',
+      color: 'primary',
+    },
+    decline: {
+      label: 'Cancel',
+      color: 'secondary',
+    },
+  }"
+  [title]="
+    'Select ' +
+    dialogData.field.relation.schema +
+    ' for ' +
+    dialogData.field.name
+  "
+  (action)="close($event)"
+>
+  <app-item-table
+    [entries]="entries"
+    [module]="module"
+    [selectedItemsSignal]="selectedItemsSignal"
+  ></app-item-table>
+</app-dialog>

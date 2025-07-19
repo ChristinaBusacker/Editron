@@ -1,13 +1,14 @@
 import {
-  CdkDropList,
   CdkDrag,
   CdkDragDrop,
+  CdkDropList,
   moveItemInArray,
   transferArrayItem,
 } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -15,12 +16,11 @@ import { MatSelectModule } from '@angular/material/select';
 import { AuthState } from '@frontend/core/store/auth/auth.state';
 import { CmsModuleState } from '@frontend/core/store/cmsModules/cmsModules.state';
 import { NavigationState } from '@frontend/core/store/navigation/navigation.state';
-import { CreateProject } from '@frontend/core/store/project/project.actions';
-import { AdminWrapperComponent } from '@frontend/shared/components/admin-wrapper/admin-wrapper.component';
+import { UpdateProject } from '@frontend/core/store/project/project.actions';
+import { DialogService } from '@frontend/shared/dialogs/dialog.service';
 import { Project } from '@frontend/shared/services/api/models/project.model';
 import { Store } from '@ngxs/store';
 import {
-  LanguageDefinition,
   LANGUAGES,
   ProjectSettings,
 } from '@shared/declarations/interfaces/project/project-settings';
@@ -39,6 +39,7 @@ import { combineLatest, map } from 'rxjs';
     MatSelectModule,
     MatExpansionModule,
     CommonModule,
+    MatButtonModule,
   ],
   templateUrl: './project-settings.component.html',
   styleUrl: './project-settings.component.scss',
@@ -61,7 +62,10 @@ export class ProjectSettingsComponent implements OnInit {
 
   isAdmin = this.store.select(AuthState.isAdmin);
 
-  constructor(private store: Store) {}
+  constructor(
+    private store: Store,
+    private dialogService: DialogService,
+  ) {}
 
   get nameValid(): boolean {
     return this.name().trim().length >= 3;
@@ -114,6 +118,25 @@ export class ProjectSettingsComponent implements OnInit {
     );
 
     this.defaultLanguage = settings.defaultLanguage;
+  }
+
+  updateProject() {
+    this.dialogService
+      .openConfirmDialog({
+        title: 'Do you want to update this project?',
+        message: 'You cannot revert the changes.',
+      })
+      .afterClosed()
+      .subscribe(response => {
+        if (response.action === 'confirm') {
+          this.store.dispatch(
+            new UpdateProject(this.project.id, {
+              name: this.name(),
+              settings: this.getSettings(),
+            }),
+          );
+        }
+      });
   }
 
   ngOnInit(): void {

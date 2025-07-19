@@ -165,8 +165,11 @@ function validateSingleField(
       break;
     case 'relation':
       if (field.relation?.multiple) {
-        if (!Array.isArray(value) || !value.every((v) => v && v.entryId)) {
-          errors.push('must be an array of relations');
+        if (
+          !Array.isArray(value) ||
+          !value.every((v) => v && typeof v === 'string')
+        ) {
+          errors.push('must be an array of ids');
         }
       } else {
         if (typeof value !== 'object' || !value.entryId) {

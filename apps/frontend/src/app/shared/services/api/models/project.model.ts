@@ -28,6 +28,6 @@ export interface CreateProjectPayload {
 }
 
 export interface UpdateProjectPayload {
-  name: string;
+  name?: string;
   settings: ProjectSettings;
 }

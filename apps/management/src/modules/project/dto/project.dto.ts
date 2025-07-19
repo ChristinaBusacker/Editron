@@ -1,4 +1,4 @@
-import { IsString, MinLength } from 'class-validator';
+import { IsObject, IsOptional, IsString, MinLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { ProjectSettings } from '@shared/declarations/interfaces/project/project-settings';
 
@@ -13,7 +13,12 @@ export class CreateProjectDto {
 export class UpdateProjectDto {
   @ApiProperty({ example: 'Updated Project Name' })
   @IsString()
+  @IsOptional()
   @MinLength(2)
   name: string;
+
+  @ApiProperty({ example: { foo: 'bar' } })
+  @IsObject()
+  @IsOptional()
   settings: ProjectSettings;
 }

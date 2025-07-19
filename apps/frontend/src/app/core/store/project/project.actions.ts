@@ -8,7 +8,7 @@ export class CreateProject {
   constructor(public payload: CreateProjectPayload) {}
 }
 
-export class UpdateProjectName {
+export class UpdateProject {
   static readonly type = '[Project] Update';
   constructor(
     public id: string,

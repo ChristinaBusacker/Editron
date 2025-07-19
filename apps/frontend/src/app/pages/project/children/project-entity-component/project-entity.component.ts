@@ -32,7 +32,7 @@ export class ProjectEntityComponent implements OnInit {
 
   moduleEntries = new BehaviorSubject([]);
 
-  selectedItemsSignal = signal<Set<any>>(new Set<any>());
+  selectedItemsSignal = signal<Set<string>>(new Set());
 
   projectId: string;
   moduleSlug: string;
@@ -98,6 +98,10 @@ export class ProjectEntityComponent implements OnInit {
 
   navigate2Editor(entityId = 'create') {
     this.router.navigate(['/', this.projectId, this.moduleSlug, entityId]);
+  }
+
+  log() {
+    console.log(this.selectedItemsSignal());
   }
 
   ngOnInit(): void {

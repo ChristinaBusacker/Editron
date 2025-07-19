@@ -13,6 +13,7 @@ import { Asset } from '@frontend/shared/services/api/models/asset.model';
 })
 export class CmsAssetEditorComponent {
   @Input() control: FormControl;
+  @Input() label: string = 'image';
 
   constructor(
     private dialogService: DialogService,

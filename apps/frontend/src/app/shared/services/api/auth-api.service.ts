@@ -71,6 +71,6 @@ export class AuthApiService {
    * @param provider OAuth provider key (google | github | microsoft)
    */
   getSSORedirectUrl(provider: 'google' | 'github' | 'microsoft'): string {
-    return `/api/auth/${provider}`;
+    return `https://localhost:3000/api/auth/${provider}`;
   }
 }

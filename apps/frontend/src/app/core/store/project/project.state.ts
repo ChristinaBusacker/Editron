@@ -6,7 +6,7 @@ import { of, switchMap } from 'rxjs';
 import {
   CreateProject,
   FetchProjectList,
-  UpdateProjectName,
+  UpdateProject,
 } from './project.actions';
 
 export interface ProjectStateModel {
@@ -41,11 +41,8 @@ export class ProjectState {
     );
   }
 
-  @Action(UpdateProjectName)
-  updateProject(
-    ctx: StateContext<ProjectStateModel>,
-    action: UpdateProjectName,
-  ) {
+  @Action(UpdateProject)
+  updateProject(ctx: StateContext<ProjectStateModel>, action: UpdateProject) {
     return this.api.update(action.id, action.payload).pipe(
       switchMap(project => {
         const state = ctx.getState();

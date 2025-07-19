@@ -12,6 +12,8 @@ import { CmsJsonEditorComponent } from '../cms-json-editor/cms-json-editor.compo
 import { CmsRichtextEditorComponent } from '../cms-richtext-editor/cms-richtext-editor.component';
 import { CmsTagEditorComponent } from '../cms-tag-editor/cms-tag-editor.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { CmsRelationEditorComponent } from '../cms-relation-editor/cms-relation-editor.component';
+import { Project } from '@frontend/shared/services/api/models/project.model';
 
 @Component({
   selector: 'lib-cms-form-field',
@@ -28,6 +30,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     CmsTagEditorComponent,
     CmsAssetEditorComponent,
     MatCheckboxModule,
+    CmsRelationEditorComponent,
   ],
   templateUrl: './cms-form-field.component.html',
   styleUrl: './cms-form-field.component.scss',
@@ -36,6 +39,7 @@ export class CmsFormFieldComponent {
   @Input({ required: true }) field!: FieldDefinition;
   @Input({ required: true }) form!: FormGroup;
   @Input() languages: string[] = [];
+  @Input() project: Project;
 
   getControl(fieldName: string): FormControl {
     return this.form.get(fieldName) as FormControl;

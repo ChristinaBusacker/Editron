@@ -11,8 +11,8 @@
   </button>
 
   @if (selectedItemsSignal().size > 0) {
-    <button mat-flat-button color="warn" (click)="navigate2Editor()">
-      {{ selectedItemsSignal().size > 1 ? 'Delte Entry' : 'Delete Entries' }}
+    <button mat-button color="warn" (click)="log()">
+      {{ selectedItemsSignal().size < 2 ? 'Delte Entry' : 'Delete Entries' }}
     </button>
   }
 </app-item-table>

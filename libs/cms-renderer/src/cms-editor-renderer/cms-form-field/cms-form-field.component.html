@@ -83,7 +83,18 @@
     <lib-cms-geolocation-editor [control]="getControl(field.name)" />
   }
   @if (field.type === 'asset') {
-    <lib-cms-asset-editor [control]="getControl(field.name)" />
+    <lib-cms-asset-editor
+      [control]="getControl(field.name)"
+      [label]="field.name"
+    />
+  }
+  @if (field.type === 'relation') {
+    <lib-cms-relation-editor
+      [control]="getControl(field.name)"
+      [field]="field"
+      [projectId]="project.id"
+      [label]="field.name"
+    />
   }
 }
 
@@ -169,6 +180,13 @@
     @if (field.type === 'geolocation') {
       <lib-cms-geolocation-editor
         [control]="getControlInGroup(field.name, lang)"
+      />
+    }
+    @if (field.type === 'relation') {
+      <lib-cms-relation-editor
+        [field]="field"
+        [control]="getControlInGroup(field.name, lang)"
+        [projectId]="project.id"
       />
     }
   }

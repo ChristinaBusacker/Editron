@@ -1,24 +1,24 @@
 import {
   Component,
-  EventEmitter,
   Input,
   Output,
-  Signal,
-  computed,
-  effect,
+  EventEmitter,
+  WritableSignal,
+  ViewChild,
+  AfterViewInit,
   inject,
-  signal,
 } from '@angular/core';
-
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { ViewChild, AfterViewInit } from '@angular/core';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { CmsModule } from 'libs/cmsmodules/src/modules/cms-module';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+
 import { combineLatest, map, Observable } from 'rxjs';
 import { Store } from '@ngxs/store';
 import { CmsModuleState } from '@frontend/core/store/cmsModules/cmsModules.state';
@@ -26,12 +26,12 @@ import {
   ContentSchemaDefinition,
   FieldDefinition,
 } from '@shared/declarations/interfaces/content/content-schema-definition';
+
 import { UserBadgeDirective } from '@frontend/core/directives/user-badge.directive';
 import { FormatDateDirective } from '@frontend/core/directives/format-date.directive';
 import { LanguageService } from '@frontend/core/services/language/language.service';
-import { MatSort, MatSortModule } from '@angular/material/sort';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
+import { CmsModule } from 'libs/cmsmodules/src/modules/cms-module';
+import { tableDisplayTypes } from '@shared/constants/table-display-types.const';
 
 @Component({
   selector: 'app-item-table',
@@ -53,38 +53,29 @@ import { MatIconModule } from '@angular/material/icon';
   ],
 })
 export class ItemTableComponent implements AfterViewInit {
-  @Input({ required: true }) entries: Observable<any[]>;
-  @Input({ required: true }) module: Observable<CmsModule>;
-  @Input({ required: true }) selectedItemsSignal!: Signal<Set<any>>;
+  @Input({ required: true }) entries!: Observable<any[]>;
+  @Input({ required: true }) module!: Observable<CmsModule>;
+  @Input({ required: true }) selectedItemsSignal!: WritableSignal<Set<any>>;
   @Output() idClicked = new EventEmitter<string>();
   @Output() onDuplicate = new EventEmitter<string>();
   @Output() onDelete = new EventEmitter<string>();
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+
+  private store = inject(Store);
+  private languageService = inject(LanguageService);
 
   schemas = this.store.select(CmsModuleState.schemas);
   schema?: ContentSchemaDefinition;
   items: any[] = [];
 
   displayedColumns: string[] = ['select', 'id', 'name', 'controls'];
-  displayTypes = ['singleline', 'slug', 'number', 'color'];
+  displayTypes = tableDisplayTypes;
 
   dataSource = new MatTableDataSource<any>();
   searchControl = new FormControl('');
-
   filteredOptions: any[] = [];
-
-  constructor(
-    private store: Store,
-    private languageService: LanguageService,
-  ) {
-    effect(() => {
-      // External selection change
-      const current = this.selectedItemsSignal();
-      this.selection.set(new Set(current));
-    });
-  }
-
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   ngOnInit(): void {
     combineLatest([this.entries, this.module, this.schemas])
@@ -132,10 +123,6 @@ export class ItemTableComponent implements AfterViewInit {
       .subscribe();
   }
 
-  idClick(id: string) {
-    this.idClicked.emit(id);
-  }
-
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
@@ -162,6 +149,10 @@ export class ItemTableComponent implements AfterViewInit {
     };
   }
 
+  idClick(id: string) {
+    this.idClicked.emit(id);
+  }
+
   getContrastColor(hex: string): string {
     if (!hex) return '#000';
     hex = hex.replace('#', '');
@@ -181,37 +172,36 @@ export class ItemTableComponent implements AfterViewInit {
 
   readFieldValue(field: FieldDefinition, element: any) {
     const content = element.content[field.name];
-
     if (typeof content === 'object') {
-      return content[this.languageService.language()];
+      const language = this.languageService.language();
+      const locKeys = Object.keys(content);
+      const key = locKeys.find(key => key.includes(language)) || locKeys[0];
+      return content[key];
     }
-
     return content;
   }
 
-  selection = signal<Set<number>>(new Set());
-
   toggleSelection(item: any) {
-    const updated = new Set(this.selection());
+    const updated = new Set(this.selectedItemsSignal());
     updated.has(item.id) ? updated.delete(item.id) : updated.add(item.id);
-    this.selection.set(updated);
+    this.selectedItemsSignal.set(updated);
   }
 
   isSelected(item: any): boolean {
-    return this.selection().has(item.id);
+    return this.selectedItemsSignal().has(item.id);
   }
 
   toggleSelectAll(checked: boolean) {
     if (checked) {
       const allIds = this.dataSource.data.map(i => i.id);
-      this.selection.set(new Set(allIds));
+      this.selectedItemsSignal.set(new Set(allIds));
     } else {
-      this.selection.set(new Set());
+      this.selectedItemsSignal.set(new Set());
     }
   }
 
   isAllSelected(): boolean {
-    const currentSelection = this.selection();
+    const currentSelection = this.selectedItemsSignal();
     return (
       this.dataSource.data.length > 0 &&
       this.dataSource.data.every(i => currentSelection.has(i.id))

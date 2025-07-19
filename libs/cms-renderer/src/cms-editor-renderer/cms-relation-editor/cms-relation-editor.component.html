@@ -1,0 +1,31 @@
+<div class="relations">
+  @for (relation of selectedRelations; track relation.id) {
+    <div class="entry">
+      @for (key of displayFields; track $index) {
+        <span>{{ readFieldValue(key, relation) }}</span>
+      }
+
+      <button class="link" mat-button (click)="openEditDialog(relation)">
+        <mat-icon>mode_edit</mat-icon>Edit
+      </button>
+
+      <button
+        class="link"
+        mat-button
+        color="warn"
+        style="color: darkred"
+        (click)="removeRelation(relation)"
+      >
+        <mat-icon>remove_circle_outline</mat-icon>
+        Remove
+      </button>
+    </div>
+  }
+</div>
+<div class="controls">
+  <button mat-flat-button (click)="openRelationPicker()">
+    Select existing Relation Entry
+  </button>
+  <button mat-flat-button color="accent">Create Relation Entry</button>
+</div>
+<span class="label">{{ label }}</span>

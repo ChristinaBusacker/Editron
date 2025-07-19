@@ -1,6 +1,7 @@
 import { ContentSchemaEntity } from '@database/content-schema/content-schema.entity';
 import { DatabaseService } from '@database/database.service';
 import { Injectable } from '@nestjs/common';
+import { PetCMSModule } from 'libs/cmsmodules/src/modules/blog copy/pet.cms';
 import { BlogCMSModule } from 'libs/cmsmodules/src/modules/blog/blog.cms';
 import { CmsModule } from 'libs/cmsmodules/src/modules/cms-module';
 import { HomepageCMSModule } from 'libs/cmsmodules/src/modules/homepage/homepage.cms';
@@ -14,6 +15,7 @@ export class AppService {
     HomepageCMSModule,
     WipMSModule,
     Test2Module,
+    PetCMSModule,
   ];
 
   constructor(private databaseService: DatabaseService) {}

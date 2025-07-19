@@ -1,3 +1,5 @@
+import { FieldDefinition } from '@shared/declarations/interfaces/content/content-schema-definition';
+
 export interface DialogButton {
   label: string;
   color?: string;
@@ -21,4 +23,10 @@ export interface ConfirmDialogData {
     label: string;
     color: string;
   };
+}
+
+export interface RelationPickerDialogData {
+  field: FieldDefinition;
+  currentValue?: any;
+  projectId: string;
 }
