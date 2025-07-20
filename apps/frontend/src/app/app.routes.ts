@@ -18,6 +18,7 @@ import { adminGuard } from './core/guards/admin.guard';
 import { userManagementResolver } from './core/resolvers/usermanagement.resolver';
 import { InvitationComponent } from './pages/invitation/invitation.component';
 import { UserSettingsComponent } from './pages/user-settings/user-settings.component';
+import { unsavedChangesGuard } from './core/guards/unsaved-changes.guard';
 
 export const routes: Routes = [
   { path: 'login', component: LoginPageComponent },
@@ -75,6 +76,7 @@ export const routes: Routes = [
           modules: cmsModulesResolver,
           entry: entryResolver,
         },
+        canDeactivate: [unsavedChangesGuard],
       },
       {
         path: '',

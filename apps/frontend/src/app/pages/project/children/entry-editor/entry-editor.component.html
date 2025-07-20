@@ -77,7 +77,12 @@
         </tr>
       </table>
       <div class="entry-controls">
-        <button mat-flat-button color="accent" (click)="updateEntry()">
+        <button
+          mat-flat-button
+          color="accent"
+          (click)="updateEntry()"
+          [disabled]="!hasUnsavedChanges()"
+        >
           Save
         </button>
         <button mat-flat-button color="primary">Publish</button>

@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, ViewChild } from '@angular/core';
 import { CmsFormComponent } from '@cmsrenderer/cms-editor-renderer/cms-form/cms-form.component';
 import { CmsModuleState } from '@frontend/core/store/cmsModules/cmsModules.state';
 import { NavigationState } from '@frontend/core/store/navigation/navigation.state';
 import { Store } from '@ngxs/store';
 import { ContentSchemaDefinition } from '@shared/declarations/interfaces/content/content-schema-definition';
 import { CmsModule } from 'libs/cmsmodules/src/modules/cms-module';
-import { combineLatest, map } from 'rxjs';
+import { combineLatest, map, switchMap } from 'rxjs';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ContentApiService } from '@frontend/shared/services/api/content-api.service';
@@ -25,6 +25,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { CanComponentDeactivate } from '@frontend/core/guards/unsaved-changes.guard';
+import { deepEqual } from '@frontend/core/utils/deep-equal.util';
 @Component({
   selector: 'app-entry-editor',
   imports: [
@@ -42,7 +44,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   templateUrl: './entry-editor.component.html',
   styleUrl: './entry-editor.component.scss',
 })
-export class EntryEditorComponent implements OnInit {
+export class EntryEditorComponent implements OnInit, CanComponentDeactivate {
+  @ViewChild(CmsFormComponent) formComponent: CmsFormComponent;
+
   schemas = this.store.select(CmsModuleState.schemas);
   module = this.store.select(NavigationState.cmsModule);
   project = this.store.select(NavigationState.currentProject);
@@ -110,9 +114,15 @@ export class EntryEditorComponent implements OnInit {
       .updateEntry(this.entryData.id, {
         data: values,
       })
-      .subscribe(data => {
-        console.log(values);
-      });
+      .pipe(
+        switchMap(() => {
+          return this.contentService.getEntryDetails(this.entryData.id);
+        }),
+        map(entryDetails => {
+          this.entryData = entryDetails;
+        }),
+      )
+      .subscribe();
   }
 
   initFormGroups() {
@@ -141,6 +151,10 @@ export class EntryEditorComponent implements OnInit {
           ]);
         }
       });
+  }
+
+  hasUnsavedChanges(): boolean {
+    return this.formComponent?.hasUnsavedChanges();
   }
 
   ngOnInit(): void {

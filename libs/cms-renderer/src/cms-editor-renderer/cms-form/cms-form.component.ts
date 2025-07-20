@@ -13,6 +13,8 @@ import {
   FieldDefinition,
 } from '@shared/declarations/interfaces/content/content-schema-definition';
 import { Project } from '@frontend/shared/services/api/models/project.model';
+import { CanComponentDeactivate } from '@frontend/core/guards/unsaved-changes.guard';
+import { deepEqual } from '@frontend/core/utils/deep-equal.util';
 
 @Component({
   selector: 'lib-cms-form',
@@ -33,41 +35,51 @@ export class CmsFormComponent implements OnInit {
   ngOnInit(): void {
     if (!this.schemaDefinition) return;
     this.fields.set(this.schemaDefinition.fields);
+    this.initFormFromValues(this.values ?? {});
+  }
 
+  initFormFromValues(values: Record<string, any>): void {
     const languages = this.project.settings.languages;
-    console.log(languages);
 
     for (const field of this.fields()) {
       const validators = this.buildValidators(field);
-      let defaultValue =
+      const defaultValue =
         field.default ?? (field.type === 'boolean' ? false : null);
 
       if (field.localizable) {
         const langGroup = this.fb.group({});
         for (const lang of languages) {
-          langGroup.addControl(lang, new FormControl(defaultValue, validators));
-
-          if (this.values) {
-            langGroup.get(lang).patchValue(this.values[field.name][lang], {
-              emit: false,
-            });
-          }
+          const value = values?.[field.name]?.[lang] ?? defaultValue;
+          langGroup.addControl(lang, new FormControl(value, validators));
         }
-
         this.form.addControl(field.name, langGroup);
       } else {
-        this.form.addControl(
-          field.name,
-          new FormControl(defaultValue, validators),
-        );
+        const value = values?.[field.name] ?? defaultValue;
+        this.form.addControl(field.name, new FormControl(value, validators));
+      }
+    }
+  }
 
-        if (this.values) {
-          this.form.get(field.name).patchValue(this.values[field.name]);
+  getValuesFromFormGroup(): Record<string, any> {
+    const result: Record<string, any> = {};
+    const languages = this.project.settings.languages;
+
+    for (const field of this.fields()) {
+      const control = this.form.get(field.name);
+      if (!control) continue;
+
+      if (field.localizable) {
+        const langGroup = control as FormGroup;
+        result[field.name] = {};
+        for (const lang of languages) {
+          result[field.name][lang] = langGroup.get(lang)?.value;
         }
+      } else {
+        result[field.name] = control.value;
       }
     }
 
-    console.log(this.form, this.values);
+    return result;
   }
 
   private buildValidators(field: FieldDefinition) {
@@ -88,5 +100,12 @@ export class CmsFormComponent implements OnInit {
     }
 
     return validators;
+  }
+
+  hasUnsavedChanges(): boolean {
+    if (this.form.dirty) {
+      return !deepEqual(this.getValuesFromFormGroup(), this.values);
+    }
+    return false;
   }
 }
