@@ -77,7 +77,7 @@ export class ProjectSettingsComponent implements OnInit {
 
   getSettings(): ProjectSettings {
     return {
-      languages: this.selectedLangauges.map(lang => lang.isoCode),
+      languages: this.selectedLangauges.map(lang => lang.locale),
       defaultLanguage: this.defaultLanguage,
       modules: this.selectedModules.map(module => module.slug),
     };

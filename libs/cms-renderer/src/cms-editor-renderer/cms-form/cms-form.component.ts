@@ -35,6 +35,7 @@ export class CmsFormComponent implements OnInit {
     this.fields.set(this.schemaDefinition.fields);
 
     const languages = this.project.settings.languages;
+    console.log(languages);
 
     for (const field of this.fields()) {
       const validators = this.buildValidators(field);
@@ -66,7 +67,7 @@ export class CmsFormComponent implements OnInit {
       }
     }
 
-    console.log(this.form);
+    console.log(this.form, this.values);
   }
 
   private buildValidators(field: FieldDefinition) {
