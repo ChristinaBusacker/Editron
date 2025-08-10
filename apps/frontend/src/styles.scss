@@ -1,5 +1,134 @@
-/* You can add global styles to this file, and also import other style files */
+.cdk-drag-preview {
+  background-color: white;
 
+  &.section {
+    min-height: 50px;
+    height: 200px;
+    border: 2px solid transparent;
+    border-collapse: collapse;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    border: 2px solid purple;
+
+    & .control {
+      background-color: purple;
+    }
+
+    & .row {
+      & .content {
+        display: grid;
+        gap: 5px;
+        width: 100%;
+      }
+
+      .control {
+        background-color: darkturquoise;
+      }
+
+      & .component {
+        width: 100%;
+        & .control {
+          background-color: grey;
+        }
+
+        & .content {
+          display: flex;
+          align-items: center;
+        }
+      }
+    }
+  }
+
+  &.row {
+    min-height: 60px;
+    border: 2px solid transparent;
+    border-collapse: collapse;
+    align-items: flex-end;
+    justify-content: center;
+    flex-direction: column;
+    min-width: 100px;
+    width: 100%;
+    display: flex;
+    border: 2px solid darkturquoise;
+
+    & .control {
+      background-color: darkturquoise;
+    }
+
+    & .component .control {
+      background-color: grey;
+    }
+
+    & .content {
+      display: grid;
+      gap: 5px;
+      width: 100%;
+
+      & .column {
+        background-color: #efefef;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+      }
+    }
+  }
+
+  &.component {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 200px;
+    border: 2px solid grey;
+
+    & .control {
+      background-color: grey;
+    }
+
+    & .content {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+    }
+  }
+
+  & .control {
+    color: white;
+    padding: 0px 10px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    font-size: 0.7rem;
+
+    & .toolbar {
+      display: flex;
+      gap: 6px;
+
+      & mat-icon {
+        font-size: 20px !important;
+        cursor: pointer;
+      }
+    }
+  }
+
+  & .addBtn {
+    display: none;
+  }
+
+  & .column {
+    min-height: 50px;
+    background-color: #efefef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+}
 body {
   margin: 0;
   font-family: Roboto, 'Helvetica Neue', sans-serif;

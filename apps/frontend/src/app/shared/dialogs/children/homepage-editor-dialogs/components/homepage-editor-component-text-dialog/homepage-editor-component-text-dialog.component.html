@@ -15,19 +15,25 @@
   <mat-tab-group>
     <mat-tab label="General">
       <div class="tab-container">
-        <mat-form-field appearance="outline" class="w-full">
-          <mat-label>Component ID</mat-label>
-          <input matInput [formControl]="form.get('id')" />
-        </mat-form-field>
-        @if (localizable) {
-          @for (lang of languages; track lang) {
-            <label>Content ({{ lang }})</label>
-            <lib-cms-richtext-editor [control]="getControlInGroup(lang)" />
+        <div class="content">
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Component ID</mat-label>
+            <input matInput [formControl]="form.get('id')" />
+          </mat-form-field>
+          @if (localizable) {
+            @for (lang of languages; track lang) {
+              <div class="editor">
+                <label>Content ({{ lang }})</label>
+                <lib-cms-richtext-editor [control]="getControlInGroup(lang)" />
+              </div>
+            }
+          } @else {
+            <div class="editor">
+              <label>Content</label>
+              <lib-cms-richtext-editor [control]="getControl()" />
+            </div>
           }
-        } @else {
-          <label>Content</label>
-          <lib-cms-richtext-editor [control]="getControl()" />
-        }
+        </div>
       </div>
     </mat-tab>
     <mat-tab label="Styling"> <div class="tab-container"></div> </mat-tab>
