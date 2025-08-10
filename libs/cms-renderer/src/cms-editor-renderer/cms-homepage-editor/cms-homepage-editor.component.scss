@@ -12,20 +12,10 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      position: relative;
-      padding: 20px 0;
+      border: 2px solid purple;
 
       & .control {
         background-color: purple;
-      }
-
-      &:hover {
-        border: 2px solid purple;
-
-        & .control {
-          display: flex !important;
-          z-index: 1;
-        }
       }
     }
 
@@ -35,11 +25,11 @@
       border-collapse: collapse;
       align-items: flex-end;
       justify-content: center;
+      flex-direction: column;
       min-width: 100px;
       width: 100%;
-      position: relative;
-      padding: 20px 0;
       display: flex;
+      border: 2px solid darkturquoise;
 
       & .control {
         background-color: darkturquoise;
@@ -59,27 +49,33 @@
           flex-direction: column;
         }
       }
+    }
 
-      &:hover {
-        border: 2px solid darkturquoise;
-        & .control {
-          display: flex !important;
+    & .component {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      border: 2px solid grey;
 
-          z-index: 2;
-        }
+      & .control {
+        background-color: grey;
+      }
+
+      & .content {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
       }
     }
 
     & .control {
-      position: absolute;
-      top: 0;
-      left: 50%;
-      display: none !important;
       color: white;
       padding: 0px 10px;
+      display: flex;
       justify-content: space-between;
-      width: calc(100% + 4px);
-      transform: translate(-50%);
+      width: 100%;
       font-size: 0.7rem;
 
       & .toolbar {

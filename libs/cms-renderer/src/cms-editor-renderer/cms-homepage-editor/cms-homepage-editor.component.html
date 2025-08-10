@@ -35,6 +35,52 @@
                 >
                   @for (column of row.columns; track column.id) {
                     <div class="column">
+                      @for (component of column.components; track $index) {
+                        <div class="component">
+                          <div class="control">
+                            <span class="id">#{{ row.id }}</span>
+                            <div class="toolbar">
+                              <mat-icon>open_with</mat-icon>
+                              <mat-icon (click)="editRow(section, row)"
+                                >settings</mat-icon
+                              >
+                              <mat-icon (click)="deleteRow(row, section)"
+                                >delete_forever</mat-icon
+                              >
+                            </div>
+                          </div>
+                          <span class="content">
+                            @switch (component.type) {
+                              @case ('text') {
+                                <mat-icon>text_fields</mat-icon>
+                              }
+                              @case ('button') {
+                                <mat-icon>crop_7_5</mat-icon>
+                              }
+                              @case ('image') {
+                                <mat-icon>crop_original</mat-icon>
+                              }
+                              @case ('video') {
+                                <mat-icon>ondemand_video</mat-icon>
+                              }
+                              @case ('carousel') {
+                                <mat-icon>view_carousel</mat-icon>
+                              }
+                              @case ('map') {
+                                <mat-icon>map</mat-icon>
+                              }
+                              @case ('galery') {
+                                <mat-icon>view_module</mat-icon>
+                              }
+                              @case ('form') {
+                                <mat-icon>email</mat-icon>
+                              }
+                            }
+                            {{ component.type | uppercase }}
+                          </span>
+                        </div>
+                      }
+
                       <button
                         mat-mini-fab
                         matTooltip="Add a Component"
@@ -51,35 +97,59 @@
                         #selectComponent="matMenu"
                         class="component-selection"
                       >
-                        <button mat-menu-item>
+                        <button
+                          mat-menu-item
+                          (click)="addComponentToColumn(column, 'text')"
+                        >
                           <mat-icon>text_fields</mat-icon>
                           <span>Text</span>
                         </button>
-                        <button mat-menu-item>
+                        <button
+                          mat-menu-item
+                          (click)="addComponentToColumn(column, 'button')"
+                        >
                           <mat-icon>crop_7_5</mat-icon>
                           <span>Button</span>
                         </button>
-                        <button mat-menu-item>
+                        <button
+                          mat-menu-item
+                          (click)="addComponentToColumn(column, 'image')"
+                        >
                           <mat-icon>crop_original</mat-icon>
                           <span>Image</span>
                         </button>
-                        <button mat-menu-item>
+                        <button
+                          mat-menu-item
+                          (click)="addComponentToColumn(column, 'video')"
+                        >
                           <mat-icon>ondemand_video</mat-icon>
                           <span>Video</span>
                         </button>
-                        <button mat-menu-item>
+                        <button
+                          mat-menu-item
+                          (click)="addComponentToColumn(column, 'carousel')"
+                        >
                           <mat-icon>view_carousel</mat-icon>
                           <span>Carousel</span>
                         </button>
-                        <button mat-menu-item>
+                        <button
+                          mat-menu-item
+                          (click)="addComponentToColumn(column, 'map')"
+                        >
                           <mat-icon>map</mat-icon>
-                          <span>Geo Location</span>
+                          <span>Map</span>
                         </button>
-                        <button mat-menu-item>
+                        <button
+                          mat-menu-item
+                          (click)="addComponentToColumn(column, 'galery')"
+                        >
                           <mat-icon>view_module</mat-icon>
                           <span>Galery</span>
                         </button>
-                        <button mat-menu-item>
+                        <button
+                          mat-menu-item
+                          (click)="addComponentToColumn(column, 'form')"
+                        >
                           <mat-icon>email</mat-icon>
                           <span>Form</span>
                         </button>

@@ -29,6 +29,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import {
+  Column,
+  ComponentInstance,
+  ComponentType,
   Row,
   Section,
 } from 'libs/cmsmodules/src/modules/homepage/declarations/component.declaration';
@@ -207,10 +210,33 @@ export class CmsHomepageEditorComponent implements OnInit {
   ngOnInit(): void {
     this.fields.set(this.schemaDefinition.fields);
     this.initFormFromValues(this.values ?? {});
-    console.log();
   }
 
   hasUnsavedChanges(): boolean {
     return !deepEqual(this.getValuesFromFormGroup(), this.values);
+  }
+
+  addComponentToColumn(column: Column, type: ComponentType) {
+    const component: ComponentInstance = {
+      id: generateCSSid(),
+      type,
+      value: null,
+      settings: {},
+      localizable:
+        this.fields().find(f => f.type === 'content').localizable ?? false,
+    };
+
+    this.dialogService
+      .openHomepageEditorComponentDialog({
+        component,
+        languages: this.project.settings.languages,
+      })
+      .afterClosed()
+      .subscribe(data => {
+        if (data.action === 'confirm') {
+          column.components.push(data.component);
+        }
+        console.log(data);
+      });
   }
 }

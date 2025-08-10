@@ -1,8 +1,11 @@
 import { ColumnLayout, StyleProperties } from './styling.declaration';
 
 export interface ComponentInstance {
-  type: string;
+  id: string;
+  type: ComponentType;
   settings: Record<string, any>;
+  value: any;
+  localizable?: boolean;
 }
 
 export interface Column {
@@ -27,3 +30,13 @@ export interface Section {
 export interface HomepageContent {
   sections: Section[];
 }
+
+export type ComponentType =
+  | 'text'
+  | 'image'
+  | 'video'
+  | 'button'
+  | 'form'
+  | 'carousel'
+  | 'galery'
+  | 'map';

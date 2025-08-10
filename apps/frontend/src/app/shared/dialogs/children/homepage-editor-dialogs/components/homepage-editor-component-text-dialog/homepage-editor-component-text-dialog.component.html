@@ -1,0 +1,35 @@
+<app-dialog
+  [buttonOptions]="{
+    confirm: {
+      label: 'Bestätigen',
+      color: 'primary',
+    },
+    decline: {
+      label: 'Cancel',
+      color: 'secondary',
+    },
+  }"
+  title="Edit Text Component"
+  (action)="close($event)"
+>
+  <mat-tab-group>
+    <mat-tab label="General">
+      <div class="tab-container">
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Component ID</mat-label>
+          <input matInput [formControl]="form.get('id')" />
+        </mat-form-field>
+        @if (localizable) {
+          @for (lang of languages; track lang) {
+            <label>Content ({{ lang }})</label>
+            <lib-cms-richtext-editor [control]="getControlInGroup(lang)" />
+          }
+        } @else {
+          <label>Content</label>
+          <lib-cms-richtext-editor [control]="getControl()" />
+        }
+      </div>
+    </mat-tab>
+    <mat-tab label="Styling"> <div class="tab-container"></div> </mat-tab>
+  </mat-tab-group>
+</app-dialog>
