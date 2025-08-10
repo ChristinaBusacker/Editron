@@ -1,4 +1,5 @@
-import { Component, Input, OnInit, Signal, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, Input, OnInit, signal } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -6,15 +7,14 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { CmsFormFieldComponent } from '../cms-form-field/cms-form-field.component';
+import { deepEqual } from '@frontend/core/utils/deep-equal.util';
+import { Project } from '@frontend/shared/services/api/models/project.model';
 import {
   ContentSchemaDefinition,
   FieldDefinition,
 } from '@shared/declarations/interfaces/content/content-schema-definition';
-import { Project } from '@frontend/shared/services/api/models/project.model';
-import { CanComponentDeactivate } from '@frontend/core/guards/unsaved-changes.guard';
-import { deepEqual } from '@frontend/core/utils/deep-equal.util';
+import { CmsFormFieldComponent } from '../cms-form-field/cms-form-field.component';
+import { buildValidatorsFromFieldDefinition } from '@frontend/core/utils/build-validators-from-field-definition.util';
 
 @Component({
   selector: 'lib-cms-form',
@@ -42,7 +42,7 @@ export class CmsFormComponent implements OnInit {
     const languages = this.project.settings.languages;
 
     for (const field of this.fields()) {
-      const validators = this.buildValidators(field);
+      const validators = buildValidatorsFromFieldDefinition(field);
       const defaultValue =
         field.default ?? (field.type === 'boolean' ? false : null);
 
@@ -82,30 +82,7 @@ export class CmsFormComponent implements OnInit {
     return result;
   }
 
-  private buildValidators(field: FieldDefinition) {
-    const v = field.validation ?? {};
-    const validators = [];
-
-    if (v.required) validators.push(Validators.required);
-    if (typeof v.minLength === 'number')
-      validators.push(Validators.minLength(v.minLength));
-    if (typeof v.maxLength === 'number')
-      validators.push(Validators.maxLength(v.maxLength));
-    if (typeof v.min === 'number') validators.push(Validators.min(v.min));
-    if (typeof v.max === 'number') validators.push(Validators.max(v.max));
-    if (v.pattern) validators.push(Validators.pattern(v.pattern));
-
-    if (field.type === 'slug') {
-      validators.push(Validators.pattern(/^[a-z0-9]+(?:-[a-z0-9]+)*$/));
-    }
-
-    return validators;
-  }
-
   hasUnsavedChanges(): boolean {
-    if (this.form.dirty) {
-      return !deepEqual(this.getValuesFromFormGroup(), this.values);
-    }
-    return false;
+    return !deepEqual(this.getValuesFromFormGroup(), this.values);
   }
 }

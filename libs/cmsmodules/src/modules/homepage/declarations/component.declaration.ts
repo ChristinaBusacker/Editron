@@ -1,4 +1,4 @@
-import { StyleProperties } from './styling.declaration';
+import { ColumnLayout, StyleProperties } from './styling.declaration';
 
 export interface ComponentInstance {
   type: string;
@@ -6,19 +6,22 @@ export interface ComponentInstance {
 }
 
 export interface Column {
-  width: number;
-  style?: StyleProperties;
+  style: StyleProperties;
   components: ComponentInstance[];
+  id: string;
 }
 
 export interface Row {
-  style?: StyleProperties;
+  style: StyleProperties;
   columns: Column[];
+  layout: ColumnLayout;
+  id: string;
 }
 
 export interface Section {
-  style?: StyleProperties;
+  style: StyleProperties;
   rows: Row[];
+  id: string;
 }
 
 export interface HomepageContent {

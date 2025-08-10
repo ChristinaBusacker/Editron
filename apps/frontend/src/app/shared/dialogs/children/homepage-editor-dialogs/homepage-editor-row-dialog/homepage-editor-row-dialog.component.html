@@ -1,0 +1,54 @@
+<app-dialog
+  [buttonOptions]="{
+    confirm: {
+      label: 'Bestätigen',
+      color: 'primary',
+    },
+    decline: {
+      label: 'Cancel',
+      color: 'secondary',
+    },
+  }"
+  title="Edit Row"
+  (action)="close($event)"
+>
+  <mat-tab-group>
+    <mat-tab label="General">
+      <div class="tab-container">
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Section ID</mat-label>
+          <input matInput [formControl]="form.get('id')" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Layout</mat-label>
+          <mat-select [formControl]="form.get('layout')">
+            @for (option of layoutOptions; track option) {
+              <mat-option [value]="option">
+                <div
+                  style="display: grid; width: 100%; min-width: 275px; gap: 5px"
+                  [style.gridTemplateColumns]="option.cssGrid"
+                >
+                  @for (
+                    col of getIterableforColumnLayout(option);
+                    track $index
+                  ) {
+                    <div
+                      style="
+                        color: white;
+                        background-color: #444444;
+                        padding: 5px;
+                      "
+                    >
+                      {{ col }}
+                    </div>
+                  }
+                </div>
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </mat-tab>
+    <mat-tab label="Styling"> <div class="tab-container"></div> </mat-tab>
+  </mat-tab-group>
+</app-dialog>

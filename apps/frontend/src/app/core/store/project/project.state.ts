@@ -5,27 +5,39 @@ import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { of, switchMap } from 'rxjs';
 import {
   CreateProject,
+  FetchBinEntries,
   FetchProjectList,
   UpdateProject,
 } from './project.actions';
+import { ContentApiService } from '@frontend/shared/services/api/content-api.service';
 
 export interface ProjectStateModel {
   projects: Array<Project>;
+  binEntries: { [key: string]: any[] };
 }
 
 @State<ProjectStateModel>({
   name: 'project',
   defaults: {
     projects: [],
+    binEntries: {},
   },
 })
 @Injectable()
 export class ProjectState {
-  constructor(private api: ProjectApiService) {}
+  constructor(
+    private api: ProjectApiService,
+    private contentApi: ContentApiService,
+  ) {}
 
   @Selector()
   static list(state: ProjectStateModel): Array<Project> {
     return state?.projects || [];
+  }
+
+  @Selector()
+  static binEntries(state: ProjectStateModel): { [key: string]: any[] } {
+    return state?.binEntries || {};
   }
 
   @Action(CreateProject)
@@ -66,6 +78,28 @@ export class ProjectState {
         });
 
         return of(projects);
+      }),
+    );
+  }
+
+  @Action(FetchBinEntries)
+  fetchBinEntries(
+    ctx: StateContext<ProjectStateModel>,
+    action: FetchBinEntries,
+  ) {
+    return this.contentApi.getEntriesInBin(action.projectId).pipe(
+      switchMap(entries => {
+        const state = ctx.getState();
+
+        const binEntries = state.binEntries;
+        binEntries[action.projectId] = entries;
+
+        ctx.patchState({
+          ...state,
+          binEntries,
+        });
+
+        return of(binEntries);
       }),
     );
   }

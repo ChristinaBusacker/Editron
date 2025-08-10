@@ -22,6 +22,7 @@ export class ContentEntryService {
   async getEntriesForSchema(
     projectId: string,
     schemaSlug: string,
+    inBin = false,
   ): Promise<
     {
       entryId: string;
@@ -42,6 +43,7 @@ export class ContentEntryService {
       where: {
         project: { id: projectId },
         schema: { id: schema.id },
+        inBin,
       },
       order: { id: 'ASC' },
     });
@@ -160,6 +162,66 @@ export class ContentEntryService {
       dto,
       user,
     );
+  }
+
+  async getEntriesInBIn(projectId) {
+    const entries = await this.db.contentEntryRepository.find({
+      where: {
+        project: { id: projectId },
+        inBin: true,
+      },
+      order: { id: 'ASC' },
+    });
+
+    const result = [];
+
+    for (const entry of entries) {
+      const version = await this.db.contentVersionRepository.findOne({
+        where: { entry: { id: entry.id } },
+        order: { createdAt: 'DESC' },
+        relations: ['createdBy'],
+      });
+
+      if (!version) continue;
+
+      const value = await this.db.contentValueRepository.findOne({
+        where: { version: { id: version.id } },
+      });
+
+      result.push({
+        id: entry.id,
+        versionId: version.id,
+        versionNumber: version.version,
+        updatedAt: version.createdAt,
+        updatedBy: version.createdBy,
+        isPublished: version.isPublished,
+        content: value?.value ?? {},
+      });
+    }
+
+    return result;
+  }
+
+  async softDeleteEntry(entryId: string) {
+    const entry = await this.db.contentEntryRepository.findOne({
+      where: { id: entryId },
+    });
+    if (!entry) throw new NotFoundException('Entry not found');
+
+    entry.inBin = true;
+
+    await this.db.contentEntryRepository.save(entry);
+  }
+
+  async revokeFromBin(entryId: string) {
+    const entry = await this.db.contentEntryRepository.findOne({
+      where: { id: entryId },
+    });
+    if (!entry) throw new NotFoundException('Entry not found');
+
+    entry.inBin = false;
+
+    await this.db.contentEntryRepository.save(entry);
   }
 
   // Update entry by creating a new version and validating values

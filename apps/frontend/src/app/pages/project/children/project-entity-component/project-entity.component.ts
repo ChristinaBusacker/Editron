@@ -85,7 +85,7 @@ export class ProjectEntityComponent implements OnInit {
       .afterClosed()
       .subscribe(response => {
         if (response.action === 'confirm') {
-          this.contentApi.deleteEntry(entryId).subscribe(data => {
+          this.contentApi.softDeleteEntry(entryId).subscribe(data => {
             setTimeout(() => {
               this.store.dispatch(
                 new FetchModuleEntries(this.projectId, this.moduleSlug),

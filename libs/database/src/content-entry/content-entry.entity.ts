@@ -16,6 +16,9 @@ export class ContentEntryEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Column({ default: false })
+  inBin: boolean;
+
   @ManyToOne(() => ContentSchemaEntity, { nullable: false })
   schema: ContentSchemaEntity;
 

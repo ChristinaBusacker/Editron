@@ -1,32 +1,30 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, signal, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CmsFormComponent } from '@cmsrenderer/cms-editor-renderer/cms-form/cms-form.component';
+import { CmsHomepageEditorComponent } from '@cmsrenderer/cms-editor-renderer/cms-homepage-editor/cms-homepage-editor.component';
+import { CopyToClipboardDirective } from '@frontend/core/directives/copy-to-clipboard.directive';
+import { FormatDateDirective } from '@frontend/core/directives/format-date.directive';
+import { UserBadgeDirective } from '@frontend/core/directives/user-badge.directive';
+import { CanComponentDeactivate } from '@frontend/core/guards/unsaved-changes.guard';
 import { CmsModuleState } from '@frontend/core/store/cmsModules/cmsModules.state';
 import { NavigationState } from '@frontend/core/store/navigation/navigation.state';
+import { ContentApiService } from '@frontend/shared/services/api/content-api.service';
+import { EntryDetails } from '@frontend/shared/services/api/models/content.model';
+import { Project } from '@frontend/shared/services/api/models/project.model';
 import { Store } from '@ngxs/store';
 import { ContentSchemaDefinition } from '@shared/declarations/interfaces/content/content-schema-definition';
-import { CmsModule } from 'libs/cmsmodules/src/modules/cms-module';
-import { combineLatest, map, switchMap } from 'rxjs';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { ContentApiService } from '@frontend/shared/services/api/content-api.service';
-import { CreateEntry } from '@frontend/core/store/content/content.actions';
-import { Project } from '@frontend/shared/services/api/models/project.model';
 import {
   LanguageDefinition,
   LANGUAGES,
 } from '@shared/declarations/interfaces/project/project-settings';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { EntryDetails } from '@frontend/shared/services/api/models/content.model';
-import { CopyToClipboardDirective } from '@frontend/core/directives/copy-to-clipboard.directive';
-import { UserBadgeDirective } from '@frontend/core/directives/user-badge.directive';
-import { FormatDateDirective } from '@frontend/core/directives/format-date.directive';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { CanComponentDeactivate } from '@frontend/core/guards/unsaved-changes.guard';
-import { deepEqual } from '@frontend/core/utils/deep-equal.util';
+import { CmsModule } from 'libs/cmsmodules/src/modules/cms-module';
+import { combineLatest, map, switchMap } from 'rxjs';
 @Component({
   selector: 'app-entry-editor',
   imports: [
@@ -40,6 +38,7 @@ import { deepEqual } from '@frontend/core/utils/deep-equal.util';
     MatIconModule,
     MatTooltipModule,
     RouterModule,
+    CmsHomepageEditorComponent,
   ],
   templateUrl: './entry-editor.component.html',
   styleUrl: './entry-editor.component.scss',

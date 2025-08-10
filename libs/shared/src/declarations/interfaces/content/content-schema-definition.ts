@@ -15,8 +15,8 @@ export type FieldType =
   | 'select' // Fixed value list (dropdown)
   | 'tags' // Free multi-select (array of strings)
   | 'json' // Arbitrary structured data
-  | 'geolocation'; // Object with latitude/longitude
-
+  | 'geolocation' // Object with latitude/longitude
+  | 'content'; // Website Content
 export interface FieldValidation {
   required?: boolean;
   minLength?: number;

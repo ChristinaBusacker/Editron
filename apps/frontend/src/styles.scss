@@ -72,3 +72,12 @@ app-root {
   display: flex;
 }
 
+.mat-icon-24 {
+  font-size: 50px;
+}
+
+.component-selection .mat-mdc-menu-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+

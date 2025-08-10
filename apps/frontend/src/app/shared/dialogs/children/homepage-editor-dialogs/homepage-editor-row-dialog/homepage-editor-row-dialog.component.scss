@@ -1,0 +1,8 @@
+:host {
+  .options-grid-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 100%;
+    min-width: 256px;
+  }
+}

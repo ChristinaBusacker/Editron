@@ -54,6 +54,21 @@ export class ContentEntryController {
     return this.contentEntryService.getEntriesForSchema(projectId, schemaSlug);
   }
 
+  @Get('projects/:projectId/bin')
+  @ApiOperation({
+    summary: 'Get all entries of a specific project in the bin',
+  })
+  @ApiParam({ name: 'projectId', type: String })
+  @ApiParam({ name: 'schemaSlug', type: String })
+  @ApiResponse({ status: 200, description: 'List of entries returned' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  getEntriesInBin(
+    @Param('projectId') projectId: string,
+    @Param('schemaSlug') schemaSlug: string,
+  ) {
+    return this.contentEntryService.getEntriesInBIn(projectId);
+  }
+
   @Post('projects/:projectId/schemas/:schemaSlug/entries')
   @ApiOperation({
     summary: 'Create a new entry in a specific project and schema',
@@ -119,6 +134,32 @@ export class ContentEntryController {
     @CurrentUser() user: UserEntity,
   ) {
     return this.contentEntryService.updateEntry(entryId, dto, user);
+  }
+
+  @Get('entries/:entryId/bin')
+  @ApiOperation({ summary: 'Moves entry into bin' })
+  @ApiParam({ name: 'entryId', type: String })
+  @ApiResponse({
+    status: 200,
+    description: 'Entry moved into bin',
+  })
+  @ApiResponse({ status: 400, description: 'Validation failed' })
+  @ApiResponse({ status: 404, description: 'Entry not found' })
+  softDeleteEntry(@Param('entryId') entryId: string) {
+    return this.contentEntryService.softDeleteEntry(entryId);
+  }
+
+  @Get('entries/:entryId/revoke')
+  @ApiOperation({ summary: 'Moves entry out of bin' })
+  @ApiParam({ name: 'entryId', type: String })
+  @ApiResponse({
+    status: 200,
+    description: 'Entry moved out of bin',
+  })
+  @ApiResponse({ status: 400, description: 'Validation failed' })
+  @ApiResponse({ status: 404, description: 'Entry not found' })
+  revokeEntry(@Param('entryId') entryId: string) {
+    return this.contentEntryService.revokeFromBin(entryId);
   }
 
   @Post('entries/:entryId/duplicate')

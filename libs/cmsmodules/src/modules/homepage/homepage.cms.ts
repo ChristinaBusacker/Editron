@@ -8,20 +8,20 @@ export const HomepageCMSModule: CmsModule = {
   schema: {
     fields: [
       {
-        name: 'slug',
-        type: 'slug',
-        localizable: false,
-        validation: { required: true },
-      },
-      {
         name: 'title',
         type: 'singleline',
         localizable: true,
         validation: { required: true },
       },
       {
+        name: 'slug',
+        type: 'slug',
+        localizable: false,
+        validation: { required: true },
+      },
+      {
         name: 'content',
-        type: 'json',
+        type: 'content',
         localizable: true,
         validation: { required: true },
       },

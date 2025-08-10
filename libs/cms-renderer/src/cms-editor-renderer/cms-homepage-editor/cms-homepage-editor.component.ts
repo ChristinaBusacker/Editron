@@ -1,0 +1,216 @@
+import { CommonModule } from '@angular/common';
+import {
+  Component,
+  Input,
+  OnInit,
+  signal,
+  ViewEncapsulation,
+} from '@angular/core';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { buildValidatorsFromFieldDefinition } from '@frontend/core/utils/build-validators-from-field-definition.util';
+import { deepEqual } from '@frontend/core/utils/deep-equal.util';
+import { Project } from '@frontend/shared/services/api/models/project.model';
+import {
+  ContentSchemaDefinition,
+  FieldDefinition,
+} from '@shared/declarations/interfaces/content/content-schema-definition';
+import { CmsFormFieldComponent } from '../cms-form-field/cms-form-field.component';
+import { Store } from '@ngxs/store';
+import { CmsModuleState } from '@frontend/core/store/cmsModules/cmsModules.state';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import {
+  Row,
+  Section,
+} from 'libs/cmsmodules/src/modules/homepage/declarations/component.declaration';
+import { generateCSSid } from '@frontend/core/utils/generate-css-id.util';
+import { DialogService } from '@frontend/shared/dialogs/dialog.service';
+import { COLUMN_LAYOUTS } from 'libs/cmsmodules/src/modules/homepage/declarations/columnLayouts.constant';
+import { map } from 'rxjs';
+import { MatMenuModule } from '@angular/material/menu';
+
+@Component({
+  selector: 'lib-cms-homepage-editor',
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    CmsFormFieldComponent,
+    MatButtonModule,
+    MatIconModule,
+    MatTooltipModule,
+    MatMenuModule,
+  ],
+  templateUrl: './cms-homepage-editor.component.html',
+  styleUrl: './cms-homepage-editor.component.scss',
+})
+export class CmsHomepageEditorComponent implements OnInit {
+  @Input({ required: true }) schemaDefinition!: ContentSchemaDefinition;
+  @Input({ required: true }) project!: Project;
+  @Input() values?: { [key: string]: any };
+  @Input() form: FormGroup = this.fb.group({ content: new FormControl() });
+
+  schemas = this.store.select(CmsModuleState.schemas);
+
+  fields = signal<FieldDefinition[]>([]);
+
+  sections: Section[] = [];
+
+  constructor(
+    private fb: FormBuilder,
+    private store: Store,
+    private dialogService: DialogService,
+  ) {}
+
+  addSection() {
+    const section: Section = { rows: [], id: generateCSSid(), style: {} };
+
+    this.dialogService
+      .openHomepageEditorSectionDialog(section)
+      .afterClosed()
+      .subscribe(data => {
+        if (data.action === 'confirm') {
+          this.sections.push(section);
+          this.updateFormControl();
+        }
+      });
+  }
+
+  addRow(section: Section) {
+    const newRow: Row = {
+      columns: [],
+      id: generateCSSid(),
+      style: {},
+      layout: COLUMN_LAYOUTS[0],
+    };
+
+    this.dialogService
+      .openHomepageEditorRowDialog(newRow)
+      .afterClosed()
+      .subscribe(data => {
+        if (data.action === 'confirm') {
+          this.sections
+            .find(s => s.id === section.id)
+            ?.rows.push(data.row as Row);
+          this.updateFormControl();
+        }
+      });
+  }
+
+  editRow(section: Section, affactedRow: Row) {
+    this.editRowDialog(affactedRow).subscribe(row => {
+      const length = section.rows.length;
+      const idx = section.rows.findIndex(r => r.id === affactedRow.id);
+      let updatedRows = [];
+      for (let i = 0; i < length; i++) {
+        if (i === idx) {
+          updatedRows[i] = row;
+        } else {
+          updatedRows[i] = section.rows[i];
+        }
+      }
+
+      const existingSection = this.sections.find(s => s.id === section.id);
+      if (existingSection) {
+        existingSection.rows = updatedRows;
+      }
+      this.updateFormControl();
+    });
+  }
+
+  editRowDialog(row: Row) {
+    return this.dialogService
+      .openHomepageEditorRowDialog(row)
+      .afterClosed()
+      .pipe(
+        map(data => {
+          if (data.action === 'confirm') {
+            return data.row as Row;
+          }
+          return row;
+        }),
+      );
+  }
+
+  initFormFromValues(values: Record<string, any>): void {
+    const languages = this.project.settings.languages;
+    for (const field of this.schemaDefinition.fields) {
+      const validators = buildValidatorsFromFieldDefinition(field);
+      const defaultValue =
+        field.default ?? (field.type === 'boolean' ? false : null);
+
+      if (field.type === 'content') {
+        const value = this.values[field.name];
+        this.form.addControl(field.name, new FormControl(value || []));
+        this.sections = value;
+      } else if (field.localizable) {
+        const langGroup = this.fb.group({});
+        for (const lang of languages) {
+          const value = values?.[field.name]?.[lang] ?? defaultValue;
+          langGroup.addControl(lang, new FormControl(value, validators));
+        }
+        this.form.addControl(field.name, langGroup);
+      } else {
+        const value = values?.[field.name] ?? defaultValue;
+        this.form.addControl(field.name, new FormControl(value, validators));
+      }
+    }
+  }
+
+  updateFormControl() {
+    this.form.get('content').patchValue(this.sections);
+  }
+
+  getValuesFromFormGroup(): Record<string, any> {
+    const result: Record<string, any> = {};
+    const languages = this.project.settings.languages;
+
+    for (const field of this.schemaDefinition.fields) {
+      const control = this.form.get(field.name);
+      if (!control) continue;
+
+      if (field.localizable) {
+        const langGroup = control as FormGroup;
+        result[field.name] = {};
+        for (const lang of languages) {
+          result[field.name][lang] = langGroup.get(lang)?.value;
+        }
+      } else {
+        result[field.name] = control.value;
+      }
+    }
+
+    return result;
+  }
+
+  deleteRow(row: Row, section: Section) {
+    const sec = this.sections.find(s => s.id === section.id);
+    sec.rows = sec.rows.filter(r => r.id !== row.id);
+    this.updateFormControl();
+  }
+
+  deleteSection(section: Section) {
+    this.sections = this.sections.filter(s => s.id !== section.id);
+    this.updateFormControl();
+  }
+
+  ngOnInit(): void {
+    this.fields.set(this.schemaDefinition.fields);
+    this.initFormFromValues(this.values ?? {});
+    console.log();
+  }
+
+  hasUnsavedChanges(): boolean {
+    return !deepEqual(this.getValuesFromFormGroup(), this.values);
+  }
+}

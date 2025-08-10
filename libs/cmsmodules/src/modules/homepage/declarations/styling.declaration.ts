@@ -36,6 +36,12 @@ export interface MiscStyle {
   opacity?: number;
 }
 
+export interface ColumnLayout {
+  label: string;
+  cssGrid: string;
+  columns: number;
+}
+
 export type StylePropertiesKeys = keyof StyleProperties;
 export type BackgroundStyleKeys = keyof BackgroundStyle;
 export type BorderStyleKeys = keyof BorderStyle;

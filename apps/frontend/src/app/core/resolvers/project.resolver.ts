@@ -6,6 +6,7 @@ import { Store } from '@ngxs/store';
 import { map } from 'rxjs';
 import { SetCurrentProject } from '../store/navigation/navigation.actions';
 import { NavigationState } from '../store/navigation/navigation.state';
+import { FetchBinEntries } from '../store/project/project.actions';
 
 export const projectResolver: ResolveFn<Project> = (route, state) => {
   const projectApi = inject(ProjectApiService);
@@ -21,6 +22,7 @@ export const projectResolver: ResolveFn<Project> = (route, state) => {
   return projectApi.get(projectId).pipe(
     map(project => {
       store.dispatch(new SetCurrentProject(project));
+      store.dispatch(new FetchBinEntries(projectId));
       return project;
     }),
   );

@@ -1,0 +1,124 @@
+@for (field of fields(); track field) {
+  @if (field.type === 'content') {
+    <div class="editor">
+      @for (section of sections; track section.id) {
+        <div class="section">
+          <div class="control">
+            <span class="id">#{{ section.id }}</span>
+            <div class="toolbar">
+              <mat-icon>open_with</mat-icon>
+              <mat-icon>settings</mat-icon>
+              <mat-icon (click)="deleteSection(section)"
+                >delete_forever</mat-icon
+              >
+            </div>
+          </div>
+
+          @if (section.rows.length > 0) {
+            @for (row of section.rows; track row.id) {
+              <div class="row">
+                <div class="control">
+                  <span class="id">#{{ row.id }}</span>
+                  <div class="toolbar">
+                    <mat-icon>open_with</mat-icon>
+                    <mat-icon (click)="editRow(section, row)"
+                      >settings</mat-icon
+                    >
+                    <mat-icon (click)="deleteRow(row, section)"
+                      >delete_forever</mat-icon
+                    >
+                  </div>
+                </div>
+                <div
+                  class="content"
+                  [style.gridTemplateColumns]="row.layout.cssGrid"
+                >
+                  @for (column of row.columns; track column.id) {
+                    <div class="column">
+                      <button
+                        mat-mini-fab
+                        matTooltip="Add a Component"
+                        style="
+                          background-color: grey;
+                          color: white;
+                          transform: scale(0.7);
+                        "
+                        [matMenuTriggerFor]="selectComponent"
+                      >
+                        <mat-icon>add</mat-icon>
+                      </button>
+                      <mat-menu
+                        #selectComponent="matMenu"
+                        class="component-selection"
+                      >
+                        <button mat-menu-item>
+                          <mat-icon>text_fields</mat-icon>
+                          <span>Text</span>
+                        </button>
+                        <button mat-menu-item>
+                          <mat-icon>crop_7_5</mat-icon>
+                          <span>Button</span>
+                        </button>
+                        <button mat-menu-item>
+                          <mat-icon>crop_original</mat-icon>
+                          <span>Image</span>
+                        </button>
+                        <button mat-menu-item>
+                          <mat-icon>ondemand_video</mat-icon>
+                          <span>Video</span>
+                        </button>
+                        <button mat-menu-item>
+                          <mat-icon>view_carousel</mat-icon>
+                          <span>Carousel</span>
+                        </button>
+                        <button mat-menu-item>
+                          <mat-icon>map</mat-icon>
+                          <span>Geo Location</span>
+                        </button>
+                        <button mat-menu-item>
+                          <mat-icon>view_module</mat-icon>
+                          <span>Galery</span>
+                        </button>
+                        <button mat-menu-item>
+                          <mat-icon>email</mat-icon>
+                          <span>Form</span>
+                        </button>
+                      </mat-menu>
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+          }
+          <button
+            mat-mini-fab
+            matTooltip="Add a Row"
+            (click)="addRow(section)"
+            style="
+              background-color: DarkTurquoise;
+              color: white;
+              transform: scale(0.7);
+            "
+          >
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+      }
+      <button
+        mat-mini-fab
+        matTooltip="Add a Section"
+        (click)="addSection()"
+        style="background-color: purple; color: white; transform: scale(0.7)"
+      >
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+  } @else {
+    <lib-cms-form-field
+      [field]="field"
+      [form]="form"
+      [languages]="project.settings.languages"
+      [project]="project"
+    />
+  }
+}

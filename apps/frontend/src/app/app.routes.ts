@@ -4,7 +4,7 @@ import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { ProjectOverviewComponent } from './pages/project-overview/project-overview.component';
 import { cmsModulesResolver } from './core/resolvers/cmsmodules.resolver';
 import { projectListResolver } from './core/resolvers/project-list.resolver';
-import { projectResolver } from './core/resolvers/projectresolver';
+
 import { ProjectDetailsComponent } from './pages/project/children/project-details/project-details.component';
 import { ProjectEntityComponent } from './pages/project/children/project-entity-component/project-entity.component';
 import { ProjectComponent } from './pages/project/project.component';
@@ -19,6 +19,9 @@ import { userManagementResolver } from './core/resolvers/usermanagement.resolver
 import { InvitationComponent } from './pages/invitation/invitation.component';
 import { UserSettingsComponent } from './pages/user-settings/user-settings.component';
 import { unsavedChangesGuard } from './core/guards/unsaved-changes.guard';
+import { binResolver } from './core/resolvers/bin.resolver';
+import { projectResolver } from './core/resolvers/project.resolver';
+import { ProjectBinComponent } from './pages/project/children/project-bin/project-bin.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginPageComponent },
@@ -45,7 +48,11 @@ export const routes: Routes = [
     path: ':projectId',
     component: ProjectComponent,
     canActivate: [authGuard],
-    resolve: { data: projectResolver, modules: cmsModulesResolver },
+    resolve: {
+      data: projectResolver,
+      modules: cmsModulesResolver,
+      bin: binResolver,
+    },
     children: [
       {
         path: 'details',
@@ -54,6 +61,10 @@ export const routes: Routes = [
       {
         path: 'settings',
         component: ProjectSettingsComponent,
+      },
+      {
+        path: 'bin',
+        component: ProjectBinComponent,
       },
       {
         path: ':moduleSlug/entries',

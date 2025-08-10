@@ -20,3 +20,8 @@ export class FetchProjectList {
   static readonly type = '[Project] Fetch list';
   constructor() {}
 }
+
+export class FetchBinEntries {
+  static readonly type = '[Project] Fetch bin entries';
+  constructor(public projectId: string) {}
+}

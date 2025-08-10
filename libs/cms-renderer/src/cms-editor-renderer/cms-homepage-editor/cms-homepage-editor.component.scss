@@ -1,0 +1,96 @@
+:host {
+  & .editor {
+    min-height: 300px;
+    border: 1px solid black;
+    border-collapse: collapse;
+
+    & .section {
+      min-height: 50px;
+      border: 2px solid transparent;
+      border-collapse: collapse;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding: 20px 0;
+
+      & .control {
+        background-color: purple;
+      }
+
+      &:hover {
+        border: 2px solid purple;
+
+        & .control {
+          display: flex !important;
+          z-index: 1;
+        }
+      }
+    }
+
+    & .row {
+      min-height: 60px;
+      border: 2px solid transparent;
+      border-collapse: collapse;
+      align-items: flex-end;
+      justify-content: center;
+      min-width: 100px;
+      width: 100%;
+      position: relative;
+      padding: 20px 0;
+      display: flex;
+
+      & .control {
+        background-color: darkturquoise;
+      }
+
+      & .content {
+        display: grid;
+        gap: 5px;
+        width: 100%;
+
+        & .column {
+          background-color: #efefef;
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-direction: column;
+        }
+      }
+
+      &:hover {
+        border: 2px solid darkturquoise;
+        & .control {
+          display: flex !important;
+
+          z-index: 2;
+        }
+      }
+    }
+
+    & .control {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      display: none !important;
+      color: white;
+      padding: 0px 10px;
+      justify-content: space-between;
+      width: calc(100% + 4px);
+      transform: translate(-50%);
+      font-size: 0.7rem;
+
+      & .toolbar {
+        display: flex;
+        gap: 6px;
+
+        & mat-icon {
+          font-size: 20px !important;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}

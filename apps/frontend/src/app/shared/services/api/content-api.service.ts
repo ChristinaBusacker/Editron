@@ -38,6 +38,10 @@ export class ContentApiService {
     );
   }
 
+  getEntriesInBin(projectId: string): Observable<any[]> {
+    return this.request.get<any[]>(`${this.baseUrl}/projects/${projectId}/bin`);
+  }
+
   createEntry(
     projectId: string,
     schemaSlug: string,
@@ -66,6 +70,14 @@ export class ContentApiService {
 
   deleteEntry(entryId: string): Observable<any> {
     return this.request.delete(`${this.baseUrl}/entries/${entryId}`);
+  }
+
+  softDeleteEntry(entryId: string) {
+    return this.request.get(`${this.baseUrl}/entries/${entryId}/bin`);
+  }
+
+  revokeEntry(entryId: string) {
+    return this.request.get(`${this.baseUrl}/entries/${entryId}/revoke`);
   }
 
   // -------------------------------

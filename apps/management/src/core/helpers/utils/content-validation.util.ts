@@ -163,6 +163,8 @@ function validateSingleField(
 
     case 'asset':
       break;
+    case 'content':
+      break;
     case 'relation':
       if (field.relation?.multiple) {
         if (
