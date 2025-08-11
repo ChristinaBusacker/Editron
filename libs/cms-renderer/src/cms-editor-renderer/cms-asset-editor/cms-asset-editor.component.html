@@ -1,8 +1,22 @@
-@if (this.control.value) {
-  <div class="preview">
-    <img [src]="generateThumbnailIdAssetUrl(this.control.value)" />
-  </div>
-}
+<div class="preview">
+  @if (this.control.value) {
+    @if (multiSelect) {
+      @for (value of this.control.value; track $index) {
+        <div class="tile">
+          <mat-icon (click)="removeImage(value)">delete_forever</mat-icon>
+          <img [src]="generateThumbnailIdAssetUrl(value)" [title]="value" />
+        </div>
+      }
+    } @else {
+      <div class="tile">
+        <img
+          [src]="generateThumbnailIdAssetUrl(this.control.value)"
+          [title]="this.control.value"
+        />
+      </div>
+    }
+  }
+</div>
 
 <button mat-flat-button color="accent" (click)="openAssetDialog()">
   Select Asset

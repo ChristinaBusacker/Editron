@@ -25,12 +25,14 @@
               <div class="editor">
                 <lib-cms-asset-editor
                   [control]="getControlInGroup('img', lang)"
+                  [multiSelect]="false"
                   [label]="'Image (' + lang + ')'"
                 />
                 <mat-form-field appearance="outline" class="w-full">
                   <mat-label>Alternativ Text</mat-label>
                   <input
                     matInput
+                    [multiSelect]="false"
                     [formControl]="getControlInGroup('alt', lang)"
                   />
                 </mat-form-field>
@@ -38,6 +40,7 @@
                   <mat-label>Title Text</mat-label>
                   <input
                     matInput
+                    [multiSelect]="false"
                     [formControl]="getControlInGroup('title', lang)"
                   />
                 </mat-form-field>

@@ -16,17 +16,32 @@
     <mat-tab label="General">
       <div class="tab-container">
         <mat-form-field appearance="outline" class="w-full">
-          <mat-label>Section ID</mat-label>
+          <mat-label>Component ID</mat-label>
           <input matInput [formControl]="form.get('id')" />
         </mat-form-field>
-        <mat-form-field appearance="outline" class="w-full">
-          <mat-label>Toppings</mat-label>
-          <mat-select [formControl]="form.get('layout')" multiple>
-            @for (option of layoutOptions; track option) {
-              <mat-option [value]="option">{{ option.cssGrid }}</mat-option>
+        <div class="editor">
+          @if (localizable) {
+            @for (lang of languages; track lang) {
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Button Text</mat-label>
+                <input
+                  matInput
+                  [formControl]="getControlInGroup('text', lang)"
+                />
+              </mat-form-field>
             }
-          </mat-select>
-        </mat-form-field>
+          } @else {
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Button Text</mat-label>
+              <input matInput [formControl]="getControl('text')" />
+            </mat-form-field>
+          }
+          <mat-label>Button Color</mat-label>
+          <lib-cms-color-editor
+            label="Button Color"
+            [control]="getControl('color')"
+          />
+        </div>
       </div>
     </mat-tab>
     <mat-tab label="Styling"> <div class="tab-container"></div> </mat-tab>

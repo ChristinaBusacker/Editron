@@ -12,12 +12,15 @@
         'url(' + generateThumbnailIdAssetUrl(asset.id) + ')'
       "
       (click)="selectAsset(asset)"
-      [class.selected]="selectedAsset?.id === asset.id"
+      [class.selected]="isAssetSelected(asset)"
     >
-      <input
-        type="checkbox"
-        [checked]="selectedAsset?.id === asset.id ? 'checked' : null"
-      />
+      @if (multiSelect) {
+        <input type="checkbox" [checked]="isAssetSelected(asset)" />
+      }
+
+      @if (!multiSelect) {
+        <input type="radio" [checked]="isAssetSelected(asset)" />
+      }
     </div>
   }
 

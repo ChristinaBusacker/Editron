@@ -3,6 +3,7 @@ import {
   EventEmitter,
   OnInit,
   Output,
+  Input,
   ViewEncapsulation,
 } from '@angular/core';
 import { DropZoneDirective } from '@frontend/core/directives/drop-zone.directive';
@@ -13,7 +14,6 @@ import {
 } from '@frontend/shared/services/api/models/asset.model';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { concatMap, from, tap } from 'rxjs';
-
 @Component({
   selector: 'app-asset-picker-dialog-selection',
   imports: [DropZoneDirective, MatProgressBarModule],
@@ -26,7 +26,10 @@ export class AssetPickerDialogSelectionComponent implements OnInit {
   isHovering = false;
   isUploading = false;
   uploadingProgress = 0;
-  selectedAsset: Asset;
+  @Input() multiSelect: boolean = false;
+  @Input() lastValue: string | string[];
+  @Input() selectedAssets: Asset[] = [];
+  @Input() selectedAsset: Asset;
 
   @Output() onAssetSelect = new EventEmitter<Asset>();
 
@@ -37,8 +40,13 @@ export class AssetPickerDialogSelectionComponent implements OnInit {
   }
 
   selectAsset(asset: Asset) {
-    this.selectedAsset = asset;
     this.onAssetSelect.emit(asset);
+  }
+
+  isAssetSelected(asset: Asset): boolean {
+    return this.multiSelect
+      ? this.selectedAssets.some(a => a.id === asset.id)
+      : this.selectedAsset?.id === asset.id;
   }
 
   async handleDrop(droppedFiles: File[]) {
@@ -69,6 +77,16 @@ export class AssetPickerDialogSelectionComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.assetService.listAssets().subscribe(assets => {
       this.assets = assets;
+      if (this.multiSelect) {
+        (this.lastValue as string[]).forEach(id => {
+          const asset = assets.find(a => a.id === id);
+          this.selectedAssets.push(asset);
+        });
+      } else {
+        const id = this.lastValue as string;
+        const asset = assets.find(a => a.id === id);
+        this.selectedAsset = asset;
+      }
     });
   }
 }

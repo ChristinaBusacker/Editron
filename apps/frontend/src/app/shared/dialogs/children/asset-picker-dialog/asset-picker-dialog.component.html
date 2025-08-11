@@ -42,6 +42,10 @@
       <div class="content">
         @if (module === 'selection') {
           <app-asset-picker-dialog-selection
+            [multiSelect]="multiSelect"
+            [selectedAssets]="selectedAssets"
+            [selectedAsset]="selectedAsset"
+            [lastValue]="dialogData.value"
             (onAssetSelect)="onAssetSelect($event)"
           />
         }

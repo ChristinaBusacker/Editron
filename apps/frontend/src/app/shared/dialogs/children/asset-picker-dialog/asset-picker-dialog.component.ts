@@ -1,4 +1,5 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DialogComponent } from '../../dialog.component';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -23,27 +24,45 @@ import { Asset } from '@frontend/shared/services/api/models/asset.model';
   templateUrl: './asset-picker-dialog.component.html',
   styleUrl: './asset-picker-dialog.component.scss',
 })
-export class AssetPickerDialogComponent {
+export class AssetPickerDialogComponent implements OnInit {
   dialogRef = inject(MatDialogRef<AssetPickerDialogComponent>);
+  dialogData: { multiSelect: boolean; value: string | string[] } =
+    inject(MAT_DIALOG_DATA);
 
   module: 'selection' | 'upload' | 'url' = 'selection';
 
+  multiSelect: boolean = !!this.dialogData?.multiSelect;
+  selectedAssets: Asset[] = [];
   selectedAsset?: Asset;
+
+  ngOnInit(): void {}
 
   getConfirmButton() {
     if (this.module === 'selection') {
       return {
-        label: 'Select Asset',
+        label: this.multiSelect ? 'Select Assets' : 'Select Asset',
         color: 'primary',
-        disabled: this.selectedAsset === undefined,
+        disabled: this.multiSelect
+          ? this.selectedAssets.length === 0
+          : this.selectedAsset === undefined,
       };
     }
-
     return undefined;
   }
 
   onAssetSelect(asset: Asset) {
-    this.selectedAsset = asset;
+    if (this.multiSelect) {
+      const idx = this.selectedAssets.findIndex(a => a.id === asset.id);
+      if (idx > -1) {
+        this.selectedAssets = this.selectedAssets.filter(
+          a => a.id !== asset.id,
+        );
+      } else {
+        this.selectedAssets = [...this.selectedAssets, asset];
+      }
+    } else {
+      this.selectedAsset = asset;
+    }
   }
 
   onFileUplaod() {
@@ -54,7 +73,9 @@ export class AssetPickerDialogComponent {
     if (action === 'confirm') {
       return this.dialogRef.close({
         action,
-        data: { asset: this.selectedAsset },
+        data: this.multiSelect
+          ? { assets: this.selectedAssets }
+          : { asset: this.selectedAsset },
       });
     }
     this.dialogRef.close({ action, data: {} });

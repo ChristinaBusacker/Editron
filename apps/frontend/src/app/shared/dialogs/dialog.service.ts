@@ -42,12 +42,16 @@ export class DialogService {
     });
   }
 
-  openAssetPickerDialog() {
+  openAssetPickerDialog(data: {
+    multiSelect: boolean;
+    value: string | string[];
+  }) {
     return this.matDialog.open(AssetPickerDialogComponent, {
       maxWidth: '90vw',
       maxHeight: '90vh',
       width: '100%',
       ariaLabelledBy: 'dialog-title',
+      data,
     });
   }
 
