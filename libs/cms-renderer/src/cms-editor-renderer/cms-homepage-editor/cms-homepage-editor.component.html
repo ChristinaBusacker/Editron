@@ -138,6 +138,7 @@
                             <button
                               mat-menu-item
                               (click)="addComponentToColumn(column, 'text')"
+                              matTooltip="Formated Text"
                             >
                               <mat-icon>text_fields</mat-icon>
                               <span>Text</span>
@@ -145,6 +146,7 @@
                             <button
                               mat-menu-item
                               (click)="addComponentToColumn(column, 'button')"
+                              matTooltip="Single Button"
                             >
                               <mat-icon>crop_7_5</mat-icon>
                               <span>Button</span>
@@ -152,6 +154,7 @@
                             <button
                               mat-menu-item
                               (click)="addComponentToColumn(column, 'image')"
+                              matTooltip="Single Image"
                             >
                               <mat-icon>crop_original</mat-icon>
                               <span>Image</span>
@@ -159,6 +162,8 @@
                             <button
                               mat-menu-item
                               (click)="addComponentToColumn(column, 'video')"
+                              matTooltip="Not implemented"
+                              [disabled]="true"
                             >
                               <mat-icon>ondemand_video</mat-icon>
                               <span>Video</span>
@@ -166,6 +171,8 @@
                             <button
                               mat-menu-item
                               (click)="addComponentToColumn(column, 'carousel')"
+                              matTooltip="Not implemented"
+                              [disabled]="true"
                             >
                               <mat-icon>view_carousel</mat-icon>
                               <span>Carousel</span>
@@ -173,6 +180,7 @@
                             <button
                               mat-menu-item
                               (click)="addComponentToColumn(column, 'map')"
+                              matTooltip="A Map with Marker"
                             >
                               <mat-icon>map</mat-icon>
                               <span>Map</span>
@@ -180,6 +188,7 @@
                             <button
                               mat-menu-item
                               (click)="addComponentToColumn(column, 'galery')"
+                              matTooltip="Multiple images"
                             >
                               <mat-icon>view_module</mat-icon>
                               <span>Galery</span>
@@ -187,6 +196,8 @@
                             <button
                               mat-menu-item
                               (click)="addComponentToColumn(column, 'form')"
+                              matTooltip="Not implemented"
+                              [disabled]="true"
                             >
                               <mat-icon>email</mat-icon>
                               <span>Form</span>

@@ -59,26 +59,30 @@ export class HomepageEditorComponentButtonDialogComponent implements OnInit {
     const valueGroup = this.fb.group({});
     if (this.localizable) {
       const langGroup = this.fb.group({});
-      const valueGroup = this.fb.group({});
       for (const lang of this.languages) {
         langGroup.addControl(
           lang,
-          new FormControl(this.data.component.value?.[lang] ?? ''),
+          new FormControl(this.data.component.value?.text[lang] ?? ''),
         );
       }
-      valueGroup.addControl('color', new FormControl());
       valueGroup.addControl('text', langGroup);
-      this.form.addControl('value', valueGroup);
     } else {
       this.form.addControl(
         'value',
-        new FormControl(this.data.component.value ?? ''),
+        new FormControl(this.data.component.value.text ?? ''),
       );
 
-      valueGroup.addControl('color', new FormControl());
       valueGroup.addControl('text', new FormControl());
-      this.form.addControl('value', valueGroup);
     }
+    valueGroup.addControl(
+      'target',
+      new FormControl(this.data.component.value?.target || ''),
+    );
+    valueGroup.addControl(
+      'color',
+      new FormControl(this.data.component.value?.color || ''),
+    );
+    this.form.addControl('value', valueGroup);
   }
 
   getControl(key): FormControl {

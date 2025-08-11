@@ -23,7 +23,7 @@
           @if (localizable) {
             @for (lang of languages; track lang) {
               <mat-form-field appearance="outline" class="w-full">
-                <mat-label>Button Text</mat-label>
+                <mat-label>Button Text ({{ lang }})</mat-label>
                 <input
                   matInput
                   [formControl]="getControlInGroup('text', lang)"
@@ -36,6 +36,10 @@
               <input matInput [formControl]="getControl('text')" />
             </mat-form-field>
           }
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Button Target</mat-label>
+            <input matInput [formControl]="getControl('target')" />
+          </mat-form-field>
           <mat-label>Button Color</mat-label>
           <lib-cms-color-editor
             label="Button Color"
