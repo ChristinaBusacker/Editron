@@ -5,7 +5,7 @@
       (opened)="activePanel.set('main')"
     >
       <mat-expansion-panel-header>
-        <mat-panel-title> {{ currentModule.name }} </mat-panel-title>
+        <mat-panel-title> {{ currentModule?.name }} </mat-panel-title>
         <mat-panel-description> Description </mat-panel-description>
       </mat-expansion-panel-header>
       @if (renderer === 'form' && schema) {
@@ -26,20 +26,20 @@
         selected renderer {{ renderer }}
       }
     </mat-expansion-panel>
-    @for (extension of currentModule.extensions; track extension.slug) {
+    @for (extension of currentModule?.extensions ?? []; track extension.slug) {
       <mat-expansion-panel
         [expanded]="activePanel() === extension.slug"
         (opened)="activePanel.set(extension.slug)"
       >
         <mat-expansion-panel-header>
-          <mat-panel-title> {{ extension.name }} </mat-panel-title>
+          <mat-panel-title> {{ extension?.name }} </mat-panel-title>
           <mat-panel-description> Description </mat-panel-description>
         </mat-expansion-panel-header>
         <lib-cms-form
-          [schemaDefinition]="extension.definition"
-          [form]="getFormGroup(extension.slug)"
+          [schemaDefinition]="extension?.definition"
+          [form]="getFormGroup(extension?.slug)"
           [project]="currentProject"
-          [values]="entryData?.value[extension.slug] || undefined"
+          [values]="entryData?.value[extension?.slug] || undefined"
         ></lib-cms-form>
       </mat-expansion-panel>
     }
@@ -69,15 +69,15 @@
         <tr>
           <td>Updated By</td>
           <td style="display: flex; align-items: center; gap: 5px">
-            <div [userBadge]="getActiveVersion().createdBy" [size]="16"></div>
-            <span> {{ getActiveVersion().createdBy.name }}</span>
+            <div [userBadge]="getActiveVersion()?.createdBy" [size]="16"></div>
+            <span> {{ getActiveVersion()?.createdBy?.name }}</span>
           </td>
         </tr>
         <tr>
           <td>Updated At</td>
           <td style="display: flex; align-items: center; gap: 5px">
             <div
-              [formatDate]="getActiveVersion().createdAt"
+              [formatDate]="getActiveVersion()?.createdAt"
               format="dd.MM.yyyy HH:mm"
             ></div>
           </td>
@@ -101,17 +101,17 @@
         <mat-panel-title> Versions</mat-panel-title>
       </mat-expansion-panel-header>
       <div class="version-list">
-        @for (version of entryData.versions; track version.id) {
+        @for (version of entryData?.versions ?? []; track version?.id) {
           <div class="card">
             <div class="card-container">
               <div class="card-content">
                 <div style="display: flex; align-items: center; gap: 5px">
-                  <span [userBadge]="version.createdBy" [size]="16"></span>
-                  <span>{{ version.createdBy.name }}</span>
+                  <span [userBadge]="version?.createdBy" [size]="16"></span>
+                  <span>{{ version?.createdBy?.name }}</span>
                 </div>
                 <div>
                   <div
-                    [formatDate]="version.createdAt"
+                    [formatDate]="version?.createdAt"
                     format="dd.MM.yyyy HH:mm"
                   ></div>
                 </div>

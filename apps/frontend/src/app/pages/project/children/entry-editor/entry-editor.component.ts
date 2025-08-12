@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, signal, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  AfterViewInit,
+  signal,
+  ViewChild,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -43,8 +50,12 @@ import { combineLatest, map, switchMap } from 'rxjs';
   templateUrl: './entry-editor.component.html',
   styleUrl: './entry-editor.component.scss',
 })
-export class EntryEditorComponent implements OnInit, CanComponentDeactivate {
+export class EntryEditorComponent
+  implements OnInit, AfterViewInit, CanComponentDeactivate
+{
   @ViewChild(CmsFormComponent) formComponent: CmsFormComponent;
+  @ViewChild(CmsHomepageEditorComponent)
+  homepageComponent: CmsHomepageEditorComponent;
 
   schemas = this.store.select(CmsModuleState.schemas);
   module = this.store.select(NavigationState.cmsModule);
@@ -81,6 +92,7 @@ export class EntryEditorComponent implements OnInit, CanComponentDeactivate {
     private contentService: ContentApiService,
     private route: ActivatedRoute,
     private router: Router,
+    private cdr: ChangeDetectorRef,
   ) {
     this.entryData = this.route.snapshot.data['entry'] as EntryDetails;
   }
@@ -119,6 +131,7 @@ export class EntryEditorComponent implements OnInit, CanComponentDeactivate {
         }),
         map(entryDetails => {
           this.entryData = entryDetails;
+          this.cdr.detectChanges();
         }),
       )
       .subscribe();
@@ -149,14 +162,22 @@ export class EntryEditorComponent implements OnInit, CanComponentDeactivate {
             data.id,
           ]);
         }
+        this.cdr.detectChanges();
       });
   }
 
   hasUnsavedChanges(): boolean {
-    return this.formComponent?.hasUnsavedChanges();
+    return (
+      this.formComponent?.hasUnsavedChanges() ||
+      this.homepageComponent?.hasUnsavedChanges()
+    );
   }
 
   ngOnInit(): void {
+    // No initialization logic here to avoid ExpressionChangedAfterItHasBeenCheckedError
+  }
+
+  ngAfterViewInit(): void {
     combineLatest([this.schemas, this.module, this.project])
       .pipe(
         map(([schemas, module, project]) => {
@@ -168,9 +189,12 @@ export class EntryEditorComponent implements OnInit, CanComponentDeactivate {
             this.activePanel.set('main');
             this.initFormGroups();
             this.projectLanguages = this.getProjectLangauges();
+            this.cdr.detectChanges();
           }
         }),
       )
-      .subscribe();
+      .subscribe(() => {
+        this.cdr.detectChanges();
+      });
   }
 }

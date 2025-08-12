@@ -64,7 +64,6 @@ import {
   styleUrl: './cms-homepage-editor.component.scss',
 })
 export class CmsHomepageEditorComponent implements OnInit {
-  // Gibt die IDs aller Column-DropLists aller Rows zurück
   getAllColumnDropListIds(): string[] {
     return this.sections.flatMap(section =>
       section.rows.flatMap(row =>
@@ -72,21 +71,18 @@ export class CmsHomepageEditorComponent implements OnInit {
       ),
     );
   }
-  // Gibt die IDs aller Row-DropLists zurück, um sie zu verbinden
+
   getSectionDropListIds(): string[] {
     return this.sections.map(section => 'section-rows-' + section.id);
   }
-  // Handler für Drag & Drop von Rows innerhalb einer Section
   dropRow(event: any, section: Section) {
     const prevIndex = event.previousIndex;
     const currIndex = event.currentIndex;
     const prevContainer = event.previousContainer;
     const currContainer = event.container;
     if (prevContainer === currContainer) {
-      // Innerhalb derselben Section sortieren
       moveItemInArray(section.rows, prevIndex, currIndex);
     } else {
-      // Zwischen Sections verschieben
       const sourceSection = this.sections.find(
         s => 'section-rows-' + s.id === prevContainer.id,
       );
@@ -105,7 +101,6 @@ export class CmsHomepageEditorComponent implements OnInit {
     this.updateFormControl();
   }
 
-  // Handler für Drag & Drop von Sections
   dropSection(event: any) {
     const prevIndex = event.previousIndex;
     const currIndex = event.currentIndex;
@@ -170,14 +165,12 @@ export class CmsHomepageEditorComponent implements OnInit {
     return row.columns.map(c => 'column-' + c.id);
   }
 
-  // Handler für Drag & Drop von Komponenten zwischen Columns
   dropComponent(event: any, _row: Row) {
     const prevIndex = event.previousIndex;
     const currIndex = event.currentIndex;
     const prevContainer = event.previousContainer;
     const currContainer = event.container;
     if (prevContainer === currContainer) {
-      // Innerhalb derselben Column sortieren
       const allColumns = this.sections.flatMap(section =>
         section.rows.flatMap(row => row.columns),
       );
@@ -188,7 +181,6 @@ export class CmsHomepageEditorComponent implements OnInit {
         moveItemInArray(column.components, prevIndex, currIndex);
       }
     } else {
-      // Zwischen Columns (auch in anderen Rows/Sections) verschieben
       const allColumns = this.sections.flatMap(section =>
         section.rows.flatMap(row => row.columns),
       );
@@ -335,8 +327,8 @@ export class CmsHomepageEditorComponent implements OnInit {
       .subscribe(data => {
         if (data.action === 'confirm') {
           column.components.push(data.component);
+          this.updateFormControl();
         }
-        console.log(data);
       });
   }
 
