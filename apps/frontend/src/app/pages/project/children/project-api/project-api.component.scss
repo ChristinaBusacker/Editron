@@ -1,0 +1,21 @@
+:host {
+  h1 {
+    margin-top: 0px;
+  }
+
+  .api-key {
+    display: grid;
+    grid-template-columns: 9fr 3fr;
+    gap: 10px;
+  }
+
+  .card {
+    background-color: whitesmoke;
+    padding: 10px;
+  }
+
+  .token-row {
+    display: flex;
+    align-items: center;
+  }
+}

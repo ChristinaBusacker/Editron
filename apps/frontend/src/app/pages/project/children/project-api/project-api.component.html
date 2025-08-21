@@ -1,0 +1,59 @@
+<h1>API Usage</h1>
+<div class="api-key">
+  <div class="card">
+    <h2>Api Tokens</h2>
+    @if (apiTokens | async; as tokens) {
+      <div class="tokens">
+        @for (token of tokens; track $index) {
+          <div class="token-row">
+            <div
+              appCopyToClipboard
+              matTooltip="Copy to clipboard"
+              class="token"
+            >
+              {{ token.token }}
+            </div>
+            <mat-chip-list>
+              @if (token.hasManagementAccess) {
+                <mat-chip color="primary" selected>Management</mat-chip>
+              }
+              @if (token.hasReadAccess) {
+                <mat-chip color="accent" selected>Read</mat-chip>
+              }
+              @if (token.hasWriteAccess) {
+                <mat-chip color="warn" selected>Write</mat-chip>
+              }
+            </mat-chip-list>
+
+            <button
+              class="link"
+              mat-button
+              (click)="deleteToken(token.id)"
+              color="warn"
+              matTooltip="Delete Token"
+              style="color: darkred"
+            >
+              <mat-icon>delete_forever</mat-icon>
+              Delete
+            </button>
+          </div>
+        }
+      </div>
+    }
+  </div>
+  <div class="card">
+    <h2>New Api Key</h2>
+    <mat-slide-toggle [formControl]="apiKeyForm.get('hasManagementAccess')">
+      Management Access
+    </mat-slide-toggle>
+    <mat-slide-toggle [formControl]="apiKeyForm.get('hasReadAccess')">
+      Read Access
+    </mat-slide-toggle>
+    <mat-slide-toggle [formControl]="apiKeyForm.get('hasWriteAccess')">
+      Write Access
+    </mat-slide-toggle>
+    <button mat-button (click)="createApiKey()">
+      Neuen API Key generieren
+    </button>
+  </div>
+</div>

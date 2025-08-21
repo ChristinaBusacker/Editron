@@ -41,10 +41,10 @@ async function bootstrap() {
   await app.listen(port);
 
   Logger.log(
-    `🤖 🚀 Management API is running on: https://localhost:${port}/${globalPrefix}`,
+    `🤖 🚀 Asset API is running on: https://localhost:${port}/${globalPrefix}`,
   );
   Logger.log(
-    `🤖 📚 Management API Swagger is running on: https://localhost:${port}/swagger`,
+    `🤖 📚 Asset API Swagger is running on: https://localhost:${port}/swagger`,
   );
 }
 bootstrap();

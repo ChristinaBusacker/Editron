@@ -15,6 +15,7 @@ import { ContentValueTableModule } from './content-value/content-value.module';
 import { ContentSchemaTableModule } from './content-schema/content-schema.module';
 import { AssetTableModule } from './asset/asset.module';
 import { UserInviteTableModule } from './user-invite/user-invite.module';
+import { ApiTokenTableModule } from './api-token/api-token.module';
 
 @Module({
   imports: [
@@ -30,7 +31,8 @@ import { UserInviteTableModule } from './user-invite/user-invite.module';
     ContentVersionTableModule,
     ContentValueTableModule,
     AssetTableModule,
-    UserInviteTableModule
+    UserInviteTableModule,
+    ApiTokenTableModule
   ],
   providers: [...databaseProviders, DatabaseService],
   exports: [...databaseProviders, DatabaseService],

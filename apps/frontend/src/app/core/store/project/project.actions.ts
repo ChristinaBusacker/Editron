@@ -1,3 +1,4 @@
+import { ApiTokenPayload } from '@frontend/shared/services/api/models/api-tokens.model';
 import {
   CreateProjectPayload,
   UpdateProjectPayload,
@@ -24,4 +25,19 @@ export class FetchProjectList {
 export class FetchBinEntries {
   static readonly type = '[Project] Fetch bin entries';
   constructor(public projectId: string) {}
+}
+
+export class FetchApiTokens {
+  static readonly type = '[Project] Fetch Api tokens';
+  constructor(public projectId: string) {}
+}
+
+export class CreateApiTokens {
+  static readonly type = '[Project] Create Api tokens';
+  constructor(public payload: ApiTokenPayload) {}
+}
+
+export class DeleteApiTokens {
+  static readonly type = '[Project] Delete Api tokens';
+  constructor(public payload: { tokenId: string; projectId: string }) {}
 }

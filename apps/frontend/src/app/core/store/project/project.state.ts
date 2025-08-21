@@ -4,16 +4,22 @@ import { ProjectApiService } from '@frontend/shared/services/api/project-api.ser
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { of, switchMap } from 'rxjs';
 import {
+  CreateApiTokens,
   CreateProject,
+  DeleteApiTokens,
+  FetchApiTokens,
   FetchBinEntries,
   FetchProjectList,
   UpdateProject,
 } from './project.actions';
 import { ContentApiService } from '@frontend/shared/services/api/content-api.service';
+import { ApiToken } from '@shared/declarations/interfaces/api-token/api-token.interface';
+import { ApiTokensService } from '@frontend/shared/services/api/api-tokens.service';
 
 export interface ProjectStateModel {
   projects: Array<Project>;
   binEntries: { [key: string]: any[] };
+  apiTokens: ApiToken[];
 }
 
 @State<ProjectStateModel>({
@@ -21,6 +27,7 @@ export interface ProjectStateModel {
   defaults: {
     projects: [],
     binEntries: {},
+    apiTokens: [],
   },
 })
 @Injectable()
@@ -28,6 +35,7 @@ export class ProjectState {
   constructor(
     private api: ProjectApiService,
     private contentApi: ContentApiService,
+    private apiTokenApi: ApiTokensService,
   ) {}
 
   @Selector()
@@ -38,6 +46,11 @@ export class ProjectState {
   @Selector()
   static binEntries(state: ProjectStateModel): { [key: string]: any[] } {
     return state?.binEntries || {};
+  }
+
+  @Selector()
+  static apiTokens(state: ProjectStateModel): Array<ApiToken> {
+    return state?.apiTokens || [];
   }
 
   @Action(CreateProject)
@@ -100,6 +113,42 @@ export class ProjectState {
         });
 
         return of(binEntries);
+      }),
+    );
+  }
+
+  @Action(FetchApiTokens)
+  fetchApiTokens(ctx: StateContext<ProjectStateModel>, action: FetchApiTokens) {
+    return this.apiTokenApi.list(action.projectId).pipe(
+      switchMap(apiTokens => {
+        ctx.patchState({ apiTokens });
+        return of(apiTokens);
+      }),
+    );
+  }
+
+  @Action(CreateApiTokens)
+  createApiTokens(
+    ctx: StateContext<ProjectStateModel>,
+    action: CreateApiTokens,
+  ) {
+    return this.apiTokenApi.create(action.payload).pipe(
+      switchMap(token => {
+        const state = ctx.getState();
+        ctx.patchState({ apiTokens: [...state.apiTokens, token] });
+        return of(token);
+      }),
+    );
+  }
+
+  @Action(DeleteApiTokens)
+  deleteApiTokens(
+    ctx: StateContext<ProjectStateModel>,
+    action: DeleteApiTokens,
+  ) {
+    return this.apiTokenApi.delete(action.payload.tokenId).pipe(
+      switchMap(() => {
+        return ctx.dispatch(new FetchApiTokens(action.payload.projectId));
       }),
     );
   }

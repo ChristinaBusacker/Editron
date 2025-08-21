@@ -22,6 +22,7 @@ import { unsavedChangesGuard } from './core/guards/unsaved-changes.guard';
 import { binResolver } from './core/resolvers/bin.resolver';
 import { projectResolver } from './core/resolvers/project.resolver';
 import { ProjectBinComponent } from './pages/project/children/project-bin/project-bin.component';
+import { ProjectApiComponent } from './pages/project/children/project-api/project-api.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginPageComponent },
@@ -61,6 +62,10 @@ export const routes: Routes = [
       {
         path: 'settings',
         component: ProjectSettingsComponent,
+      },
+      {
+        path: 'api',
+        component: ProjectApiComponent,
       },
       {
         path: 'bin',
