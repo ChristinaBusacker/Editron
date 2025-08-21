@@ -3,7 +3,6 @@ import { LanguageService } from '@frontend/core/services/language/language.servi
 import { NavigationState } from '@frontend/core/store/navigation/navigation.state';
 import { ContentApiService } from '@frontend/shared/services/api/content-api.service';
 import { Store } from '@ngxs/store';
-import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
