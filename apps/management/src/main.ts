@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import {
+  mountSpa,
   readHttpsOptionsFromEnv,
   setupCors,
   setupSwagger,
@@ -54,46 +55,8 @@ async function bootstrap() {
   const cmsBrowser =
     findBrowserDir('dist/apps/cms/browser', 'dist/cms/browser') ?? '';
 
-  const mountSpa = (basePath: string, browserDir: string) => {
-    ex.use(
-      basePath,
-      express.static(browserDir, {
-        index: false,
-        fallthrough: true,
-        etag: true,
-        maxAge: '1y',
-      }),
-    );
-
-    const excludeApiSwagger = new RegExp(
-      `^(?!\\/${globalPrefix}(?:\\/|$)|\\/${swaggerPath}(?:\\/|$)).*$`,
-    );
-    const pathRegex =
-      basePath === '/'
-        ? excludeApiSwagger
-        : new RegExp(`^${basePath}(?:\\/.*)?$`);
-
-    ex.get(pathRegex, (req, res, next) => {
-      const accept = String(req.headers.accept || '*/*');
-      const wantsHtml =
-        req.method === 'GET' &&
-        (accept.includes('text/html') ||
-          accept.includes('application/xhtml+xml') ||
-          accept.includes('*/*'));
-
-      if (!wantsHtml) return next();
-
-      res.setHeader('Cache-Control', 'no-store');
-      res.sendFile(join(browserDir, 'index.html'));
-    });
-
-    Logger.log(
-      `✅ SPA fallback enabled for "${basePath}" from "${browserDir}"`,
-    );
-  };
-
   if (frontendBrowser) {
-    mountSpa('/', frontendBrowser);
+    mountSpa(ex, '/', frontendBrowser, globalPrefix, swaggerPath);
   } else {
     Logger.warn(
       '⚠️ No frontend browser bundle found (looked for dist/apps/frontend/browser or dist/frontend/browser).',
@@ -101,7 +64,7 @@ async function bootstrap() {
   }
 
   if (cmsBrowser) {
-    mountSpa('/cms', cmsBrowser);
+    mountSpa(ex, '/', cmsBrowser, globalPrefix, swaggerPath);
   }
 
   await app.init();
@@ -137,8 +100,8 @@ async function bootstrap() {
     }
   }
 
-  const port = config.get<number>('MANAGEMENT_PORT') ?? 3001;
-  console.log(config.get<number>('MANAGEMENT_PORT'));
+  const port = config.get<number>('MANAGEMENT_PORT') ?? 3000;
+
   await app.listen(port);
 
   const proto = process.env.HTTPS_ENABLED === 'true' ? 'https' : 'http';

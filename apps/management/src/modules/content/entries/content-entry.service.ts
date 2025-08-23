@@ -13,6 +13,8 @@ import { ValidateEntryDto } from '../dto/validate-entry.dto';
 import { UserEntity } from '@database/user/user.entity';
 import { ContentValueEntity } from '@database/content-value/content-value.entity';
 import { In } from 'typeorm';
+import { EntryStatus } from '@shared/declarations/enums/entry-status.enum';
+import { User } from '@frontend/shared/services/api/models/user.model';
 
 @Injectable()
 export class ContentEntryService {
@@ -25,11 +27,12 @@ export class ContentEntryService {
     inBin = false,
   ): Promise<
     {
-      entryId: string;
+      id: string;
       versionId: string;
       versionNumber: number;
-      createdAt: Date;
-      isPublished: boolean;
+      updatedAt: Date;
+      updatedBy: User;
+      status: EntryStatus;
       content: any;
     }[]
   > {
@@ -51,25 +54,42 @@ export class ContentEntryService {
     const result = [];
 
     for (const entry of entries) {
-      const version = await this.db.contentVersionRepository.findOne({
+      // Get latest version
+      const latestVersion = await this.db.contentVersionRepository.findOne({
         where: { entry: { id: entry.id } },
         order: { createdAt: 'DESC' },
         relations: ['createdBy'],
       });
 
-      if (!version) continue;
+      if (!latestVersion) continue;
+
+      // Get published version (if any)
+      const publishedVersion = await this.db.contentVersionRepository.findOne({
+        where: { entry: { id: entry.id }, isPublished: true },
+        order: { createdAt: 'DESC' },
+      });
+
+      // Determine status
+      let status: EntryStatus;
+      if (!publishedVersion) {
+        status = EntryStatus.UNPUBLISHED;
+      } else if (publishedVersion.id === latestVersion.id) {
+        status = EntryStatus.PUBLISHED;
+      } else {
+        status = EntryStatus.OUTDATED;
+      }
 
       const value = await this.db.contentValueRepository.findOne({
-        where: { version: { id: version.id } },
+        where: { version: { id: latestVersion.id } },
       });
 
       result.push({
         id: entry.id,
-        versionId: version.id,
-        versionNumber: version.version,
-        updatedAt: version.createdAt,
-        updatedBy: version.createdBy,
-        isPublished: version.isPublished,
+        versionId: latestVersion.id,
+        versionNumber: latestVersion.version,
+        updatedAt: latestVersion.createdAt,
+        updatedBy: latestVersion.createdBy,
+        status,
         content: value?.value ?? {},
       });
     }

@@ -32,12 +32,15 @@ import { FormatDateDirective } from '@frontend/core/directives/format-date.direc
 import { LanguageService } from '@frontend/core/services/language/language.service';
 import { CmsModule } from 'libs/cmsmodules/src/modules/cms-module';
 import { tableDisplayTypes } from '@shared/constants/table-display-types.const';
+import { MatChipsModule } from '@angular/material/chips';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-item-table',
   templateUrl: './item-table.component.html',
   standalone: true,
   imports: [
+    CommonModule,
     MatTableModule,
     MatPaginatorModule,
     MatCheckboxModule,
@@ -50,6 +53,7 @@ import { tableDisplayTypes } from '@shared/constants/table-display-types.const';
     MatSortModule,
     MatButtonModule,
     MatIconModule,
+    MatChipsModule,
   ],
 })
 export class ItemTableComponent implements AfterViewInit {
@@ -70,7 +74,7 @@ export class ItemTableComponent implements AfterViewInit {
   schema?: ContentSchemaDefinition;
   items: any[] = [];
 
-  displayedColumns: string[] = ['select', 'id', 'name', 'controls'];
+  displayedColumns: string[] = ['select', 'user', 'date', 'status', 'controls'];
   displayTypes = tableDisplayTypes;
 
   dataSource = new MatTableDataSource<any>();
@@ -86,7 +90,7 @@ export class ItemTableComponent implements AfterViewInit {
             this.items = entries[module.slug];
             this.dataSource.data = this.items ?? [];
             this.filteredOptions = this.items ?? [];
-
+            console.log(entries);
             let columns = [];
 
             if (this.schema) {
@@ -107,6 +111,7 @@ export class ItemTableComponent implements AfterViewInit {
               ...columns,
               'user',
               'date',
+              'status',
               'controls',
             ];
 
