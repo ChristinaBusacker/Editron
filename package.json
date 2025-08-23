@@ -144,7 +144,9 @@
       "<rootDir>/libs/"
     ],
     "moduleNameMapper": {
-      "^@auth/auth(|/.*)$": "<rootDir>/libs/auth/src/$1"
+      "^@auth/auth(|/.*)$": "<rootDir>/libs/auth/src/$1",
+      "^bootstrap/bootstrap(|/.*)$": "<rootDir>/libs/bootstrap/src/$1",
+      "^@asset/asset(|/.*)$": "<rootDir>/libs/asset/src/$1"
     }
   }
 }

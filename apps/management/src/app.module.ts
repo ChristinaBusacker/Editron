@@ -12,6 +12,7 @@ import { UserModule } from './modules/user/user.module';
 import { DatabaseModule } from '@database/database.module';
 import { AuthModule } from '@auth';
 import { ApiTokenModule } from './modules/api-token/api-token.module';
+import { AssetModule } from '@asset/asset';
 
 
 @Module({
@@ -24,7 +25,8 @@ import { ApiTokenModule } from './modules/api-token/api-token.module';
     ProjectMemberModule, 
     ContentModule,
     ApiTokenModule,
-    DatabaseModule
+    DatabaseModule,
+    AssetModule
   ],
   controllers: [AppController],
   providers: [AppService],

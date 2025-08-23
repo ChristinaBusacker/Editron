@@ -1,9 +1,8 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "types": ["node", "express", "multer"],
-    "declaration": false,
-    "outDir": "../../dist/apps/asset"
+    "declaration": true,
+    "outDir": "../../dist/libs/asset"
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]

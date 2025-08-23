@@ -18,15 +18,6 @@
         "tsConfigPath": "apps/api/tsconfig.app.json"
       }
     },
-    "asset": {
-      "type": "application",
-      "root": "apps/asset",
-      "entryFile": "main",
-      "sourceRoot": "apps/asset/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/asset/tsconfig.app.json"
-      }
-    },
     "auth": {
       "type": "library",
       "root": "libs/auth",
@@ -43,6 +34,33 @@
       "sourceRoot": "apps/public-api/src",
       "compilerOptions": {
         "tsConfigPath": "apps/public-api/tsconfig.app.json"
+      }
+    },
+    "cms": {
+      "type": "application",
+      "root": "apps/cms",
+      "entryFile": "main",
+      "sourceRoot": "apps/cms/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/cms/tsconfig.app.json"
+      }
+    },
+    "bootstrap": {
+      "type": "library",
+      "root": "libs/bootstrap",
+      "entryFile": "index",
+      "sourceRoot": "libs/bootstrap/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/bootstrap/tsconfig.lib.json"
+      }
+    },
+    "asset": {
+      "type": "library",
+      "root": "libs/asset",
+      "entryFile": "index",
+      "sourceRoot": "libs/asset/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/asset/tsconfig.lib.json"
       }
     }
   },

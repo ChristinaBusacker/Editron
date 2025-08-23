@@ -59,6 +59,18 @@
       ],
       "@auth/*": [
         "libs/auth/src/*"
+      ],
+      "@bootstrap/bootstrap": [
+        "libs/bootstrap"
+      ],
+      "@bootstrap/bootstrap/*": [
+        "libs/bootstrap/*"
+      ],
+      "@asset/asset": [
+        "libs/asset/src"
+      ],
+      "@asset/asset/*": [
+        "libs/asset/src/*"
       ]
     }
   },

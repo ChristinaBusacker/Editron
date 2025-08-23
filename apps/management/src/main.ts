@@ -41,7 +41,6 @@ async function bootstrap() {
   const port = configService.get<number>('MANAGEMENT_PORT') ?? 3001;
 
   databaseReady.then(() => {
-    // Trigger migrations
     app.get(MigrationService).migrate();
     app.get(AppService).initCMSModules();
   });
