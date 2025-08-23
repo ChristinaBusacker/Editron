@@ -1,4 +1,3 @@
-export * from './angular-ssr.helper';
 export * from './core.helper';
 export * from './https.helper';
 export * from './migrations.helper';

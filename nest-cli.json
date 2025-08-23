@@ -9,15 +9,6 @@
         "tsConfigPath": "apps/management/tsconfig.app.json"
       }
     },
-    "api": {
-      "type": "application",
-      "root": "apps/api",
-      "entryFile": "main",
-      "sourceRoot": "apps/api/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/api/tsconfig.app.json"
-      }
-    },
     "auth": {
       "type": "library",
       "root": "libs/auth",
@@ -25,24 +16,6 @@
       "sourceRoot": "libs/auth/src",
       "compilerOptions": {
         "tsConfigPath": "libs/auth/tsconfig.lib.json"
-      }
-    },
-    "public-api": {
-      "type": "application",
-      "root": "apps/public-api",
-      "entryFile": "main",
-      "sourceRoot": "apps/public-api/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/public-api/tsconfig.app.json"
-      }
-    },
-    "cms": {
-      "type": "application",
-      "root": "apps/cms",
-      "entryFile": "main",
-      "sourceRoot": "apps/cms/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/cms/tsconfig.app.json"
       }
     },
     "bootstrap": {
@@ -61,6 +34,15 @@
       "sourceRoot": "libs/asset/src",
       "compilerOptions": {
         "tsConfigPath": "libs/asset/tsconfig.lib.json"
+      }
+    },
+    "public-api": {
+      "type": "library",
+      "root": "libs/public-api",
+      "entryFile": "index",
+      "sourceRoot": "libs/public-api/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/public-api/tsconfig.lib.json"
       }
     }
   },

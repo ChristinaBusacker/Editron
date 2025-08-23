@@ -71,6 +71,12 @@
       ],
       "@asset/asset/*": [
         "libs/asset/src/*"
+      ],
+      "@public-api/public-api": [
+        "libs/public-api/src"
+      ],
+      "@public-api/public-api/*": [
+        "libs/public-api/src/*"
       ]
     }
   },
