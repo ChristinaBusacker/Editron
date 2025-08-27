@@ -73,8 +73,6 @@ export class ContentState {
 
   @Action(CreateEntry)
   createEntry(ctx: StateContext<ContentStateModel>, action: CreateEntry) {
-    // NOTE: In der aktuellen Codebasis ruft CreateEntry direkt getEntries auf.
-    // Falls du später wirklich "create" brauchst, hängst du hier api.createEntry(...) davor.
     return this.api.getEntries(action.projectId, action.module).pipe(
       map(entryResponse => {
         const state = ctx.getState();
