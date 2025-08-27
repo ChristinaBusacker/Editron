@@ -84,20 +84,20 @@ export class ContentApiService {
   // ContentVersions
   // -------------------------------
 
-  getVersions(entryId: number): Observable<any[]> {
+  getVersions(entryId: string): Observable<any[]> {
     return this.request.get<any[]>(
       `${this.baseUrl}/entries/${entryId}/versions`,
     );
   }
 
-  publishVersion(versionId: number): Observable<any> {
+  publishVersion(versionId: string): Observable<any> {
     return this.request.post(
       `${this.baseUrl}/versions/${versionId}/publish`,
       {},
     );
   }
 
-  restoreVersion(versionId: number): Observable<any> {
+  restoreVersion(versionId: string): Observable<any> {
     return this.request.post(
       `${this.baseUrl}/versions/${versionId}/restore`,
       {},

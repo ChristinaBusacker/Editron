@@ -20,7 +20,7 @@ import { buildAuthHeaders } from '@frontend/core/utils/build-auth-header.util';
   providedIn: 'root',
 })
 export class AssetService {
-  public readonly baseUrl = 'https://localhost:3002/asset';
+  public readonly baseUrl = 'https://localhost:3000/api/assets';
 
   constructor(
     private http: HttpClient,
@@ -44,7 +44,11 @@ export class AssetService {
       .post<{
         mimeType: string;
         valid: boolean;
-      }>(`${this.baseUrl}/validate-url`, { url }, { headers: this.buildHeaders() })
+      }>(
+        `${this.baseUrl}/validate-url`,
+        { url },
+        { headers: this.buildHeaders() },
+      )
       .pipe(
         map(response => {
           if (!response.valid) {

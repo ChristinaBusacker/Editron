@@ -44,7 +44,7 @@ import { parseDataUrl } from './utils/parse-data-url.util';
 
 @ApiTags('Assets')
 @ApiBearerAuth()
-@Controller()
+@Controller('assets')
 export class AssetController {
   private generateId = customAlphabet(
     '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',

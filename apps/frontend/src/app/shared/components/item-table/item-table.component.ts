@@ -90,7 +90,6 @@ export class ItemTableComponent implements AfterViewInit {
             this.items = entries[module.slug];
             this.dataSource.data = this.items ?? [];
             this.filteredOptions = this.items ?? [];
-            console.log(entries);
             let columns = [];
 
             if (this.schema) {

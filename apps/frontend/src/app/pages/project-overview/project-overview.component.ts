@@ -47,7 +47,6 @@ export class ProjectOverviewComponent {
       .afterClosed()
       .subscribe((response: DialogResponse<object>) => {
         if (response.action === 'confirm') {
-          debugger;
         }
       });
   }

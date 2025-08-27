@@ -53,7 +53,6 @@ export class InvitationComponent implements OnInit {
           )
           .subscribe(data => {
             if (data) {
-              debugger;
             }
           });
       } else {

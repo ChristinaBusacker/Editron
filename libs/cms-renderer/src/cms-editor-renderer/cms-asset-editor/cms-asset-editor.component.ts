@@ -49,4 +49,12 @@ export class CmsAssetEditorComponent {
   generateThumbnailIdAssetUrl(id: string) {
     return `${this.assetService.baseUrl}/${id}/small`;
   }
+
+  controlVal() {
+    if (typeof this.control.value === 'string') {
+      return [this.control.value];
+    }
+
+    return this.control.value;
+  }
 }

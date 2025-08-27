@@ -20,9 +20,13 @@ import { FormatDateDirective } from '@frontend/core/directives/format-date.direc
 import { UserBadgeDirective } from '@frontend/core/directives/user-badge.directive';
 import { CanComponentDeactivate } from '@frontend/core/guards/unsaved-changes.guard';
 import { CmsModuleState } from '@frontend/core/store/cmsModules/cmsModules.state';
+import { PublishVersion } from '@frontend/core/store/content/content.actions';
 import { NavigationState } from '@frontend/core/store/navigation/navigation.state';
 import { ContentApiService } from '@frontend/shared/services/api/content-api.service';
-import { EntryDetails } from '@frontend/shared/services/api/models/content.model';
+import {
+  EntryDetails,
+  EntryVersion,
+} from '@frontend/shared/services/api/models/content.model';
 import { Project } from '@frontend/shared/services/api/models/project.model';
 import { Store } from '@ngxs/store';
 import { ContentSchemaDefinition } from '@shared/declarations/interfaces/content/content-schema-definition';
@@ -51,7 +55,7 @@ import { combineLatest, map, switchMap } from 'rxjs';
   styleUrl: './entry-editor.component.scss',
 })
 export class EntryEditorComponent
-  implements OnInit, AfterViewInit, CanComponentDeactivate
+  implements AfterViewInit, CanComponentDeactivate
 {
   @ViewChild(CmsFormComponent) formComponent: CmsFormComponent;
   @ViewChild(CmsHomepageEditorComponent)
@@ -113,7 +117,7 @@ export class EntryEditorComponent
     );
   }
 
-  updateEntry() {
+  updateEntry(callback?: () => void) {
     const values = this.getFormGroup(this.currentModule.slug).value;
     Object.keys(this.formGroups).forEach(key => {
       if (key !== this.currentModule.slug) {
@@ -134,7 +138,11 @@ export class EntryEditorComponent
           this.cdr.detectChanges();
         }),
       )
-      .subscribe();
+      .subscribe(() => {
+        if (callback) {
+          callback();
+        }
+      });
   }
 
   initFormGroups() {
@@ -173,9 +181,29 @@ export class EntryEditorComponent
     );
   }
 
-  ngOnInit(): void {
-    // No initialization logic here to avoid ExpressionChangedAfterItHasBeenCheckedError
+  isAlreadyPublished() {
+    const lastVersion = this.entryData.versions[0];
+    return lastVersion.isPublished;
   }
+
+  publishedVersion() {
+    return this.entryData.versions.find(v => v.isPublished);
+  }
+
+  saveAndPublish() {
+    this.updateEntry(() => {
+      this.publishVersion();
+    });
+  }
+
+  publishVersion(version?: EntryVersion) {
+    if (!version) {
+      version = this.entryData.versions[0];
+    }
+    this.store.dispatch(new PublishVersion(version.id, this.entryData.id));
+  }
+
+  restoreVersion() {}
 
   ngAfterViewInit(): void {
     combineLatest([this.schemas, this.module, this.project])

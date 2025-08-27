@@ -92,7 +92,20 @@
         >
           Save
         </button>
-        <button mat-flat-button color="primary">Publish</button>
+        @if (hasUnsavedChanges(); as unsavedChanges) {
+          <button mat-flat-button color="primary" (click)="saveAndPublish()">
+            Save & Publish
+          </button>
+        } @else {
+          <button
+            mat-flat-button
+            color="primary"
+            (click)="publishVersion()"
+            [disabled]="isAlreadyPublished()"
+          >
+            Publish
+          </button>
+        }
       </div>
     </mat-expansion-panel>
 
@@ -109,6 +122,7 @@
                   <span [userBadge]="version?.createdBy" [size]="16"></span>
                   <span>{{ version?.createdBy?.name }}</span>
                 </div>
+                <div>{{ version.isPublished }}</div>
                 <div>
                   <div
                     [formatDate]="version?.createdAt"
