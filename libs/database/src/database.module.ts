@@ -16,6 +16,7 @@ import { ContentSchemaTableModule } from './content-schema/content-schema.module
 import { AssetTableModule } from './asset/asset.module';
 import { UserInviteTableModule } from './user-invite/user-invite.module';
 import { ApiTokenTableModule } from './api-token/api-token.module';
+import { PublicApiRequestLoggerTableModule } from './public-api-request-logger/public-api-request-logger.module';
 
 @Module({
   imports: [
@@ -32,7 +33,8 @@ import { ApiTokenTableModule } from './api-token/api-token.module';
     ContentValueTableModule,
     AssetTableModule,
     UserInviteTableModule,
-    ApiTokenTableModule
+    ApiTokenTableModule,
+    PublicApiRequestLoggerTableModule
   ],
   providers: [...databaseProviders, DatabaseService],
   exports: [...databaseProviders, DatabaseService],

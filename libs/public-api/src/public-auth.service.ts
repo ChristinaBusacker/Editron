@@ -16,6 +16,7 @@ export class PublicAuthService {
 
     const token = await this.databaseService.apiTokenRepository.findOne({
       where: { token: key },
+      relations: { project: true },
     });
     if (!token) return null;
 

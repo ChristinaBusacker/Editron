@@ -14,6 +14,7 @@ import { ContentValueEntity } from './content-value/content-value.entity';
 import { AssetEntity } from './asset/asset.entity';
 import { UserInviteEntity } from './user-invite/user-invite.entity';
 import { ApiTokenEntity } from './api-token/api-token.entity';
+import { PublicApiRequestLogEntity } from './public-api-request-logger/public-api-request-logger.entity';
 
 dotenv.config();
 
@@ -32,6 +33,7 @@ export const entities = [
   AssetEntity,
   UserInviteEntity,
   ApiTokenEntity,
+  PublicApiRequestLogEntity,
 ];
 
 export const AppDataSource = new DataSource({

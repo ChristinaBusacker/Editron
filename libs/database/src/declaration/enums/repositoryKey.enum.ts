@@ -14,4 +14,5 @@ export enum RepositoryKey {
   asset = 'ASSET_REPOSITORY',
   userInvite = 'USERINVITE_REPOSITORY',
   apiToken = 'APITOKEN_REPOSITORY',
+  publicApiRequestLog = 'PUBLICAPIREQLOG_REPOSITORY',
 }

@@ -15,6 +15,7 @@ import { ContentValueEntity } from './content-value/content-value.entity';
 import { AssetEntity } from './asset/asset.entity';
 import { UserInviteEntity } from './user-invite/user-invite.entity';
 import { ApiTokenEntity } from './api-token/api-token.entity';
+import { PublicApiRequestLogEntity } from './public-api-request-logger/public-api-request-logger.entity';
 
 @Injectable()
 export class DatabaseService {
@@ -47,5 +48,7 @@ export class DatabaseService {
     public readonly userInviteRepository: Repository<UserInviteEntity>,
     @Inject(RepositoryKey.apiToken)
     public readonly apiTokenRepository: Repository<ApiTokenEntity>,
+    @Inject(RepositoryKey.publicApiRequestLog)
+    public readonly publicApiRequestLog: Repository<PublicApiRequestLogEntity>,
   ) {}
 }
