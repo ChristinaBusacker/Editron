@@ -1,33 +1,34 @@
-import { CommonModule } from '@angular/common';
 import {
-  Component,
-  Input,
-  OnInit,
-  signal,
-  ViewEncapsulation,
-} from '@angular/core';
+  DragDropModule,
+  moveItemInArray,
+  transferArrayItem,
+} from '@angular/cdk/drag-drop';
+import { CommonModule } from '@angular/common';
+import { Component, Input, OnInit, signal } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
   FormGroup,
   ReactiveFormsModule,
-  Validators,
 } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { CmsModuleState } from '@frontend/core/store/cmsModules/cmsModules.state';
 import { buildValidatorsFromFieldDefinition } from '@frontend/core/utils/build-validators-from-field-definition.util';
 import { deepEqual } from '@frontend/core/utils/deep-equal.util';
+import { generateCSSid } from '@frontend/core/utils/generate-css-id.util';
+import { DialogService } from '@frontend/shared/dialogs/dialog.service';
 import { Project } from '@frontend/shared/services/api/models/project.model';
+import { Store } from '@ngxs/store';
 import {
   ContentSchemaDefinition,
   FieldDefinition,
 } from '@shared/declarations/interfaces/content/content-schema-definition';
-import { CmsFormFieldComponent } from '../cms-form-field/cms-form-field.component';
-import { Store } from '@ngxs/store';
-import { CmsModuleState } from '@frontend/core/store/cmsModules/cmsModules.state';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatTooltipModule } from '@angular/material/tooltip';
+import { COLUMN_LAYOUTS } from 'libs/cmsmodules/src/modules/homepage/declarations/columnLayouts.constant';
 import {
   Column,
   ComponentInstance,
@@ -35,16 +36,8 @@ import {
   Row,
   Section,
 } from 'libs/cmsmodules/src/modules/homepage/declarations/component.declaration';
-import { generateCSSid } from '@frontend/core/utils/generate-css-id.util';
-import { DialogService } from '@frontend/shared/dialogs/dialog.service';
-import { COLUMN_LAYOUTS } from 'libs/cmsmodules/src/modules/homepage/declarations/columnLayouts.constant';
 import { map } from 'rxjs';
-import { MatMenuModule } from '@angular/material/menu';
-import {
-  DragDropModule,
-  moveItemInArray,
-  transferArrayItem,
-} from '@angular/cdk/drag-drop';
+import { CmsFormFieldComponent } from '../cms-form-field/cms-form-field.component';
 
 @Component({
   selector: 'lib-cms-homepage-editor',
@@ -64,6 +57,23 @@ import {
   styleUrl: './cms-homepage-editor.component.scss',
 })
 export class CmsHomepageEditorComponent implements OnInit {
+  @Input({ required: true }) schemaDefinition!: ContentSchemaDefinition;
+  @Input({ required: true }) project!: Project;
+  @Input() values?: { [key: string]: any };
+  @Input() form: FormGroup = this.fb.group({ content: new FormControl() });
+
+  schemas = this.store.select(CmsModuleState.schemas);
+
+  fields = signal<FieldDefinition[]>([]);
+
+  sections: Section[] = [];
+
+  constructor(
+    private fb: FormBuilder,
+    private store: Store,
+    private dialogService: DialogService,
+  ) {}
+
   getAllColumnDropListIds(): string[] {
     return this.sections.flatMap(section =>
       section.rows.flatMap(row =>
@@ -75,6 +85,7 @@ export class CmsHomepageEditorComponent implements OnInit {
   getSectionDropListIds(): string[] {
     return this.sections.map(section => 'section-rows-' + section.id);
   }
+
   dropRow(event: any, section: Section) {
     const prevIndex = event.previousIndex;
     const currIndex = event.currentIndex;
@@ -109,22 +120,6 @@ export class CmsHomepageEditorComponent implements OnInit {
       this.updateFormControl();
     }
   }
-  @Input({ required: true }) schemaDefinition!: ContentSchemaDefinition;
-  @Input({ required: true }) project!: Project;
-  @Input() values?: { [key: string]: any };
-  @Input() form: FormGroup = this.fb.group({ content: new FormControl() });
-
-  schemas = this.store.select(CmsModuleState.schemas);
-
-  fields = signal<FieldDefinition[]>([]);
-
-  sections: Section[] = [];
-
-  constructor(
-    private fb: FormBuilder,
-    private store: Store,
-    private dialogService: DialogService,
-  ) {}
 
   addSection() {
     const section: Section = { rows: [], id: generateCSSid(), style: {} };
@@ -245,9 +240,9 @@ export class CmsHomepageEditorComponent implements OnInit {
         field.default ?? (field.type === 'boolean' ? false : null);
 
       if (field.type === 'content') {
-        const value = this.values[field.name];
+        const value = values[field.name];
         this.form.addControl(field.name, new FormControl(value || []));
-        this.sections = value;
+        this.sections = value || [];
       } else if (field.localizable) {
         const langGroup = this.fb.group({});
         for (const lang of languages) {
@@ -274,7 +269,9 @@ export class CmsHomepageEditorComponent implements OnInit {
       const control = this.form.get(field.name);
       if (!control) continue;
 
-      if (field.localizable) {
+      if (field.type === 'content') {
+        result[field.name] = control.value;
+      } else if (field.localizable) {
         const langGroup = control as FormGroup;
         result[field.name] = {};
         for (const lang of languages) {
@@ -301,11 +298,16 @@ export class CmsHomepageEditorComponent implements OnInit {
 
   ngOnInit(): void {
     this.fields.set(this.schemaDefinition.fields);
+    this.form.valueChanges.subscribe(() => {
+      console.log(this.form.value);
+    });
     this.initFormFromValues(this.values ?? {});
   }
 
   hasUnsavedChanges(): boolean {
-    return !deepEqual(this.getValuesFromFormGroup(), this.values);
+    const formValue = this.getValuesFromFormGroup();
+    debugger;
+    return !deepEqual(formValue, this.values);
   }
 
   addComponentToColumn(column: Column, type: ComponentType) {

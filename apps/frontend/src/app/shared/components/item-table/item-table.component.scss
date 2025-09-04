@@ -26,4 +26,15 @@
     display: block;
     padding: 0px 10px;
   }
+
+  .status {
+    background-color: yellow !important;
+    & .published {
+      background-color: lightgreen;
+    }
+
+    & .unpublished {
+      background-color: lightblue;
+    }
+  }
 }

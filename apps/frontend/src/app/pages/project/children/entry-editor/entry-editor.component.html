@@ -13,14 +13,14 @@
           [schemaDefinition]="schema"
           [form]="getFormGroup(currentModule.slug)"
           [project]="currentProject"
-          [values]="entryData?.value || undefined"
+          [values]="getValuesWithoutExtension() || undefined"
         ></lib-cms-form>
       } @else if (renderer === 'homepage' && schema) {
         <lib-cms-homepage-editor
           [schemaDefinition]="schema"
           [form]="getFormGroup(currentModule.slug)"
           [project]="currentProject"
-          [values]="entryData?.value || undefined"
+          [values]="getValuesWithoutExtension() || undefined"
         ></lib-cms-homepage-editor>
       } @else {
         selected renderer {{ renderer }}

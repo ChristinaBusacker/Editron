@@ -210,3 +210,19 @@ app-root {
   grid-template-columns: 1fr 1fr;
 }
 
+mat-chip.status {
+  width: 100%;
+  text-align: center;
+  &.published {
+    background-color: #f1fff1;
+  }
+
+  &.unpublished {
+    background-color: #ffeded;
+  }
+
+  &.outdated {
+    background-color: #ededff;
+  }
+}
+

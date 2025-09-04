@@ -43,15 +43,22 @@
   </div>
   <div class="card">
     <h2>New Api Key</h2>
-    <mat-slide-toggle [formControl]="apiKeyForm.get('hasManagementAccess')">
-      Management Access
-    </mat-slide-toggle>
-    <mat-slide-toggle [formControl]="apiKeyForm.get('hasReadAccess')">
-      Read Access
-    </mat-slide-toggle>
-    <mat-slide-toggle [formControl]="apiKeyForm.get('hasWriteAccess')">
-      Write Access
-    </mat-slide-toggle>
+    <div>
+      <mat-slide-toggle [formControl]="apiKeyForm.get('hasManagementAccess')">
+        Management Access
+      </mat-slide-toggle>
+    </div>
+    <div>
+      <mat-slide-toggle [formControl]="apiKeyForm.get('hasReadAccess')">
+        Read Access
+      </mat-slide-toggle>
+    </div>
+    <div>
+      <mat-slide-toggle [formControl]="apiKeyForm.get('hasWriteAccess')">
+        Write Access
+      </mat-slide-toggle>
+    </div>
+
     <button mat-button (click)="createApiKey()">
       Neuen API Key generieren
     </button>

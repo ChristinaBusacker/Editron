@@ -22,6 +22,7 @@ import { CanComponentDeactivate } from '@frontend/core/guards/unsaved-changes.gu
 import { CmsModuleState } from '@frontend/core/store/cmsModules/cmsModules.state';
 import { PublishVersion } from '@frontend/core/store/content/content.actions';
 import { NavigationState } from '@frontend/core/store/navigation/navigation.state';
+import { deepClone } from '@frontend/core/utils/deep-clone.util';
 import { ContentApiService } from '@frontend/shared/services/api/content-api.service';
 import {
   EntryDetails,
@@ -105,6 +106,16 @@ export class EntryEditorComponent
     if (!this.formGroups[slug]) {
       this.formGroups[slug] = this.fb.group({});
     }
+  }
+
+  getValuesWithoutExtension() {
+    if (!this.entryData) return undefined;
+
+    const values = deepClone(this.entryData.value);
+    this.currentModule.extensions.forEach(ex => {
+      delete values[ex.slug];
+    });
+    return values;
   }
 
   getFormGroup(slug: string) {
