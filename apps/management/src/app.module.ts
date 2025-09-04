@@ -13,6 +13,7 @@ import { DatabaseModule } from '@database/database.module';
 import { AuthModule } from '@auth';
 import { ApiTokenModule } from './modules/api-token/api-token.module';
 import { AssetModule } from '@asset/asset';
+import { PublicApiModule } from '@public-api/public-api';
 
 
 @Module({
@@ -26,7 +27,8 @@ import { AssetModule } from '@asset/asset';
     ContentModule,
     ApiTokenModule,
     DatabaseModule,
-    AssetModule
+    AssetModule,
+    PublicApiModule
   ],
   controllers: [AppController],
   providers: [AppService],
