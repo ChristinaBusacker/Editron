@@ -16,6 +16,8 @@ import {
   setupSwagger,
   mountSpa,
 } from 'libs/server/bootstrap';
+import { ErrorLoggerService } from './modules/error-log/error-logger.service';
+import { GlobalExceptionFilter } from './core/handlers/global-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -25,6 +27,31 @@ async function bootstrap() {
   const config = app.get(ConfigService);
   const globalPrefix = config.get<string>('GLOBAL_PREFIX') ?? 'api';
   app.setGlobalPrefix(globalPrefix);
+
+  const errors = app.get(ErrorLoggerService);
+  app.useGlobalFilters(app.get(GlobalExceptionFilter));
+
+  process.on('uncaughtException', (err) => {
+    void errors.log({
+      source: 'server',
+      message: err.message,
+      stack: err.stack,
+      context: 'uncaughtException',
+    });
+  });
+  process.on('unhandledRejection', (reason: any) => {
+    const msg =
+      typeof reason === 'string'
+        ? reason
+        : (reason?.message ?? 'unhandledRejection');
+    const stack = reason?.stack ?? null;
+    void errors.log({
+      source: 'server',
+      message: msg,
+      stack,
+      context: 'unhandledRejection',
+    });
+  });
 
   const corsOrigins =
     config.get<string>('CORS_ORIGINS') ??

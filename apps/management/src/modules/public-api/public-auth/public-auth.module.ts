@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
 import { PublicAuthService } from './public-auth.service';
 import { DatabaseModule } from '@database/database.module';
-import { ApiKeyAuthGuard } from '../guards/api-key.guard';
-import { ApiManagementPermissionGuard } from '../guards/api-management.guard';
-import { ApiReadPermissionGuard, ApiWritePermissionGuard } from '../guards/api-permission.guards';
-
+import { ApiKeyAuthGuard } from '@management/core/guards/api-key.guard';
+import { ApiManagementPermissionGuard } from '@management/core/guards/api-management.guard';
+import { ApiReadPermissionGuard, ApiWritePermissionGuard } from '@management/core/guards/api-permission.guards';
 
 @Module({
   imports: [

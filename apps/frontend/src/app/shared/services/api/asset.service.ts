@@ -7,20 +7,20 @@ import {
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
+import { environment } from '@editron/client/environments/environment';
+import { CookieService } from '@frontend/core/services/cookie/cookie.service';
 import { map, Observable } from 'rxjs';
 import {
-  UploadAssetResponse,
-  UploadAssetFromDataPayload,
   Asset,
+  UploadAssetFromDataPayload,
+  UploadAssetResponse,
 } from './models/asset.model';
-import { CookieService } from '@frontend/core/services/cookie/cookie.service';
-import { buildAuthHeaders } from '@frontend/core/utils/build-auth-header.util';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AssetService {
-  public readonly baseUrl = 'https://localhost:3000/api/assets';
+  public readonly baseUrl = environment.apiUrl + '/api/assets';
 
   constructor(
     private http: HttpClient,

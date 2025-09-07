@@ -32,6 +32,7 @@ import localeDe from '@angular/common/locales/de';
 import { LanguageService } from './core/services/language/language.service';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { UserManagementState } from './core/store/user-management/user-management.state';
+import { provideEditronErrorLogger } from '@editron/client/errorLogging/provide-editron-error-logger';
 
 registerLocaleData(localeDe);
 
@@ -65,6 +66,7 @@ export const appConfig: ApplicationConfig = {
       provide: MAT_DATE_LOCALE,
       useValue: navigator.language || navigator.languages[0] || 'en-US',
     },
+    provideEditronErrorLogger(),
     { provide: LOCALE_ID, useValue: 'de' },
     provideStore([...states], withNgxsReduxDevtoolsPlugin()),
   ],

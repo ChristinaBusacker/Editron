@@ -1,13 +1,13 @@
-import { ApiKeyAuthGuard } from '@management/modules/public-api/guards/api-key.guard';
-import { ApiManagementPermissionGuard } from '@management/modules/public-api/guards/api-management.guard';
-import {
-  ApiReadPermissionGuard,
-  ApiWritePermissionGuard,
-} from '@management/modules/public-api/guards/api-permission.guards';
 import { applyDecorators, UseGuards } from '@nestjs/common';
 import { ApiSecurity } from '@nestjs/swagger';
 
 import { API_KEY_SECURITY_NAME } from '@shared/constants/api-key.constant';
+import { ApiKeyAuthGuard } from '../guards/api-key.guard';
+import { ApiManagementPermissionGuard } from '../guards/api-management.guard';
+import {
+  ApiReadPermissionGuard,
+  ApiWritePermissionGuard,
+} from '../guards/api-permission.guards';
 
 /** Protects route with API key only */
 export function ApiKeyOnly(): MethodDecorator & ClassDecorator {

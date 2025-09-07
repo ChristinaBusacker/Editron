@@ -15,6 +15,7 @@ import { PublicApiRequestLogEntity } from './public-api-request-logger/public-ap
 import { SessionEntity } from './session/session.entity';
 import { UserInviteEntity } from './user-invite/user-invite.entity';
 import { UserEntity } from './user/user.entity';
+import { ErrorLogEntity } from './error-log/error-log.entity';
 
 dotenv.config();
 
@@ -34,6 +35,7 @@ export const entities = [
   UserInviteEntity,
   ApiTokenEntity,
   PublicApiRequestLogEntity,
+  ErrorLogEntity,
 ];
 
 export const datasSourceOptions: DataSourceOptions = {

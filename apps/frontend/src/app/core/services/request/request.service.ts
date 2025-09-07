@@ -1,15 +1,16 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { CookieService } from '../cookie/cookie.service.js';
+import { Injectable } from '@angular/core';
+import { SetLoading } from '@frontend/core/store/navigation/navigation.actions.js';
 import { buildAuthHeaders } from '@frontend/core/utils/build-auth-header.util.js';
 import { Store } from '@ngxs/store';
-import { catchError, finalize, tap } from 'rxjs/operators';
-import { SetLoading } from '@frontend/core/store/navigation/navigation.actions.js';
+import { Observable } from 'rxjs';
+import { finalize } from 'rxjs/operators';
+import { CookieService } from '../cookie/cookie.service.js';
+import { environment } from '@editron/client/environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class RequestService {
-  private baseUrl = 'https://localhost:3000';
+  private baseUrl = environment.apiUrl;
 
   constructor(
     private http: HttpClient,

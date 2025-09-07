@@ -14,6 +14,9 @@ import { ApiTokenModule } from './modules/api-token/api-token.module';
 import { AssetModule } from './modules/asset/asset.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { PublicApiModule } from './modules/public-api/public-api.module';
+import { ErrorLoggerService } from './modules/error-log/error-logger.service';
+import { ErrorLoggerModule } from './modules/error-log/error-logger.module';
+import { GlobalExceptionFilter } from './core/handlers/global-exception.filter';
 
 @Module({
   imports: [
@@ -27,10 +30,11 @@ import { PublicApiModule } from './modules/public-api/public-api.module';
     ApiTokenModule,
     DatabaseModule,
     AssetModule,
-    PublicApiModule
+    PublicApiModule,
+    ErrorLoggerModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, GlobalExceptionFilter],
   exports: [AppService]
 })
 export class AppModule {}

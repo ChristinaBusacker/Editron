@@ -16,6 +16,7 @@ import { PublicApiRequestLoggerTableModule } from './public-api-request-logger/p
 import { SessionTableModule } from './session/session.module';
 import { UserInviteTableModule } from './user-invite/user-invite.module';
 import { UserTableModule } from './user/user.module';
+import { ErrorLogTableModule } from './error-log/error-log.module';
 
 @Module({
   imports: [
@@ -33,7 +34,8 @@ import { UserTableModule } from './user/user.module';
     AssetTableModule,
     UserInviteTableModule,
     ApiTokenTableModule,
-    PublicApiRequestLoggerTableModule
+    PublicApiRequestLoggerTableModule,
+    ErrorLogTableModule
   ],
   providers: [...databaseProviders, DatabaseService],
   exports: [...databaseProviders, DatabaseService],

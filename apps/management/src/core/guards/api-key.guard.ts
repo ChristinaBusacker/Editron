@@ -1,4 +1,5 @@
 import { ApiTokenEntity } from '@database/api-token/api-token.entity';
+import { PublicAuthService } from '@management/modules/public-api/public-auth/public-auth.service';
 import {
   CanActivate,
   ExecutionContext,
@@ -11,7 +12,6 @@ import {
 } from '@shared/constants/api-key.constant';
 
 import type { Request } from 'express';
-import { PublicAuthService } from '../public-auth/public-auth.service';
 
 /**
  * Reads API key from header "x-api-key" or query "?apiKey=".

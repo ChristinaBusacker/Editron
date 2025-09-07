@@ -15,4 +15,5 @@ export enum RepositoryKey {
   userInvite = 'USERINVITE_REPOSITORY',
   apiToken = 'APITOKEN_REPOSITORY',
   publicApiRequestLog = 'PUBLICAPIREQLOG_REPOSITORY',
+  errorLog = 'ERRORLOG_REPOSITORY',
 }
