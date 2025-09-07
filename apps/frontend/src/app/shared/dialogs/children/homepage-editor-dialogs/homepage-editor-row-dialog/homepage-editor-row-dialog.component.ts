@@ -5,14 +5,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
+import { COLUMN_LAYOUTS } from '@editron/common/cmsmodules/src/modules/homepage/declarations/columnLayouts.constant';
+import { Row } from '@editron/common/cmsmodules/src/modules/homepage/declarations/component.declaration';
+import { ColumnLayout } from '@editron/common/cmsmodules/src/modules/homepage/declarations/styling.declaration';
 import { generateCSSid } from '@frontend/core/utils/generate-css-id.util';
 import { DialogComponent } from '@frontend/shared/dialogs/dialog.component';
-import { COLUMN_LAYOUTS } from 'libs/cmsmodules/src/modules/homepage/declarations/columnLayouts.constant';
-import {
-  Column,
-  Row,
-} from 'libs/cmsmodules/src/modules/homepage/declarations/component.declaration';
-import { ColumnLayout } from 'libs/cmsmodules/src/modules/homepage/declarations/styling.declaration';
 
 @Component({
   selector: 'app-homepage-editor-row-dialog',

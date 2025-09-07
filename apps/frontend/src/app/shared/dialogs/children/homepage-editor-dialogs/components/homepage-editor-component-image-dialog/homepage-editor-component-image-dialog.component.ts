@@ -1,20 +1,15 @@
 import { Component, inject, OnInit } from '@angular/core';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormBuilder, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
-import { CmsAssetEditorComponent } from '@cmsrenderer/cms-editor-renderer/cms-asset-editor/cms-asset-editor.component';
+import { CmsAssetEditorComponent } from '@editron/client/cms-renderer/src/cms-editor-renderer/cms-asset-editor/cms-asset-editor.component';
+import { COLUMN_LAYOUTS } from '@editron/common/cmsmodules/src/modules/homepage/declarations/columnLayouts.constant';
+import { ComponentInstance } from '@editron/common/cmsmodules/src/modules/homepage/declarations/component.declaration';
 import { DialogComponent } from '@frontend/shared/dialogs/dialog.component';
-import { COLUMN_LAYOUTS } from 'libs/cmsmodules/src/modules/homepage/declarations/columnLayouts.constant';
-import { ComponentInstance } from 'libs/cmsmodules/src/modules/homepage/declarations/component.declaration';
 
 @Component({
   selector: 'app-homepage-editor-component-image-dialog',

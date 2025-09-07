@@ -6,7 +6,7 @@ import {
   Renderer2,
   inject,
   effect,
-  signal,
+  signal, OnChanges,
 } from '@angular/core';
 import { formatDate as angularFormatDate } from '@angular/common';
 import { LanguageService } from '../services/language/language.service';
@@ -15,7 +15,7 @@ import { LanguageService } from '../services/language/language.service';
   selector: '[formatDate]',
   standalone: true,
 })
-export class FormatDateDirective implements OnDestroy {
+export class FormatDateDirective implements OnDestroy, OnChanges {
   @Input('formatDate') rawDate?: string | Date | null;
   @Input() format?: string;
 

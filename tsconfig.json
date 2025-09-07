@@ -22,16 +22,16 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@database/": [
-        "libs/database/src"
+        "libs/server/database/src"
       ],
       "@database/*": [
-        "libs/database/src/*"
+        "libs/server/database/src/*"
       ],
       "@shared": [
-        "libs/shared/src"
+        "libs/common/shared/src"
       ],
       "@shared/*": [
-        "libs/shared/src/*"
+        "libs/common/shared/src/*"
       ],
       "@frontend/*": [
         "apps/frontend/src/app/*"
@@ -39,45 +39,22 @@
       "@management/*": [
         "apps/management/src/*"
       ],
-      "@cmsmodules/*": [
-        "apps/cmsmodules/src/*"
-      ],
-      "@cmsrenderer": [
-        "libs/cms-renderer/src"
-      ],
-      "@cmsrenderer/*": [
-        "libs/cms-renderer/src/*"
-      ],
       "three": [
         "node_modules/three"
       ],
       "three/examples/jsm/*": [
         "node_modules/three/examples/jsm/*"
       ],
-      "@auth": [
-        "libs/auth/src"
+      "@editron/common/*": [
+        "libs/common/*"
       ],
-      "@auth/*": [
-        "libs/auth/src/*"
+      "@editron/client/*": [
+        "libs/client/*"
       ],
-      "@bootstrap/bootstrap": [
-        "libs/bootstrap"
+      "@editron/server/*": [
+        "libs/server/*"
       ],
-      "@bootstrap/bootstrap/*": [
-        "libs/bootstrap/*"
-      ],
-      "@asset/asset": [
-        "libs/asset/src"
-      ],
-      "@asset/asset/*": [
-        "libs/asset/src/*"
-      ],
-      "@public-api/public-api": [
-        "libs/public-api/src"
-      ],
-      "@public-api/public-api/*": [
-        "libs/public-api/src/*"
-      ]
+
     }
   },
   "exclude": [

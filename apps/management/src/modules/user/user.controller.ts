@@ -16,7 +16,7 @@ import {
   UpdateUserDto,
   UpdateUserInviteDto,
 } from './dto/user.dto';
-import { AuthGuard } from '@auth';
+
 import {
   ApiTags,
   ApiOperation,
@@ -29,6 +29,7 @@ import {
 import * as bcrypt from 'bcryptjs';
 import { SessionEntity } from '@database/session/session.entity';
 import { UserInviteEntity } from '@database/user-invite/user-invite.entity';
+import { AuthGuard } from '../auth/auth.guard';
 
 @ApiTags('Users')
 @ApiBearerAuth()

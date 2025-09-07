@@ -18,8 +18,8 @@ import {
   ApiBearerAuth,
   ApiHeader,
 } from '@nestjs/swagger';
-import { AuthGuard } from '@auth';
-import { CurrentUser } from '@shared/decorators/current-user.decorator';
+import { AuthGuard } from '../auth/auth.guard';
+import { CurrentUser } from '@management/core/decorators/current-user.decorator';
 
 @ApiTags('Projects')
 @ApiBearerAuth()

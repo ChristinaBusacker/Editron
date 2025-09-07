@@ -8,7 +8,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { CurrentUser } from '@shared/decorators/current-user.decorator';
+import { CurrentUser } from '@management/core/decorators/current-user.decorator';
 import { ApiTokenService } from './api-token.service';
 import { CreateApiTokenDto } from './dto/api-token.dto';
 

@@ -1,5 +1,5 @@
 import { Project } from '@frontend/shared/services/api/models/project.model';
-import { CmsModule } from 'libs/cmsmodules/src/modules/cms-module';
+import { CmsModule } from '@editron/common/cmsmodules/src/modules/cms-module';
 
 export class SetCurrentProject {
   static readonly type = '[Navigation] Set Project';

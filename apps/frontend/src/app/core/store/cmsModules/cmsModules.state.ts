@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ContentApiService } from '@frontend/shared/services/api/content-api.service';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
-import { CmsModule } from 'libs/cmsmodules/src/modules/cms-module';
+import { CmsModule } from '@editron/common/cmsmodules/src/modules/cms-module';
 import { map } from 'rxjs';
 import { FetchCMSModules, FetchModuleSchema } from './cmsModules.actions';
 import { ContentSchemaDefinition } from '@shared/declarations/interfaces/content/content-schema-definition';

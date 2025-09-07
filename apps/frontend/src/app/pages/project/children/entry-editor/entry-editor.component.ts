@@ -13,8 +13,6 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { CmsFormComponent } from '@cmsrenderer/cms-editor-renderer/cms-form/cms-form.component';
-import { CmsHomepageEditorComponent } from '@cmsrenderer/cms-editor-renderer/cms-homepage-editor/cms-homepage-editor.component';
 import { CopyToClipboardDirective } from '@frontend/core/directives/copy-to-clipboard.directive';
 import { FormatDateDirective } from '@frontend/core/directives/format-date.directive';
 import { UserBadgeDirective } from '@frontend/core/directives/user-badge.directive';
@@ -35,8 +33,10 @@ import {
   LanguageDefinition,
   LANGUAGES,
 } from '@shared/declarations/interfaces/project/project-settings';
-import { CmsModule } from 'libs/cmsmodules/src/modules/cms-module';
+import { CmsModule } from '@editron/common/cmsmodules/src/modules/cms-module';
 import { combineLatest, map, switchMap } from 'rxjs';
+import { CmsFormComponent } from '@editron/client/cms-renderer/src/cms-editor-renderer/cms-form/cms-form.component';
+import { CmsHomepageEditorComponent } from '@editron/client/cms-renderer/src/cms-editor-renderer/cms-homepage-editor/cms-homepage-editor.component';
 @Component({
   selector: 'app-entry-editor',
   imports: [

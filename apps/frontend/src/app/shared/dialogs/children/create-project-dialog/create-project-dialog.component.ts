@@ -21,7 +21,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { CmsModuleState } from '@frontend/core/store/cmsModules/cmsModules.state';
 import { CommonModule } from '@angular/common';
-import { CmsModule } from 'libs/cmsmodules/src/modules/cms-module';
+import { CmsModule } from '@editron/common/cmsmodules/src/modules/cms-module';
 
 @Component({
   selector: 'app-create-project-dialog',

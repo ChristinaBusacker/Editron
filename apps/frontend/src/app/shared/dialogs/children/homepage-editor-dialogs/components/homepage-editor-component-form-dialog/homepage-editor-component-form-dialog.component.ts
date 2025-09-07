@@ -5,9 +5,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
+import { COLUMN_LAYOUTS } from '@editron/common/cmsmodules/src/modules/homepage/declarations/columnLayouts.constant';
+import { ComponentInstance } from '@editron/common/cmsmodules/src/modules/homepage/declarations/component.declaration';
 import { DialogComponent } from '@frontend/shared/dialogs/dialog.component';
-import { COLUMN_LAYOUTS } from 'libs/cmsmodules/src/modules/homepage/declarations/columnLayouts.constant';
-import { ComponentInstance } from 'libs/cmsmodules/src/modules/homepage/declarations/component.declaration';
 
 @Component({
   selector: 'app-homepage-editor-component-form-dialog',

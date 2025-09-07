@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { CmsModule } from '@editron/common/cmsmodules/src/modules/cms-module';
+import { RequestService } from '@frontend/core/services/request/request.service';
 import { Observable } from 'rxjs';
 import {
   CreateEntry,
@@ -7,8 +9,6 @@ import {
   UpdateEntry,
   ValidateEntry,
 } from './models/content.model';
-import { RequestService } from '@frontend/core/services/request/request.service';
-import { CmsModule } from 'libs/cmsmodules/src/modules/cms-module';
 
 @Injectable({ providedIn: 'root' })
 export class ContentApiService {
@@ -32,14 +32,16 @@ export class ContentApiService {
   // ContentEntries
   // -------------------------------
 
-  getEntries(projectId: string, schemaSlug: string): Observable<any[]> {
-    return this.request.get<any[]>(
+  getEntries(projectId: string, schemaSlug: string): Observable<unknown[]> {
+    return this.request.get<unknown[]>(
       `${this.baseUrl}/projects/${projectId}/schemas/${schemaSlug}/entries`,
     );
   }
 
-  getEntriesInBin(projectId: string): Observable<any[]> {
-    return this.request.get<any[]>(`${this.baseUrl}/projects/${projectId}/bin`);
+  getEntriesInBin(projectId: string): Observable<unknown[]> {
+    return this.request.get<unknown[]>(
+      `${this.baseUrl}/projects/${projectId}/bin`,
+    );
   }
 
   createEntry(
@@ -84,8 +86,8 @@ export class ContentApiService {
   // ContentVersions
   // -------------------------------
 
-  getVersions(entryId: string): Observable<any[]> {
-    return this.request.get<any[]>(
+  getVersions(entryId: string): Observable<unknown[]> {
+    return this.request.get<unknown[]>(
       `${this.baseUrl}/entries/${entryId}/versions`,
     );
   }

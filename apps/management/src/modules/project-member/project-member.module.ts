@@ -2,7 +2,8 @@ import { Module } from '@nestjs/common';
 import { ProjectMemberService } from './project-member.service';
 import { ProjectMemberController } from './project-member.controller';
 import { DatabaseModule } from '@database/database.module';
-import { AuthModule } from '@auth';
+import { AuthModule } from '../auth/auth.module';
+
 
 @Module({
   imports: [DatabaseModule, AuthModule],

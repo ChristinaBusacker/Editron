@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Project } from '@frontend/shared/services/api/models/project.model';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
-import { CmsModule } from 'libs/cmsmodules/src/modules/cms-module';
+import { CmsModule } from '@editron/common/cmsmodules/src/modules/cms-module';
 import {
   SetCmsModule,
   SetCurrentProject,

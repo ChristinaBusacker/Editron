@@ -13,6 +13,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { CmsModule } from '@editron/common/cmsmodules/src/modules/cms-module';
 import { AuthState } from '@frontend/core/store/auth/auth.state';
 import { CmsModuleState } from '@frontend/core/store/cmsModules/cmsModules.state';
 import { NavigationState } from '@frontend/core/store/navigation/navigation.state';
@@ -24,7 +25,7 @@ import {
   LANGUAGES,
   ProjectSettings,
 } from '@shared/declarations/interfaces/project/project-settings';
-import { CmsModule } from 'libs/cmsmodules/src/modules/cms-module';
+
 import { combineLatest, map } from 'rxjs';
 
 @Component({

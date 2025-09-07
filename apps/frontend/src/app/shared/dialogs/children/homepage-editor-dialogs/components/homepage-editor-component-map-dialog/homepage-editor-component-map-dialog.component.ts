@@ -1,14 +1,14 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
-import { CmsGeolocationEditorComponent } from '@cmsrenderer/cms-editor-renderer/cms-geolocation-editor/cms-geolocation-editor.component';
+import { CmsGeolocationEditorComponent } from '@editron/client/cms-renderer/src/cms-editor-renderer/cms-geolocation-editor/cms-geolocation-editor.component';
+import { COLUMN_LAYOUTS } from '@editron/common/cmsmodules/src/modules/homepage/declarations/columnLayouts.constant';
+import { ComponentInstance } from '@editron/common/cmsmodules/src/modules/homepage/declarations/component.declaration';
 import { DialogComponent } from '@frontend/shared/dialogs/dialog.component';
-import { COLUMN_LAYOUTS } from 'libs/cmsmodules/src/modules/homepage/declarations/columnLayouts.constant';
-import { ComponentInstance } from 'libs/cmsmodules/src/modules/homepage/declarations/component.declaration';
 
 @Component({
   selector: 'app-homepage-editor-component-map-dialog',
@@ -24,7 +24,7 @@ import { ComponentInstance } from 'libs/cmsmodules/src/modules/homepage/declarat
   templateUrl: './homepage-editor-component-map-dialog.component.html',
   styleUrl: './homepage-editor-component-map-dialog.component.scss',
 })
-export class HomepageEditorComponentMapDialogComponent implements OnInit {
+export class HomepageEditorComponentMapDialogComponent {
   public data: { component: ComponentInstance; languages: string[] } =
     inject(MAT_DIALOG_DATA);
   private dialogRef = inject(
@@ -39,8 +39,6 @@ export class HomepageEditorComponentMapDialogComponent implements OnInit {
   });
 
   constructor(private fb: FormBuilder) {}
-
-  ngOnInit(): void {}
 
   close(action: 'confirm' | 'cancel') {
     if (action === 'confirm') {

@@ -2,12 +2,6 @@ import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import {
-  mountSpa,
-  readHttpsOptionsFromEnv,
-  setupCors,
-  setupSwagger,
-} from '@bootstrap/bootstrap';
 
 import * as express from 'express';
 import * as fs from 'fs';
@@ -16,6 +10,12 @@ import { join } from 'path';
 import { databaseReady } from '@database/database.source';
 import { MigrationService } from './core/migration/migration.service';
 import { AppService } from './app.service';
+import {
+  readHttpsOptionsFromEnv,
+  setupCors,
+  setupSwagger,
+  mountSpa,
+} from 'libs/server/bootstrap';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {

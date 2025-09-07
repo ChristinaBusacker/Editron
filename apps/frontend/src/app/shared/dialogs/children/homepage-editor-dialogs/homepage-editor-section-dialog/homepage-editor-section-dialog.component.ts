@@ -1,12 +1,13 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { ConfirmDialogData } from '@frontend/core/declarations/interfaces/dialog.interfaces';
+
 import { DialogComponent } from '@frontend/shared/dialogs/dialog.component';
-import { Section } from 'libs/cmsmodules/src/modules/homepage/declarations/component.declaration';
+
 import { MatTabsModule } from '@angular/material/tabs';
+import { Section } from '@editron/common/cmsmodules/src/modules/homepage/declarations/component.declaration';
 
 @Component({
   selector: 'app-homepage-editor-section-dialog',
@@ -20,7 +21,7 @@ import { MatTabsModule } from '@angular/material/tabs';
   templateUrl: './homepage-editor-section-dialog.component.html',
   styleUrl: './homepage-editor-section-dialog.component.scss',
 })
-export class HomepageEditorSectionDialogComponent implements OnInit {
+export class HomepageEditorSectionDialogComponent {
   public section: Section = inject(MAT_DIALOG_DATA);
   private dialogRef = inject(
     MatDialogRef<HomepageEditorSectionDialogComponent>,
@@ -29,8 +30,6 @@ export class HomepageEditorSectionDialogComponent implements OnInit {
   form = this.fb.group(this.section);
 
   constructor(private fb: FormBuilder) {}
-
-  ngOnInit(): void {}
 
   close(action: 'confirm' | 'cancel') {
     this.dialogRef.close({ action });

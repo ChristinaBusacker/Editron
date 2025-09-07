@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @angular-eslint/no-output-on-prefix */
 import {
   Component,
   Input,
@@ -6,7 +8,7 @@ import {
   WritableSignal,
   ViewChild,
   AfterViewInit,
-  inject,
+  inject, OnInit,
 } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -30,10 +32,11 @@ import {
 import { UserBadgeDirective } from '@frontend/core/directives/user-badge.directive';
 import { FormatDateDirective } from '@frontend/core/directives/format-date.directive';
 import { LanguageService } from '@frontend/core/services/language/language.service';
-import { CmsModule } from 'libs/cmsmodules/src/modules/cms-module';
+
 import { tableDisplayTypes } from '@shared/constants/table-display-types.const';
 import { MatChipsModule } from '@angular/material/chips';
 import { CommonModule } from '@angular/common';
+import { CmsModule } from '@editron/common/cmsmodules/src/modules/cms-module';
 
 @Component({
   selector: 'app-item-table',
@@ -56,7 +59,7 @@ import { CommonModule } from '@angular/common';
     MatChipsModule,
   ],
 })
-export class ItemTableComponent implements AfterViewInit {
+export class ItemTableComponent implements AfterViewInit, OnInit {
   @Input({ required: true }) entries!: Observable<any[]>;
   @Input({ required: true }) module!: Observable<CmsModule>;
   @Input({ required: true }) selectedItemsSignal!: WritableSignal<Set<any>>;

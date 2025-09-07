@@ -1,12 +1,12 @@
 import { ContentSchemaEntity } from '@database/content-schema/content-schema.entity';
 import { DatabaseService } from '@database/database.service';
 import { Injectable } from '@nestjs/common';
-import { PetCMSModule } from 'libs/cmsmodules/src/modules/blog copy/pet.cms';
-import { BlogCMSModule } from 'libs/cmsmodules/src/modules/blog/blog.cms';
-import { CmsModule } from 'libs/cmsmodules/src/modules/cms-module';
-import { HomepageCMSModule } from 'libs/cmsmodules/src/modules/homepage/homepage.cms';
-import { Test2Module } from 'libs/cmsmodules/src/modules/test2/test2';
-import { WipMSModule } from 'libs/cmsmodules/src/modules/wip/wip.cms';
+import { PetCMSModule } from 'libs/common/cmsmodules/src/modules/blog copy/pet.cms';
+import { BlogCMSModule } from 'libs/common/cmsmodules/src/modules/blog/blog.cms';
+import { CmsModule } from 'libs/common/cmsmodules/src/modules/cms-module';
+import { HomepageCMSModule } from 'libs/common/cmsmodules/src/modules/homepage/homepage.cms';
+import { Test2Module } from 'libs/common/cmsmodules/src/modules/test2/test2';
+import { WipMSModule } from 'libs/common/cmsmodules/src/modules/wip/wip.cms';
 
 @Injectable()
 export class AppService {

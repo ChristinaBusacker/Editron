@@ -9,12 +9,7 @@ import {
 import { ConfirmDialogComponent } from './children/confirm-dialog/confirm-dialog.component';
 import { ConfirmDeleteDialogComponent } from './children/confirm-delete-dialog/confirm-delete-dialog.component';
 import { RelationPickerComponent } from './children/relation-picker-dialog/relation-picker-dialog.component';
-import {
-  Column,
-  ComponentInstance,
-  Row,
-  Section,
-} from 'libs/cmsmodules/src/modules/homepage/declarations/component.declaration';
+
 import { HomepageEditorColumnDialogComponent } from './children/homepage-editor-dialogs/homepage-editor-column-dialog/homepage-editor-column-dialog.component';
 import { HomepageEditorRowDialogComponent } from './children/homepage-editor-dialogs/homepage-editor-row-dialog/homepage-editor-row-dialog.component';
 import { HomepageEditorSectionDialogComponent } from './children/homepage-editor-dialogs/homepage-editor-section-dialog/homepage-editor-section-dialog.component';
@@ -26,6 +21,12 @@ import { HomepageEditorComponentCarouselDialogComponent } from './children/homep
 import { HomepageEditorComponentFormDialogComponent } from './children/homepage-editor-dialogs/components/homepage-editor-component-form-dialog/homepage-editor-component-form-dialog.component';
 import { HomepageEditorComponentGaleryDialogComponent } from './children/homepage-editor-dialogs/components/homepage-editor-component-galery-dialog/homepage-editor-component-galery-dialog.component';
 import { HomepageEditorComponentMapDialogComponent } from './children/homepage-editor-dialogs/components/homepage-editor-component-map-dialog/homepage-editor-component-map-dialog.component';
+import {
+  Section,
+  Row,
+  Column,
+  ComponentInstance,
+} from '@editron/common/cmsmodules/src/modules/homepage/declarations/component.declaration';
 
 @Injectable({
   providedIn: 'root',
@@ -130,6 +131,7 @@ export class DialogService {
     });
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private getComponentDialog(type: string): any {
     switch (type) {
       case 'text':

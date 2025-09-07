@@ -1,17 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect, OnInit, signal, Signal } from '@angular/core';
+import { Component, effect, OnInit, signal } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { Router, RouterModule } from '@angular/router';
+import { FetchModuleEntries } from '@frontend/core/store/content/content.actions';
 import { ContentState } from '@frontend/core/store/content/content.state';
 import { NavigationState } from '@frontend/core/store/navigation/navigation.state';
+import { DialogService } from '@frontend/shared/dialogs/dialog.service';
+import { ContentApiService } from '@frontend/shared/services/api/content-api.service';
 import { Store } from '@ngxs/store';
 import { BehaviorSubject, combineLatest, map } from 'rxjs';
 import { ItemTableComponent } from '../../../../shared/components/item-table/item-table.component';
-import { MatButtonModule } from '@angular/material/button';
-import { DialogService } from '@frontend/shared/dialogs/dialog.service';
-import { ContentApiService } from '@frontend/shared/services/api/content-api.service';
-import { FetchModuleEntries } from '@frontend/core/store/content/content.actions';
-import { MatIconModule } from '@angular/material/icon';
-import { FetchProjectList } from '@frontend/core/store/project/project.actions';
 
 @Component({
   selector: 'app-project-entity',
@@ -45,7 +44,7 @@ export class ProjectEntityComponent implements OnInit {
   ) {
     effect(() => {
       // External selection change
-      const current = this.selectedItemsSignal();
+      this.selectedItemsSignal();
     });
   }
 

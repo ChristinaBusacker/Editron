@@ -1,0 +1,18 @@
+<mat-form-field class="w-full">
+  <mat-label>{{ label }}</mat-label>
+  <mat-chip-grid #chipGrid aria-label="Enter keywords" [formControl]="control">
+    @for (keyword of keywords(); track keyword) {
+      <mat-chip-row (removed)="removeKeyword(keyword)">
+        {{ keyword }}
+        <button matChipRemove [attr.aria-label]="'remove ' + keyword">
+          <mat-icon>cancel</mat-icon>
+        </button>
+      </mat-chip-row>
+    }
+  </mat-chip-grid>
+  <input
+    placeholder="New keyword..."
+    [matChipInputFor]="chipGrid"
+    (matChipInputTokenEnd)="add($event)"
+  />
+</mat-form-field>
