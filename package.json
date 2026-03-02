@@ -6,14 +6,15 @@
   "scripts": {
     "dev:frontend": "ng serve frontend --ssl true --ssl-cert ./ssl/localhost.pem --ssl-key ./ssl/localhost-key.pem",
     "dev:management": "nest start management --watch",
-    "dev:asset": "nest start asset --watch",
-    "dev:api": "nest start api --watch",
     "prettier": "npx prettier --write .",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "prepare": "husky"
   },
   "author": "Christina Busacker",
+  "engines": {
+    "node": ">=24.0.0"
+  },
   "license": "ISC",
   "dependencies": {
     "@acrodata/code-editor": "^0.5.1",
@@ -42,7 +43,6 @@
     "@nestjs/throttler": "^6.4.0",
     "@nestjs/typeorm": "^11.0.0",
     "@nestjs/websockets": "^10.4.1",
-    "@ngxmc/datetime-picker": "^19.3.1",
     "@ngxs/devtools-plugin": "19.0.0",
     "@ngxs/store": "^19.0.0",
     "@swimlane/ngx-charts": "22.0.0",
